@@ -2,7 +2,7 @@
 
 namespace EventsMS.Repository;
 
-public interface ICategory
+public interface ICategoryRepository
 {
     Task<IEnumerable<Category>> GetAllCategoryAsync(CancellationToken cancellationToken);
     Task<Category?> GetCategoryByIdAsync(long id, CancellationToken cancellationToken);
