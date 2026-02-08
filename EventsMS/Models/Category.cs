@@ -2,9 +2,8 @@
 
 namespace EventsMS.Models;
 
-public class Category
+public class Category:BaseEntities.BaseEntity<int>
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
 

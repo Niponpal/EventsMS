@@ -1,9 +1,7 @@
 ﻿namespace EventsMS.Models;
 
-public class PaymentHistory
+public class PaymentHistory:BaseEntities.BaseEntity<int>
 {
-    public Guid Id { get; set; }
-
     public string InvoiceNumber { get; set; } = null!;
     public string StudentIdCard { get; set; } = null!;
     public string StudentName { get; set; } = null!;
