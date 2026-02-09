@@ -36,7 +36,7 @@ public class CategoryController : Controller
         return View(NotFound());
     }
     [HttpPost]
-    public async Task<IActionResult> CreateOrEDit(Models.Category category, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateOrEdit(Models.Category category, CancellationToken cancellationToken)
     {
       
             if (category.Id == 0)
