@@ -35,4 +35,38 @@ public class CategoryController : Controller
         }
         return View(NotFound());
     }
-}
+    [HttpPost]
+    public async Task<IActionResult> CreateOrEDit(Models.Category category, CancellationToken cancellationToken)
+    {
+      
+            if (category.Id == 0)
+            {
+                await _categoryRepository.AddCategoryAsync(category, cancellationToken);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                await _categoryRepository.UpdateCategoryAsync(category, cancellationToken);
+            return RedirectToAction(nameof(Index));
+            }
+           
+    }
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        await _categoryRepository.DeleteCategoryAsync(id, cancellationToken);
+        return RedirectToAction(nameof(Index));
+    }
+    [HttpGet]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var category = await _categoryRepository.GetCategoryByIdAsync(id, cancellationToken);
+        if (category != null)
+        {
+            return View(category);
+        }
+        return View(NotFound());
+
+    }
+
+    }
