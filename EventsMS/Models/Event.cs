@@ -2,18 +2,16 @@
 
 public class Event:BaseEntities.BaseEntity<int>
 {
-    public string Name { get; set; } = null!;
-    public string? Image { get; set; }
-
-    // Foreign key for Category
-    public Guid CategoryId { get; set; }
-    public Category Category { get; set; } = null!;
-
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public decimal Fee { get; set; }
-    public string? MealType { get; set; }
-
-    // Navigation property
-    public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    public string ImageUrl { get; set; } = default!;
+    public long CategoryId { get; set; }
+    public Category Category { get; set; }
+    public string Name { get; set; } = default!;
+    public string Description { get; set; }
+    public DateTimeOffset StartDate { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset EndDate { get; set; } = DateTimeOffset.UtcNow;
+    public decimal RegistrationFee { get; set; }
+    public string Slug { get; set; } = default!;
+    public int MealsOffered { get; set; }
+    public bool IsFree { get; set; }
+    public ICollection<StudentRegistration> Registrations { get; set; } = new List<StudentRegistration>();
 }

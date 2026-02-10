@@ -1,19 +1,21 @@
-﻿namespace EventsMS.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EventsMS.Models;
 
 public class PaymentHistory:BaseEntities.BaseEntity<int>
 {
-    public string InvoiceNumber { get; set; } = null!;
-    public string StudentIdCard { get; set; } = null!;
-    public string StudentName { get; set; } = null!;
-    public string Email { get; set; } = null!;
-
-    // Foreign key for Event
-    public Guid EventId { get; set; }
-    public Event Event { get; set; } = null!;
-
-    public decimal PaidAmount { get; set; }
-    public string BankName { get; set; } = null!;
-    public string TransactionId { get; set; } = null!;
-    public DateTime PaymentDate { get; set; }
-    public string Status { get; set; } = null!;
+    public long PaymentId { get; set; }
+    public Payment Payment { get; set; } = default!;
+    public string Provider { get; set; } = "SSLCommerz";
+    public string ProviderSessionId { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string TransactionId { get; set; } = string.Empty;
+    public string ValidationId { get; set; } = string.Empty;
+    public string BankName { get; set; } = string.Empty;
+    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerMobile { get; set; } = string.Empty;
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Amount { get; set; } = 0;
+    public string Currency { get; set; } = string.Empty;
+    public string JsonResponse { get; set; } = string.Empty;
 }
