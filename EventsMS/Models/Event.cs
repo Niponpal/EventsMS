@@ -1,6 +1,6 @@
 ﻿namespace EventsMS.Models;
 
-public class Event:BaseEntities.BaseEntity<int>
+public class Event:BaseEntities.BaseEntity<long>
 {
     public string ImageUrl { get; set; } = default!;
     public long CategoryId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace EventsMS.Models
 {
-    public class StudentRegistration
+    public class StudentRegistration:BaseEntities.BaseEntity<long>
     {
         public long EventId { get; set; }
         public Event Event { get; set; }

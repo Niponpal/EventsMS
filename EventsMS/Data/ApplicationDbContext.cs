@@ -11,6 +11,11 @@ public class ApplicationDbContext: DbContext
     }
     public DbSet<Event> Events { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<PaymentHistory> PaymentHistories { get; set; }
-    public DbSet<Registration> Registrations { get; set; }
+    public DbSet<FoodToken> FoodTokens { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Payment>  payments { get; set; }
+    public DbSet<PaymentHistory> paymentHistories { get; set; }
+    public DbSet<Permission> permissions { get; set; }
+    public DbSet<StudentRegistration> studentRegistrations { get; set; }
+
 }

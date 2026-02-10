@@ -2,7 +2,7 @@
 
 namespace EventsMS.Models;
 
-public class PaymentHistory:BaseEntities.BaseEntity<int>
+public class PaymentHistory:BaseEntities.BaseEntity<long>
 {
     public long PaymentId { get; set; }
     public Payment Payment { get; set; } = default!;

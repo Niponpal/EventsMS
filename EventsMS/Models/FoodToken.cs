@@ -1,6 +1,6 @@
 ﻿namespace EventsMS.Models
 {
-    public class FoodToken
+    public class FoodToken:BaseEntities.BaseEntity<long>
     {
         public long RegistrationId { get; set; }
         public StudentRegistration Registration { get; set; }
