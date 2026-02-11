@@ -3,8 +3,6 @@
 public class Event:BaseEntities.BaseEntity<long>
 {
     public string ImageUrl { get; set; } = default!;
-    public long CategoryId { get; set; }
-    public Category Category { get; set; }
     public string Name { get; set; } = default!;
     public string Description { get; set; }
     public DateTimeOffset StartDate { get; set; } = DateTimeOffset.UtcNow;
@@ -13,5 +11,7 @@ public class Event:BaseEntities.BaseEntity<long>
     public string Slug { get; set; } = default!;
     public int MealsOffered { get; set; }
     public bool IsFree { get; set; }
+    public long CategoryId { get; set; }
+    public Category Category { get; set; }
     public ICollection<StudentRegistration> Registrations { get; set; } = new List<StudentRegistration>();
 }
