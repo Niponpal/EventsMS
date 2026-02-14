@@ -1,0 +1,110 @@
+﻿@model EventsMS.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow border-0">
+
+        <!-- Image Section -->
+        <div class="position-relative">
+            <img src="@Model.ImageUrl"
+                 class="w-100"
+                 style="height:350px; object-fit:cover;"
+                 alt="@Model.Name" />
+
+            <!-- Category Badge -->
+            <span class="badge bg-primary position-absolute top-0 start-0 m-3 px-3 py-2">
+                @Model.Category?.Name
+            </span>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Title -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="fw-bold text-dark">@Model.Name</h2>
+
+                @if (Model.IsFree)
+                {
+                    <span class="badge bg-success fs-6 px-3 py-2">
+                        Free Event
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                        Registration Fee: @Model.RegistrationFee ৳
+                    </span>
+                }
+            </div>
+
+            <!-- Dates -->
+            <div class="row mb-4">
+
+                <div class="col-md-4">
+                    <div class="border rounded p-3 text-center bg-light">
+                        <h6 class="text-muted">Start Date</h6>
+                        <p class="fw-semibold mb-0">
+                            @Model.StartDate.ToString("dd MMM yyyy hh:mm tt")
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="border rounded p-3 text-center bg-light">
+                        <h6 class="text-muted">End Date</h6>
+                        <p class="fw-semibold mb-0">
+                            @Model.EndDate.ToString("dd MMM yyyy hh:mm tt")
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="border rounded p-3 text-center bg-light">
+                        <h6 class="text-muted">Meals Offered</h6>
+                        <p class="fw-semibold mb-0">
+                            @Model.MealsOffered
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Registration Count -->
+            <div class="mb-4">
+                <span class="badge bg-info fs-6 px-3 py-2">
+                    Total Registrations: @Model.Registrations.Count
+                </span>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <h5 class="fw-bold border-bottom pb-2">Event Description</h5>
+                <p class="text-muted mt-3">
+                    @Model.Description
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-end">
+                <a asp-action="Index" class="btn btn-secondary me-2">
+                    Back
+                </a>
+
+                <a asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-warning me-2">
+                    Edit
+                </a>
+
+                <a asp-action="Delete" asp-route-id="@Model.Id"
+                   class="btn btn-danger">
+                    Delete
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

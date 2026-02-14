@@ -24,7 +24,7 @@ public class EventController : Controller
         }
         return View(NotFound());
     }
-
+    [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
     {
         if (id == 0)
@@ -38,6 +38,7 @@ public class EventController : Controller
         }
         return View(NotFound());
     }
+    [HttpPost]
     public async Task<IActionResult> CreateOrEdit(Event events, CancellationToken cancellationToken)
     {
         if (events.Id == 0)
@@ -51,6 +52,22 @@ public class EventController : Controller
             return RedirectToAction(nameof(Index));
         }
         
+    }
+    [HttpPost]
+    public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
+    {
+        await _eventRepository.DeleteEventyAsync(id, cancellationToken);
+        return RedirectToAction(nameof(Index));
+    }
+    [HttpGet]
+    public async Task<IActionResult> Details(long id, CancellationToken cancellationToken)
+    {
+        var data = await _eventRepository.GeEventByIdAsync(id, cancellationToken);
+        if (data != null)
+        {
+            return View(data);
+        }
+        return View(NotFound());
     }
 
 }
