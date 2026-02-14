@@ -1,7 +1,6 @@
 ﻿using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
 

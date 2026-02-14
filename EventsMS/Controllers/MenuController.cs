@@ -1,8 +1,5 @@
-﻿using EventsMS.Data;
-using EventsMS.Repository;
+﻿using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
 

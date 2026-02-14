@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseSqlServer(builder.
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IFoodTokenRepository, FoodTokenRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 
 var app = builder.Build();
