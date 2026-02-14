@@ -1,0 +1,72 @@
+﻿@model EventsMS.Models.Menu
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Create Menu" : "Edit Menu";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                @(Model.Id == 0 ? "Create Menu" : "Edit Menu")
+            </h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="CreateOrEdit" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter menu title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <!-- URL -->
+                <div class="mb-3">
+                    <label asp-for="Url" class="form-label fw-bold"></label>
+                    <input asp-for="Url" class="form-control" placeholder="/StudentRegistration/Index" />
+                    <span asp-validation-for="Url" class="text-danger"></span>
+                </div>
+
+                <!-- Parent Menu -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Parent Menu</label>
+                    <select asp-for="ParentId" asp-items="ViewBag.ParentMenus" class="form-select">
+                        <option value="">-- Select Parent Menu --</option>
+                    </select>
+                </div>
+
+                <!-- Sort Order -->
+                <div class="mb-3">
+                    <label asp-for="SortOrder" class="form-label fw-bold"></label>
+                    <input asp-for="SortOrder" type="number" class="form-control" />
+                </div>
+
+                <!-- Is Active -->
+                <div class="form-check mb-3">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label"></label>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Back to List
+                    </a>
+
+                    <button type="submit" class="btn btn-success">
+                        @(Model.Id == 0 ? "Save" : "Update")
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

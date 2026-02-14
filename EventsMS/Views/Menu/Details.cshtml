@@ -1,0 +1,85 @@
+﻿@model EventsMS.Models.Menu
+
+@{
+    ViewData["Title"] = "Menu Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-info text-white d-flex justify-content-between">
+            <h4 class="mb-0">Menu Details</h4>
+            <div>
+                <a asp-action="CreateOrEdit" asp-route-id="@Model.Id"
+                   class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary btn-sm">
+                    Back
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Title</div>
+                <div class="col-md-9">@Model.Title</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">URL</div>
+                <div class="col-md-9">@Model.Url</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Parent Menu</div>
+                <div class="col-md-9">
+                    @(Model.Parent != null ? Model.Parent.Title : "Root Menu")
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Sort Order</div>
+                <div class="col-md-9">@Model.SortOrder</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Status</div>
+                <div class="col-md-9">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Children Menus -->
+            <h5 class="fw-bold">Child Menus</h5>
+
+            @if (Model.Children != null && Model.Children.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var child in Model.Children.OrderBy(x => x.SortOrder))
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>@child.Title</span>
+                            <span class="badge bg-secondary">@child.SortOrder</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No child menus available.</p>
+            }
+
+        </div>
+    </div>
+</div>
