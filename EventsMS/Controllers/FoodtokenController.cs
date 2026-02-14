@@ -49,4 +49,20 @@ public class FoodtokenController : Controller
                 return RedirectToAction(nameof(Index));
             }     
     }
+        [HttpPost]
+        public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
+        {
+            await _foodTokenRepository.DeleteFoodTokenAsync(id, cancellationToken);
+            return RedirectToAction(nameof(Index));
+    }
+    [HttpGet]
+    public async Task<IActionResult> Details(long id, CancellationToken cancellationToken)
+    {
+        var data = await _foodTokenRepository.GetFoodTokenByIdAsync(id, cancellationToken);
+        if (data != null)
+        {
+            return View(data);
+        }
+        return NotFound();
+    }
 }

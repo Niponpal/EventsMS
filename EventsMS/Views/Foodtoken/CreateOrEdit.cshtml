@@ -1,0 +1,90 @@
+﻿@model EventsMS.Models.FoodToken
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Generate Food Token" : "Edit Food Token";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow border-0">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                @(Model.Id == 0 ? "Generate New Food Token" : "Edit Food Token")
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+
+                    <!-- Registration Dropdown -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="RegistrationId" class="form-label fw-semibold">
+                            Select Registration
+                        </label>
+                        <select asp-for="RegistrationId"
+                                asp-items="ViewBag.RegistrationList"
+                                class="form-select">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                        <span asp-validation-for="RegistrationId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Token Code -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="TokenCode" class="form-label fw-semibold"></label>
+                        <input asp-for="TokenCode" class="form-control" readonly />
+                    </div>
+
+                    <!-- Issued Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IssuedUtc" class="form-label fw-semibold"></label>
+                        <input asp-for="IssuedUtc"
+                               type="datetime-local"
+                               class="form-control"
+                               value="@Model.IssuedUtc.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="IssuedUtc" class="text-danger"></span>
+                    </div>
+
+                    <!-- Is Used Switch -->
+                    <div class="col-md-6 mb-3 d-flex align-items-center">
+                        <div class="form-check form-switch mt-4">
+                            <input asp-for="IsUsed"
+                                   class="form-check-input"
+                                   type="checkbox" />
+                            <label asp-for="IsUsed"
+                                   class="form-check-label fw-semibold">
+                                Mark as Used
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end mt-3">
+                    <a asp-action="Index" class="btn btn-secondary me-2">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary px-4">
+                        @(Model.Id == 0 ? "Generate Token" : "Update Token")
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
