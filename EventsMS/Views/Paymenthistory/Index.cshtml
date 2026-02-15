@@ -1,0 +1,49 @@
+﻿@model IEnumerable<EventsMS.Models.PaymentHistory>
+
+@{
+    ViewData["Title"] = "Payment History";
+}
+
+<h1>Payment History</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Payment</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Payment Id</th>
+            <th>Provider</th>
+            <th>Transaction Id</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Customer Name</th>
+            <th>Customer Mobile</th>
+            <th>Bank Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PaymentId</td>
+                <td>@item.Provider</td>
+                <td>@item.TransactionId</td>
+                <td>@item.Status</td>
+                <td>@item.Amount.ToString("C")</td>
+                <td>@item.Currency</td>
+                <td>@item.CustomerName</td>
+                <td>@item.CustomerMobile</td>
+                <td>@item.BankName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

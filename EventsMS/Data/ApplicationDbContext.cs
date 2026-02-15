@@ -15,7 +15,5 @@ public class ApplicationDbContext: DbContext
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Payment>  payments { get; set; }
     public DbSet<PaymentHistory> paymentHistories { get; set; }
-    public DbSet<Permission> permissions { get; set; }
     public DbSet<StudentRegistration> studentRegistrations { get; set; }
-
 }

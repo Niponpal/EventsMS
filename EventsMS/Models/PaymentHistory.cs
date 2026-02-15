@@ -4,8 +4,6 @@ namespace EventsMS.Models;
 
 public class PaymentHistory:BaseEntities.BaseEntity<long>
 {
-    public long PaymentId { get; set; }
-    public Payment Payment { get; set; } = default!;
     public string Provider { get; set; } = "SSLCommerz";
     public string ProviderSessionId { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
@@ -18,4 +16,6 @@ public class PaymentHistory:BaseEntities.BaseEntity<long>
     public decimal Amount { get; set; } = 0;
     public string Currency { get; set; } = string.Empty;
     public string JsonResponse { get; set; } = string.Empty;
+    public long PaymentId { get; set; }
+    public Payment Payment { get; set; } = default!;
 }

@@ -1,0 +1,82 @@
+﻿@model EventsMS.Models.PaymentHistory
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Add Payment History" : "Edit Payment History";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="CreateOrEdit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="PaymentId"></label>
+        <input asp-for="PaymentId" class="form-control" />
+        <span asp-validation-for="PaymentId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Provider"></label>
+        <input asp-for="Provider" class="form-control" />
+        <span asp-validation-for="Provider" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProviderSessionId"></label>
+        <input asp-for="ProviderSessionId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TransactionId"></label>
+        <input asp-for="TransactionId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ValidationId"></label>
+        <input asp-for="ValidationId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BankName"></label>
+        <input asp-for="BankName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CustomerName"></label>
+        <input asp-for="CustomerName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CustomerMobile"></label>
+        <input asp-for="CustomerMobile" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Currency"></label>
+        <input asp-for="Currency" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="JsonResponse"></label>
+        <textarea asp-for="JsonResponse" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

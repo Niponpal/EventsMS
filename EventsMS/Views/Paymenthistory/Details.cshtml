@@ -1,0 +1,54 @@
+﻿@model EventsMS.Models.PaymentHistory
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<h1>Payment Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Payment Id</dt>
+            <dd class="col-sm-9">@Model.PaymentId</dd>
+
+            <dt class="col-sm-3">Provider</dt>
+            <dd class="col-sm-9">@Model.Provider</dd>
+
+            <dt class="col-sm-3">Provider Session Id</dt>
+            <dd class="col-sm-9">@Model.ProviderSessionId</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Transaction Id</dt>
+            <dd class="col-sm-9">@Model.TransactionId</dd>
+
+            <dt class="col-sm-3">Validation Id</dt>
+            <dd class="col-sm-9">@Model.ValidationId</dd>
+
+            <dt class="col-sm-3">Bank Name</dt>
+            <dd class="col-sm-9">@Model.BankName</dd>
+
+            <dt class="col-sm-3">Customer Name</dt>
+            <dd class="col-sm-9">@Model.CustomerName</dd>
+
+            <dt class="col-sm-3">Customer Mobile</dt>
+            <dd class="col-sm-9">@Model.CustomerMobile</dd>
+
+            <dt class="col-sm-3">Amount</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Currency</dt>
+            <dd class="col-sm-9">@Model.Currency</dd>
+
+            <dt class="col-sm-3">JSON Response</dt>
+            <dd class="col-sm-9"><pre>@Model.JsonResponse</pre></dd>
+        </dl>
+    </div>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>
