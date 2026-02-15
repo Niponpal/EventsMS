@@ -1,4 +1,5 @@
-﻿using EventsMS.Repository;
+﻿using EventsMS.Models;
+using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsMS.Controllers;
@@ -25,7 +26,7 @@ public class MenuController : Controller
     {
         if (id == 0)
         {
-            return View(new Models.Menu());
+            return View(new Menu());
         }
         else
         {
@@ -38,7 +39,7 @@ public class MenuController : Controller
         }
     }
     [HttpPost]
-    public async Task<IActionResult> CreateOrEdit(Models.Menu menu, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateOrEdit(Menu menu, CancellationToken cancellationToken)
     {
         if (menu.Id == 0)
         {
