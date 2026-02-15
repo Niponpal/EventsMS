@@ -1,0 +1,79 @@
+﻿@model EventsMS.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<div class="container mt-4">
+    <h2>Payment Details</h2>
+    <hr />
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Invoice Number:</div>
+                <div class="col-md-8">@Model.InvoiceNumber</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Student:</div>
+                <div class="col-md-8">@Model.Registration?.FullName</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Provider:</div>
+                <div class="col-md-8">@Model.Provider</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Status:</div>
+                <div class="col-md-8">
+                    @if (Model.Status == "Paid")
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else if (Model.Status == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">@Model.Status</span>
+                    }
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Amount:</div>
+                <div class="col-md-8">@Model.Amount.ToString("C")</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Transaction ID:</div>
+                <div class="col-md-8">@Model.TransactionId</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Provider Session ID:</div>
+                <div class="col-md-8">@Model.ProviderSessionId</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Validation ID:</div>
+                <div class="col-md-8">@Model.ValidationId</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Created Date:</div>
+                <div class="col-md-8">@DateTime.Now.ToString("dd MMM yyyy")</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

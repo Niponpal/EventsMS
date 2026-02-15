@@ -1,0 +1,77 @@
+﻿@model Payment
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Create Payment" : "Edit Payment";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    <form asp-action="CreateOrEdit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="InvoiceNumber" class="form-label"></label>
+                <input asp-for="InvoiceNumber" class="form-control" />
+                <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="RegistrationId" class="form-label">Student</label>
+                <select asp-for="RegistrationId"  class="form-select">
+                    <option value="">-- Select Student --</option>
+                </select>
+                <span asp-validation-for="RegistrationId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Provider" class="form-label"></label>
+                <input asp-for="Provider" class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-select">
+                    <option>Pending</option>
+                    <option>Paid</option>
+                    <option>Failed</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="TransactionId" class="form-label"></label>
+                <input asp-for="TransactionId" class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="ProviderSessionId" class="form-label"></label>
+                <input asp-for="ProviderSessionId" class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="ValidationId" class="form-label"></label>
+                <input asp-for="ValidationId" class="form-control" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            @(Model.Id == 0 ? "Create" : "Update")
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
