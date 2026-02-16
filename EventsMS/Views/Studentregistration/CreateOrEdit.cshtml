@@ -1,0 +1,104 @@
+﻿@model EventsMS.Models.StudentRegistration
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Create Registration" : "Edit Registration";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                @(Model.Id == 0 ? "Create Student Registration" : "Edit Student Registration")
+            </h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Save" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">ID Card Number</label>
+                        <input asp-for="IdCardNumber" class="form-control" />
+                        <span asp-validation-for="IdCardNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department</label>
+                        <input asp-for="Department" class="form-control" />
+                        <span asp-validation-for="Department" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Event</label>
+                        <select asp-for="EventId"
+                                asp-items="ViewBag.EventList"
+                                class="form-select">
+                            <option value="">-- Select Event --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Payment Status</label>
+                        <select asp-for="PaymentStatus" class="form-select">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Upload Photo</label>
+                        <input type="file" name="PhotoFile" class="form-control" />
+
+                        @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                        {
+                            <div class="mt-2">
+                                <img src="~/@Model.PhotoPath"
+                                     width="100"
+                                     class="img-thumbnail" />
+                            </div>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="mt-3 text-end">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Back
+                    </a>
+
+                    <button type="submit" class="btn btn-success">
+                        Save
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
