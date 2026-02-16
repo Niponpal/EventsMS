@@ -1,0 +1,104 @@
+﻿@model EventsMS.Models.StudentRegistration
+
+@{
+    ViewData["Title"] = "Registration Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Student Registration Details</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Photo Section -->
+                <div class="col-md-4 text-center mb-4">
+                    @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                    {
+                        <img src="~/@Model.PhotoPath"
+                             class="img-fluid rounded shadow"
+                             style="max-height:250px;" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/200"
+                             class="img-fluid rounded" />
+                    }
+                </div>
+
+                <!-- Details Section -->
+                <div class="col-md-8">
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Full Name</th>
+                            <td>@Model.FullName</td>
+                        </tr>
+
+                        <tr>
+                            <th>Phone Number</th>
+                            <td>@Model.PhoneNumber</td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td>@Model.Email</td>
+                        </tr>
+
+                        <tr>
+                            <th>ID Card Number</th>
+                            <td>@Model.IdCardNumber</td>
+                        </tr>
+
+                        <tr>
+                            <th>Department</th>
+                            <td>@Model.Department</td>
+                        </tr>
+
+                        <tr>
+                            <th>Event</th>
+                            <td>@Model.Event?.Description</td>
+                        </tr>
+
+                        <tr>
+                            <th>Payment Status</th>
+                            <td>
+                                @if (Model.PaymentStatus == "Completed")
+                                {
+                                    <span class="badge bg-success">Completed</span>
+                                }
+                                else if (Model.PaymentStatus == "Failed")
+                                {
+                                    <span class="badge bg-danger">Failed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="mt-3 text-end">
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back
+                </a>
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-warning">
+                    Edit
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
