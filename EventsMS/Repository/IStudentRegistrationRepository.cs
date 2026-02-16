@@ -1,13 +1,12 @@
 ﻿using EventsMS.Models;
 
-namespace EventsMS.Repository
+namespace EventsMS.Repository;
+
+public interface IStudentRegistrationRepository
 {
-    public interface IStudentRegistrationRepository
-    {
-        Task<IEnumerable<StudentRegistration>> GetAllStudentRegistrationAsync(CancellationToken cancellationToken);
-        Task<StudentRegistration?> GetStudentRegistrationByIdAsync(long id, CancellationToken cancellationToken);
-        Task<StudentRegistration> AddStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
-        Task<StudentRegistration?> UpdateStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
-        Task<StudentRegistration> DeleteStudentRegistrationAsync(long id, CancellationToken cancellationToken);
-    }
+    Task<IEnumerable<StudentRegistration>> GetAllStudentRegistrationAsync(CancellationToken cancellationToken);
+    Task<StudentRegistration?> GetStudentRegistrationByIdAsync(long id, CancellationToken cancellationToken);
+    Task<StudentRegistration> AddStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
+    Task<StudentRegistration?> UpdateStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
+    Task<StudentRegistration> DeleteStudentRegistrationAsync(long id, CancellationToken cancellationToken);
 }
