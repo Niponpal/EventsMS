@@ -1,6 +1,6 @@
-﻿using EventsMS.Repository;
+﻿using EventsMS.Models;
+using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
 
@@ -22,22 +22,22 @@ public class CategoryController : Controller
         return View(NotFound());
     }
     [HttpGet]
-    public async Task<IActionResult> CreateOrEDit(int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateOrEdit(int id, CancellationToken cancellationToken)
     {
         if (id == 0)
         {
-            return View(new Models.Category());
+            return View(new Category());
         }
         var category = await _categoryRepository.GetCategoryByIdAsync(id, cancellationToken);
         if (category != null)
         {
             return View(category);
         }
-        return View(NotFound());
+        return NotFound();
     }
     [HttpPost]
-    public async Task<IActionResult> CreateOrEdit(Models.Category category, CancellationToken cancellationToken)
-    {
+    public async Task<IActionResult> CreateOrEdit(Category category, CancellationToken cancellationToken)
+    {  
       
             if (category.Id == 0)
             {
