@@ -4,70 +4,95 @@
     ViewData["Title"] = "Category Details - " + Model.Name;
 }
 
-<div class="container py-5">
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
-
-            <!-- Header with navigation buttons -->
+            <!-- Header with Back & Edit -->
             <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
                 <div>
-                    <h1 class="fw-bold text-dark mb-1">@Model.Name</h1>
-                    <p class="text-muted mb-0">Category details</p>
+                    <h1 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 2.25rem; letter-spacing: -0.02em;">
+                        @Model.Name
+                    </h1>
+                    <p class="mb-0" style="color: var(--text-secondary); font-size: 1.05rem;">
+                        Category Details
+                    </p>
                 </div>
-                <div class="d-flex gap-2">
-                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                <div class="d-flex gap-2 flex-wrap">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4 rounded-pill shadow-sm"
+                       style="font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-arrow-left me-2"></i> Back to List
                     </a>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary px-4">
+                    <a asp-action="CreateOrEdit" asp-route-id="@Model.Id"
+                       class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm"
+                       style="font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-pencil me-2"></i> Edit
                     </a>
                 </div>
             </div>
 
             <!-- Main Details Card -->
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-
-                <!-- Card Header -->
-                <div class="card-header bg-gradient text-white py-4 border-0">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h4 class="mb-1 fw-semibold">Category Information</h4>
-                            <p class="mb-0 opacity-90">Basic details of this category</p>
-                        </div>
-                        <i class="bi bi-tags-fill fs-1 opacity-75"></i>
+            <div class="chart-card mb-5">
+                <!-- Reusing dashboard chart-card style -->
+                <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-3 border-bottom"
+                     style="border-bottom-color: var(--border) !important;">
+                    <div>
+                        <h5 class="fw-bold mb-0" style="color: var(--text-primary); font-size: 1.5rem;">
+                            Category Information
+                        </h5>
+                        <small class="text-muted">Basic details and overview</small>
                     </div>
+                    <i class="bi bi-tags-fill fs-1" style="color: var(--primary); opacity: 0.85;"></i>
                 </div>
 
-                <!-- Card Body -->
-                <div class="card-body p-5">
-                    <div class="row g-5">
-
+                <div class="p-4 p-md-5">
+                    <div class="row g-4">
                         <!-- Name -->
                         <div class="col-12">
-                            <h6 class="text-uppercase text-muted small fw-semibold mb-2">Category Name</h6>
-                            <p class="fs-4 fw-medium mb-0">@Model.Name</p>
+                            <h6 class="text-uppercase fw-semibold mb-2 small" style="color: var(--text-secondary); letter-spacing: 0.05em;">
+                                Category Name
+                            </h6>
+                            <p class="fs-4 fw-medium mb-0" style="color: var(--text-primary);">
+                                @Model.Name
+                            </p>
                         </div>
 
                         <!-- Description -->
                         <div class="col-12">
-                            <h6 class="text-uppercase text-muted small fw-semibold mb-2">Description</h6>
+                            <h6 class="text-uppercase fw-semibold mb-2 small" style="color: var(--text-secondary); letter-spacing: 0.05em;">
+                                Description
+                            </h6>
                             @if (!string.IsNullOrWhiteSpace(Model.Description))
                             {
-                                <p class="fs-5 text-dark mb-0" style="white-space: pre-wrap;">@Model.Description</p>
+                                <p class="fs-5 mb-0" style="color: var(--text-primary); white-space: pre-wrap; line-height: 1.6;">
+                                    @Model.Description
+                                </p>
                             }
                             else
                             {
-                                <p class="text-muted fst-italic mb-0">No description provided</p>
+                                <p class="text-muted fst-italic mb-0" style="font-size: 1.05rem;">
+                                    No description provided
+                                </p>
                             }
                         </div>
 
+                        <!-- Additional Info (you can expand later) -->
+                        <div class="col-12">
+                            <h6 class="text-uppercase fw-semibold mb-2 small" style="color: var(--text-secondary); letter-spacing: 0.05em;">
+                                Associated Events
+                            </h6>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fs-6">
+                                @Model.Events?.Count events
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Footer with delete option -->
-                <div class="card-footer bg-light border-0 p-4 d-flex justify-content-end">
+                <!-- Footer with Delete -->
+                <div class="px-4 py-4 border-top d-flex justify-content-end"
+                     style="border-top-color: var(--border) !important;">
                     <a asp-action="Delete" asp-route-id="@Model.Id"
-                       class="btn btn-outline-danger px-5">
+                       class="btn btn-outline-danger btn-lg px-5 rounded-pill shadow-sm"
+                       style="font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-trash3 me-2"></i> Delete Category
                     </a>
                 </div>
@@ -75,19 +100,11 @@
 
             <!-- Small back link -->
             <div class="text-center mt-4">
-                <a asp-action="Index" class="text-muted text-decoration-none small">
-                    ← Return to Categories
+                <a asp-action="Index" class="text-muted text-decoration-none small d-inline-flex align-items-center gap-2"
+                   style="transition: color 0.2s;">
+                    <i class="bi bi-arrow-left-circle"></i> Return to Categories List
                 </a>
             </div>
-
         </div>
     </div>
 </div>
-
-@section Styles {
-    <style>
-        .bg-gradient {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
-        }
-    </style>
-}

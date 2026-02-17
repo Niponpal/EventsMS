@@ -7,31 +7,32 @@
     string cardHeaderText = Model?.Id > 0 ? "Edit Category" : "New Category";
 }
 
-<div class="container py-5">
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
-
-            <!-- Card with shadow and rounded corners -->
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-
+            <!-- Main Card - matching dashboard card style -->
+            <div class="chart-card mb-5">
+                <!-- Reusing your chart-card class for consistency -->
                 <!-- Card Header -->
-                <div class="card-header bg-gradient-primary text-white py-4 border-0">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h4 class="mb-1 fw-semibold">@cardHeaderText</h4>
-                            <p class="mb-0 opacity-75">
-                                @(Model?.Id > 0 ? "Update the details of this category" : "Add a new category for your events")
-                            </p>
-                        </div>
-                        <i class="bi bi-tags-fill fs-1 opacity-75"></i>
+                <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-3 border-bottom"
+                     style="border-bottom-color: var(--border) !important;">
+                    <div>
+                        <h4 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 1.75rem;">
+                            @cardHeaderText
+                        </h4>
+                        <p class="mb-0" style="color: var(--text-secondary); font-size: 1rem;">
+                            @(Model?.Id > 0
+                                                        ? "Update the details of this category"
+                                                        : "Add a new category to organize your events")
+                        </p>
                     </div>
+                    <i class="bi bi-tags-fill fs-1" style="color: var(--primary); opacity: 0.85;"></i>
                 </div>
 
                 <!-- Card Body -->
-                <div class="card-body p-4 p-md-5">
-
+                <div class="p-4 p-md-5">
                     <form asp-action="CreateOrEdit" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-4 fw-medium"></div>
 
                         <!-- Hidden ID for Edit -->
                         @if (Model?.Id > 0)
@@ -41,37 +42,42 @@
 
                         <!-- Name Field -->
                         <div class="mb-4">
-                            <label asp-for="Name" class="form-label fw-medium required">
-                                Category Name
+                            <label asp-for="Name" class="form-label fw-semibold" style="color: var(--text-primary);">
+                                Category Name <span class="text-danger">*</span>
                             </label>
-                            <input asp-for="Name" class="form-control form-control-lg"
-                                   placeholder="e.g. Concert, Workshop, Conference..."
+                            <input asp-for="Name" class="form-control form-control-lg shadow-sm"
+                                   placeholder="e.g. Concert, Workshop, Conference, Seminar..."
+                                   style="border-radius: 0.75rem; font-size: 1.1rem;"
                                    autofocus />
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback" style="font-size: 0.9rem;">
                                 <span asp-validation-for="Name"></span>
                             </div>
                         </div>
 
                         <!-- Description Field -->
                         <div class="mb-5">
-                            <label asp-for="Description" class="form-label fw-medium">
+                            <label asp-for="Description" class="form-label fw-semibold" style="color: var(--text-primary);">
                                 Description <small class="text-muted">(optional)</small>
                             </label>
-                            <textarea asp-for="Description" class="form-control form-control-lg"
-                                      rows="4"
-                                      placeholder="Brief description of this category..."></textarea>
-                            <div class="form-text text-muted mt-1">
-                                Helps users understand what kind of events belong here.
+                            <textarea asp-for="Description" class="form-control shadow-sm"
+                                      rows="5"
+                                      placeholder="Brief description of what kind of events belong in this category..."
+                                      style="border-radius: 0.75rem; font-size: 1.05rem; resize: vertical;"></textarea>
+                            <div class="form-text text-muted mt-2" style="font-size: 0.9rem;">
+                                Helps users understand the type of events in this category.
                             </div>
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
                         <!-- Form Actions -->
-                        <div class="d-flex flex-wrap gap-3 justify-content-end mt-5 pt-4 border-top">
-                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5">
+                        <div class="d-flex flex-wrap gap-3 justify-content-end mt-5 pt-4 border-top"
+                             style="border-top-color: var(--border) !important;">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 rounded-pill shadow-sm"
+                               style="font-weight: 600; transition: all 0.2s;">
                                 <i class="bi bi-arrow-left me-2"></i> Cancel
                             </a>
-                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm rounded-pill"
+                                    style="font-weight: 600; transition: all 0.2s;">
                                 <i class="bi bi-save me-2"></i> @submitButtonText
                             </button>
                         </div>
@@ -79,13 +85,13 @@
                 </div>
             </div>
 
-            <!-- Back link (small, subtle) -->
+            <!-- Back link -->
             <div class="text-center mt-4">
-                <a asp-action="Index" class="text-muted text-decoration-none small">
+                <a asp-action="Index" class="text-muted text-decoration-none small d-inline-flex align-items-center gap-2"
+                   style="transition: color 0.2s;">
                     <i class="bi bi-arrow-left-circle"></i> Back to Categories List
                 </a>
             </div>
-
         </div>
     </div>
 </div>
