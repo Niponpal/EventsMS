@@ -1,4 +1,146 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Filter Section -->
+<div class="filter-section mb-5">
+    <span class="filter-label"><i class="bi bi-funnel me-1"></i> Filter by Event:</span>
+    <select class="filter-select form-select">
+        <option selected>All Events</option>
+        <option>Tech Summit 2026</option>
+        <option>AI Workshop Dhaka</option>
+        <option>Startup Pitch Night</option>
+    </select>
+    <button class="btn-apply">Apply</button>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center">
+            <i class="bi bi-calendar-event stat-icon me-3 text-primary"></i>
+            <div>
+                <div class="stat-label">Total Events</div>
+                <div class="stat-value">10</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center">
+            <i class="bi bi-people stat-icon me-3 text-success"></i>
+            <div>
+                <div class="stat-label">Registrations</div>
+                <div class="stat-value">8</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle stat-icon me-3 text-warning"></i>
+            <div>
+                <div class="stat-label">Pending Payments</div>
+                <div class="stat-value">1</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center">
+            <i class="bi bi-credit-card stat-icon me-3 text-info"></i>
+            <div>
+                <div class="stat-label">Total Payments</div>
+                <div class="stat-value">6</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row g-4 mb-5">
+    <div class="col-md-6">
+        <div class="chart-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 class="chart-title mb-0">Daily Registrations</h5>
+                    <small class="text-muted">Last 30 days</small>
+                </div>
+                <i class="bi bi-graph-up-arrow fs-4 text-primary opacity-75"></i>
+            </div>
+            <!-- Placeholder bars (real data-এ Chart.js ব্যবহার করো) -->
+            <div class="d-flex align-items-end gap-2 mt-4" style="height: 160px;">
+                <div class="bg-primary rounded-top" style="width: 7%; height: 45%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 70%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 40%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 85%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 100%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 60%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 50%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 75%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 55%;"></div>
+                <div class="bg-primary rounded-top" style="width: 7%; height: 90%;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-card">
+            <h5 class="chart-title mb-1">Payment Status</h5>
+            <small class="text-muted d-block mb-3">Overall Overview</small>
+            <div class="progress rounded-pill" style="height: 14px; background: var(--border);">
+                <div class="progress-bar" role="progressbar" style="width: 85.7%; background: linear-gradient(90deg, var(--primary), var(--primary-dark));" aria-valuenow="85.7" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="d-flex justify-content-between mt-2 small fw-bold">
+                <span class="text-success">Paid: 85.7%</span>
+                <span class="text-warning">Pending: 14.3%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Registrations -->
+<div class="recent-reg-table mb-5">
+    <h5 class="fw-semibold mb-3 px-4 pt-4"><i class="bi bi-list-ul me-2"></i> Recent Registrations</h5>
+    <div class="table-responsive px-4 pb-4">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID Card No.</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Department</th>
+                    <th>Event Name</th>
+                    <th>Payment Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>999966</td>
+                    <td>Octavius Fernandez</td>
+                    <td>srajdip920@gmail.com</td>
+                    <td>01701714627</td>
+                    <td><span class="dept-badge">Art & Culture</span></td>
+                    <td>Hurley Expo</td>
+                    <td><span class="badge bg-success-subtle text-success">Paid</span></td>
+                    <td>11 Jan 2026</td>
+                </tr>
+                <tr>
+                    <td>7777888</td>
+                    <td>Chadwick Simon</td>
+                    <td>srajdip920@gmail.com</td>
+                    <td>01701714627</td>
+                    <td><span class="dept-badge">CSE</span></td>
+                    <td>Health & Wellness Fair</td>
+                    <td><span class="badge bg-warning-subtle text-warning">Pending</span></td>
+                    <td>11 Jan 2026</td>
+                </tr>
+                <!-- আরও rows যোগ করো -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@* <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8" />
@@ -595,4 +737,4 @@
         });
     </script>
 </body>
-</html>
+</html> *@
