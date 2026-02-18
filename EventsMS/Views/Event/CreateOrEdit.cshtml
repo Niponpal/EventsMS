@@ -14,7 +14,7 @@
         </div>
 
         <div class="card-body">
-            <form asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
+            <form asp-action="CreateOrEdit" method="post">
 
                 <input type="hidden" asp-for="Id" />
 
@@ -80,16 +80,20 @@
                         <span asp-validation-for="MealsOffered" class="text-danger"></span>
                     </div>
 
-                    <!-- Category Dropdown -->
-                    <div class="col-md-4 mb-3">
-                        <label asp-for="CategoryId" class="form-label fw-semibold"></label>
-                        <select asp-for="CategoryId"
-                                asp-items="ViewBag.CategoryList"
-                                class="form-select">
-                            <option value="">-- Select Category --</option>
-                        </select>
-                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+               
+
+
+                    <div class="col-md-4 mb-3" ">
+                        <label asp-for="CategoryId" class="form-label fw-semibold">Category</label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                            <select asp-for="CategoryId" class="form-select" asp-items="@ViewBag.CategoryId" required>
+                                <option value="">-- Select Category --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
                     </div>
+
 
                     <!-- Is Free Switch -->
                     <div class="col-md-12 mb-3">

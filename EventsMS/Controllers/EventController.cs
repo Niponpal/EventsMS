@@ -9,11 +9,16 @@ public class EventController : Controller
 {
 
     private readonly IEventRepository _eventRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public EventController(IEventRepository eventRepository)
+   
+
+    public EventController(IEventRepository eventRepository, ICategoryRepository categoryRepository)
     {
         _eventRepository = eventRepository;
+        _categoryRepository = categoryRepository;
     }
+
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
 
@@ -27,6 +32,7 @@ public class EventController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
     {
+        ViewData["CategoryId"] = _categoryRepository.Dropdown();
         if (id == 0)
         {
             return View(new Models.Event());

@@ -1,5 +1,6 @@
 ﻿using EventsMS.Data;
 using EventsMS.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsMS.Repository;
@@ -34,6 +35,7 @@ public class CategoryRepository : ICategoryRepository
         return null!;
     }
 
+
     public async Task<IEnumerable<Category>> GetAllCategoryAsync(CancellationToken cancellationToken)
     {
       var data = await _context.Categories.ToListAsync(cancellationToken);
@@ -67,4 +69,17 @@ public class CategoryRepository : ICategoryRepository
         }
         return null;
     }
+
+
+    public IEnumerable<SelectListItem> Dropdown()
+    {
+        var data = _context.Categories.Select(x => new SelectListItem
+        {
+            Text = x.Name,
+            Value = x.Id.ToString()
+        }).ToList();
+        return data;
+    }
+
+
 }
