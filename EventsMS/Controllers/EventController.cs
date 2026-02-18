@@ -73,7 +73,7 @@ public class EventController : Controller
         {
             return View(data);
         }
-        return View(NotFound());
+        return NotFound();
     }
 
 }

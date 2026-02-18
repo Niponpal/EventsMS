@@ -1,110 +1,174 @@
 ﻿@model EventsMS.Models.Event
-
 @{
     ViewData["Title"] = "Event Details";
 }
 
-<div class="container mt-4">
-
-    <div class="card shadow border-0">
-
-        <!-- Image Section -->
+<div class="container-fluid px-0 mt-4">
+    <div class="card detail-card shadow-md border-0 overflow-hidden" style="border-radius: var(--radius-lg); background: var(--card-bg);">
+        <!-- Hero Image Section -->
         <div class="position-relative">
             <img src="@Model.ImageUrl"
                  class="w-100"
-                 style="height:350px; object-fit:cover;"
-                 alt="@Model.Name" />
+                 style="height: 380px; object-fit: cover;"
+                 alt="@Model.Name"
+                 loading="lazy" />
 
-            <!-- Category Badge -->
-            <span class="badge bg-primary position-absolute top-0 start-0 m-3 px-3 py-2">
+            <!-- Category Badge (top-left overlay) -->
+            <span class="dept-badge position-absolute top-0 start-0 m-4 px-4 py-2 fw-medium shadow-sm">
                 @Model.Category?.Name
             </span>
-        </div>
 
-        <div class="card-body">
-
-            <!-- Title -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="fw-bold text-dark">@Model.Name</h2>
-
+            <!-- Free/Paid Badge (top-right overlay) -->
+            <div class="position-absolute top-0 end-0 m-4">
                 @if (Model.IsFree)
                 {
-                    <span class="badge bg-success fs-6 px-3 py-2">
+                    <span class="badge rounded-pill bg-success px-4 py-2 fs-6 fw-medium shadow-sm">
                         Free Event
                     </span>
                 }
                 else
                 {
-                    <span class="badge bg-warning text-dark fs-6 px-3 py-2">
-                        Registration Fee: @Model.RegistrationFee ৳
+                    <span class="badge rounded-pill bg-warning text-dark px-4 py-2 fs-6 fw-medium shadow-sm">
+                        ৳ @Model.RegistrationFee
                     </span>
                 }
             </div>
+        </div>
 
-            <!-- Dates -->
-            <div class="row mb-4">
+        <div class="card-body p-4 p-md-5">
+            <!-- Title & Quick Stats -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+                <h2 class="fw-bold mb-0" style="color: var(--text-primary); font-size: 2.25rem; line-height: 1.2;">
+                    @Model.Name
+                </h2>
 
-                <div class="col-md-4">
-                    <div class="border rounded p-3 text-center bg-light">
-                        <h6 class="text-muted">Start Date</h6>
-                        <p class="fw-semibold mb-0">
-                            @Model.StartDate.ToString("dd MMM yyyy hh:mm tt")
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="border rounded p-3 text-center bg-light">
-                        <h6 class="text-muted">End Date</h6>
-                        <p class="fw-semibold mb-0">
-                            @Model.EndDate.ToString("dd MMM yyyy hh:mm tt")
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="border rounded p-3 text-center bg-light">
-                        <h6 class="text-muted">Meals Offered</h6>
-                        <p class="fw-semibold mb-0">
-                            @Model.MealsOffered
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Registration Count -->
-            <div class="mb-4">
-                <span class="badge bg-info fs-6 px-3 py-2">
+                <span class="badge bg-info-subtle text-info px-4 py-2 fs-6 fw-medium rounded-pill">
+                    <i class="bi bi-people me-1"></i>
                     Total Registrations: @Model.Registrations.Count
                 </span>
             </div>
 
-            <!-- Description -->
-            <div class="mb-4">
-                <h5 class="fw-bold border-bottom pb-2">Event Description</h5>
-                <p class="text-muted mt-3">
-                    @Model.Description
-                </p>
+            <!-- Key Info Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 rounded" style="background: rgba(var(--primary-rgb), 0.08); border: 1px solid var(--border);">
+                        <i class="bi bi-calendar-event fs-3 text-primary mb-2 d-block"></i>
+                        <h6 class="text-muted fw-semibold mb-1 small text-uppercase">Start Date</h6>
+                        <p class="fw-bold mb-0" style="color: var(--text-primary);">
+                            @Model.StartDate.ToString("dd MMM yyyy • hh:mm tt")
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 rounded" style="background: rgba(var(--primary-rgb), 0.08); border: 1px solid var(--border);">
+                        <i class="bi bi-calendar-check fs-3 text-primary mb-2 d-block"></i>
+                        <h6 class="text-muted fw-semibold mb-1 small text-uppercase">End Date</h6>
+                        <p class="fw-bold mb-0" style="color: var(--text-primary);">
+                            @Model.EndDate.ToString("dd MMM yyyy • hh:mm tt")
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 rounded" style="background: rgba(var(--primary-rgb), 0.08); border: 1px solid var(--border);">
+                        <i class="bi bi-cup-hot fs-3 text-primary mb-2 d-block"></i>
+                        <h6 class="text-muted fw-semibold mb-1 small text-uppercase">Meals Offered</h6>
+                        <p class="fw-bold mb-0 fs-4" style="color: var(--text-primary);">
+                            @Model.MealsOffered
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="mb-5">
+                <h5 class="fw-bold mb-3 pb-2 border-bottom" style="border-bottom-color: var(--border) !important; color: var(--text-primary);">
+                    <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                    Event Description
+                </h5>
+                <div class="description-content" style="color: var(--text-secondary); line-height: 1.7; font-size: 1.05rem;">
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        @Html.Raw(Model.Description.Replace("\n", "<br />"))
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No description provided.</p>
+                    }
+                </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="d-flex justify-content-end">
-                <a asp-action="Index" class="btn btn-secondary me-2">
-                    Back
+            <div class="d-flex flex-wrap justify-content-end gap-3 mt-5 pt-4 border-top" style="border-top-color: var(--border) !important;">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 rounded-pill">
+                    <i class="bi bi-arrow-left me-2"></i> Back to List
                 </a>
+                <a asp-action="CreateOrEdit" asp-route-id="@Model.Id"
+                   class="btn btn-outline-warning btn-lg px-5 rounded-pill">
+                    <i class="bi bi-pencil me-2"></i> Edit Event
+                </a>
+                <form method="post"
+                      asp-controller="Events"
+                      asp-action="Delete"
+                      asp-route-id="@Model.Id"
+                      onsubmit="return confirm('Are you sure you want to delete this event?');">
 
-                <a asp-action="Edit" asp-route-id="@Model.Id"
-                   class="btn btn-warning me-2">
-                    Edit
-                </a>
+                    @Html.AntiForgeryToken()
 
-                <a asp-action="Delete" asp-route-id="@Model.Id"
-                   class="btn btn-danger">
-                    Delete
-                </a>
+                    <button type="submit"
+                            class="btn btn-outline-danger btn-lg px-5 rounded-pill">
+                        <i class="bi bi-trash me-2"></i> Delete Event
+                    </button>
+                </form>
+
             </div>
-
         </div>
     </div>
 </div>
+
+<style>
+    .detail-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .detail-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+    .info-box {
+        transition: all 0.25s ease;
+        border-radius: var(--radius-lg);
+    }
+
+        .info-box:hover {
+            background: rgba(var(--primary-rgb), 0.12) !important;
+            transform: translateY(-4px);
+        }
+
+    .dept-badge {
+        background: #1e40af;
+        color: white;
+        font-size: 1rem;
+        border-radius: 9999px;
+    }
+
+    /* Dark mode adjustments */
+    [data-bs-theme="dark"] .info-box {
+        background: rgba(59, 130, 246, 0.12) !important;
+    }
+
+        [data-bs-theme="dark"] .info-box:hover {
+            background: rgba(59, 130, 246, 0.20) !important;
+        }
+
+    [data-bs-theme="dark"] .badge.bg-info-subtle {
+        background-color: #1e40af33 !important;
+        color: #93c5fd !important;
+    }
+
+    [data-bs-theme="dark"] .description-content {
+        color: var(--text-secondary);
+    }
+</style>
