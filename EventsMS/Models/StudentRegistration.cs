@@ -16,5 +16,6 @@
         public long UserId { get; set; }
         public Payment Payment { get; set; }
         public FoodToken FoodToken { get; set; }
+        public ICollection<FoodToken>  foodTokens { get; set; } = new List<FoodToken>();
     }
 }

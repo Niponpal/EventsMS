@@ -1,8 +1,6 @@
-﻿
-using EventsMS.Data;
+﻿using EventsMS.Data;
 using EventsMS.Models;
 using Microsoft.EntityFrameworkCore;
-
 namespace EventsMS.Repository;
 
 public class FoodTokenRepository : IFoodTokenRepository

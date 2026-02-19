@@ -35,6 +35,16 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         return null;
     }
 
+    public IEnumerable<SelectListItem> Dropdown()
+    {
+      var data = _context.studentRegistrations.Select(x => new SelectListItem
+        {
+            Text = x.FullName,
+            Value = x.Id.ToString()
+        }).ToList();
+        return data;
+    }
+
     public async Task<IEnumerable<StudentRegistration>> GetAllStudentRegistrationAsync(CancellationToken cancellationToken)
     {
        var data = await _context.studentRegistrations.ToListAsync(cancellationToken);

@@ -7,11 +7,15 @@ namespace EventsMS.Controllers;
 public class FoodtokenController : Controller
 {
     private readonly IFoodTokenRepository _foodTokenRepository;
+    private readonly IStudentRegistrationRepository _studentRegistrationRepository;
 
-    public FoodtokenController(IFoodTokenRepository foodTokenRepository)
+
+    public FoodtokenController(IFoodTokenRepository foodTokenRepository, IStudentRegistrationRepository studentRegistrationRepository)
     {
         _foodTokenRepository = foodTokenRepository;
+        _studentRegistrationRepository = studentRegistrationRepository;
     }
+
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var data = await _foodTokenRepository.GetAllFoodTokenAsync(cancellationToken);
@@ -20,9 +24,10 @@ public class FoodtokenController : Controller
     [HttpGet]
     public async Task<IActionResult>CreateOrEdit(long id, CancellationToken cancellationToken)
     {
+        ViewData["RegistrationId"] = _studentRegistrationRepository.Dropdown();
         if (id == 0)
         {
-            return View(new Models.FoodToken());
+            return View(new FoodToken());
         }
         else
         {
@@ -37,6 +42,7 @@ public class FoodtokenController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(FoodToken foodToken, CancellationToken cancellationToken)
     {
+        ViewData["RegistrationId"] = _studentRegistrationRepository.Dropdown();
         if (foodToken.Id == 0)
             {
                 await _foodTokenRepository.AddFoodTokenAsync(foodToken, cancellationToken);
