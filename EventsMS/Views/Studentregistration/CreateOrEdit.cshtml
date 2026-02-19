@@ -13,7 +13,7 @@
         </div>
 
         <div class="card-body">
-            <form asp-action="Save" method="post" enctype="multipart/form-data">
+            <form asp-action="CreateOrEdit" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Id" />
 
                 <div class="row">
@@ -48,13 +48,17 @@
                         <span asp-validation-for="Department" class="text-danger"></span>
                     </div>
 
+                  
+
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Event</label>
-                        <select asp-for="EventId"
-                                asp-items="ViewBag.EventList"
-                                class="form-select">
-                            <option value="">-- Select Event --</option>
-                        </select>
+                        <label asp-for="EventId" class="form-label fw-semibold" style="color: var(--text-primary);">Event</label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                            <select asp-for="EventId" class="form-select shadow-sm" asp-items="@ViewBag.EventId" required>
+                                <option value="">-- Select Category --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="EventId" class="text-danger small mt-1 d-block"></span>
                     </div>
 
                     <div class="col-md-6 mb-3">

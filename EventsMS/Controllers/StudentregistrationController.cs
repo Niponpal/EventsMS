@@ -20,6 +20,7 @@ public class StudentregistrationController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
+        
         var data = await _studentRegistrationRepository.GetAllStudentRegistrationAsync(cancellationToken);
         if (data != null)
         {
@@ -30,9 +31,10 @@ public class StudentregistrationController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
     {
+        ViewData["EventId"] = _eventRepository.Dropdown();
         if (id == 0)
         {
-            return View(new Models.StudentRegistration());
+            return View(new StudentRegistration());
         }
         else
         {
