@@ -8,11 +8,16 @@ namespace EventsMS.Controllers;
 public class StudentregistrationController : Controller
 {
     private readonly IStudentRegistrationRepository _studentRegistrationRepository;
+    private readonly IEventRepository _eventRepository;
 
-    public StudentregistrationController(IStudentRegistrationRepository studentRegistrationRepository)
+
+
+    public StudentregistrationController(IStudentRegistrationRepository studentRegistrationRepository, IEventRepository eventRepository)
     {
         _studentRegistrationRepository = studentRegistrationRepository;
+        _eventRepository = eventRepository;
     }
+
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var data = await _studentRegistrationRepository.GetAllStudentRegistrationAsync(cancellationToken);

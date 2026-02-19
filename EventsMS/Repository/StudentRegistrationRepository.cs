@@ -1,5 +1,6 @@
 ﻿using EventsMS.Data;
 using EventsMS.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsMS.Repository;
@@ -74,4 +75,7 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }
         return null;
     }
+
+    
+
 }

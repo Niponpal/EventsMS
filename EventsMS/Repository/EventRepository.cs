@@ -1,5 +1,6 @@
 ﻿using EventsMS.Data;
 using EventsMS.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsMS.Repository;
@@ -71,5 +72,15 @@ public class EventRepository : IEventRepository
             return data;
         }
         return null;
+    }
+
+    public IEnumerable<SelectListItem> Dropdown()
+    {
+        var data = _context.Events.Select(x => new SelectListItem
+        {
+            Text = x.Name,
+            Value = x.Id.ToString()
+        }).ToList();
+        return data;
     }
 }

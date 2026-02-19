@@ -1,7 +1,6 @@
 ﻿using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
 
@@ -47,6 +46,7 @@ public class EventController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(Event events, CancellationToken cancellationToken)
     {
+        ViewData["CategoryId"] = _categoryRepository.Dropdown();
         if (events.Id == 0)
         {
             await _eventRepository.AddEventAsync(events, cancellationToken);
