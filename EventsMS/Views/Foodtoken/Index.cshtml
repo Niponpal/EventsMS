@@ -4,107 +4,147 @@
     ViewData["Title"] = "Food Tokens";
 }
 
-<div class="container mt-4">
-
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="fw-bold text-primary">Food Token List</h3>
-
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Generate Token
+<div class="container-fluid mt-4 px-0">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1" style="font-size: 1.85rem; color: var(--text-primary);">Food Tokens</h2>
+            <p class="text-secondary mb-0" style="font-size: 0.95rem;">
+                Manage and track issued food tokens for events
+            </p>
+        </div>
+        <a asp-action="CreateOrEdit" class="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
+            <i class="bi bi-plus-lg"></i> Generate New Token
         </a>
     </div>
 
-    <div class="card shadow border-0">
-        <div class="card-body">
-
+    <!-- Main Card -->
+    <div class="card shadow border-0 rounded-4 overflow-hidden" style="border-radius: var(--radius-lg);">
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
+                <table class="table table-hover table-borderless align-middle mb-0">
+                    <thead class="bg-light-subtle">
                         <tr>
-                            <th>Token Code</th>
-                            <th>Student</th>
-                            <th>Event</th>
-                            <th>Issued Date</th>
-                            <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th scope="col" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.25rem;">
+                                Token Code
+                            </th>
+                            <th scope="col" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.25rem;">
+                                Student
+                            </th>
+                            <th scope="col" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.25rem;">
+                                Event
+                            </th>
+                            <th scope="col" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.25rem;">
+                                Issued Date
+                            </th>
+                            <th scope="col" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.25rem;">
+                                Status
+                            </th>
+                            <th scope="col" class="text-end" style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 1.1rem 1.5rem;">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @foreach (var item in Model)
+                        @if (!Model.Any())
                         {
                             <tr>
-                                <!-- Token Code -->
-                                <td>
-                                    <span class="fw-bold text-dark">
-                                        @item.TokenCode
-                                    </span>
-                                </td>
-
-                                <!-- Student -->
-                                <td>
-                                    @item.Registration.FullName
-
-                                <!-- Event -->
-                                <td>
-                                    @item.Registration?.Event?.Name
-                                </td>
-
-                                <!-- Issued Date -->
-                                <td>
-                                    @item.IssuedUtc.ToString("dd MMM yyyy hh:mm tt")
-                                </td>
-
-                                <!-- Status -->
-                                <td>
-                                    @if (item.IsUsed)
-                                    {
-                                        <span class="badge bg-success">
-                                            Used
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-warning text-dark">
-                                            Unused
-                                        </span>
-                                    }
-                                </td>
-
-                                <!-- Actions -->
-                                <td class="text-end">
-
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-primary">
-                                        Details
-                                    </a>
-
-                                    @if (!item.IsUsed)
-                                    {
-                                        <a asp-action="MarkUsed"
-                                           asp-route-id="@item.Id"
-                                           class="btn btn-sm btn-outline-success">
-                                            Mark Used
-                                        </a>
-                                    }
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-danger">
-                                        Delete
-                                    </a>
-
+                                <td colspan="6" class="text-center py-5 text-muted" style="font-size: 1.1rem;">
+                                    No food tokens found. Generate your first token.
                                 </td>
                             </tr>
                         }
-                    </tbody>
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr class="border-bottom">
+                                    <td class="fw-semibold" style="font-size: 1rem; color: var(--text-primary); padding: 1.15rem 1.25rem;">
+                                        @item.TokenCode
+                                    </td>
+                                    <td style="font-size: 0.97rem; color: var(--text-primary); padding: 1.15rem 1.25rem;">
+                                        @item.Registration?.FullName
+                                    </td>
+                                    <td style="font-size: 0.97rem; color: var(--text-primary); padding: 1.15rem 1.25rem;">
+                                        @item.Registration?.Event?.Name
+                                    </td>
+                                    <td style="font-size: 0.97rem; color: var(--text-secondary); padding: 1.15rem 1.25rem;">
+                                        @item.IssuedUtc.ToString("dd MMM yyyy • hh:mm tt")
+                                    </td>
+                                    <td style="padding: 1.15rem 1.25rem;">
+                                        @if (item.IsUsed)
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-3 py-2 fw-medium" style="font-size: 0.9rem; border-radius: 2rem;">
+                                                Used
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning px-3 py-2 fw-medium" style="font-size: 0.9rem; border-radius: 2rem;">
+                                                Unused
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-end" style="padding: 1.15rem 1.5rem;">
+                                        <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                                <i class="bi bi-eye me-1"></i> Details
+                                            </a>
 
+                                            @if (!item.IsUsed)
+                                            {
+                                                <a asp-action="MarkUsed" asp-route-id="@item.Id"
+                                                   class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                                    <i class="bi bi-check2-circle me-1"></i> Mark Used
+                                                </a>
+                                            }
+
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                               onclick="return confirm('Are you sure you want to delete this token?');">
+                                                <i class="bi bi-trash me-1"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
                 </table>
             </div>
+        </div>
 
+        <!-- Optional footer for pagination / count in future -->
+        <div class="card-footer bg-transparent border-0 text-end py-3 px-4 small text-muted">
+            Showing @Model.Count() token@(Model.Count() == 1 ? "" : "s")
         </div>
     </div>
 </div>
+
+<style>
+    /* Optional: Enhance hover & focus states */
+    tr:hover {
+        background-color: rgba(var(--primary-rgb, 59, 130, 246), 0.06) !important;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-sm.rounded-pill {
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-sm:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Dark mode adjustments (if your root has --card-bg etc.) */
+    [data-bs-theme="dark"] .bg-light-subtle {
+        background-color: #2d3748 !important;
+    }
+
+    [data-bs-theme="dark"] tr:hover {
+        background-color: rgba(59, 130, 246, 0.12) !important;
+    }
+</style>
