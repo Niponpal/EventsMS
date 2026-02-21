@@ -2,53 +2,174 @@
 
 @{
     ViewData["Title"] = "Payment Details";
+    bool isSuccess = string.Equals(Model.Status, "Success", StringComparison.OrdinalIgnoreCase);
+    bool isPending = string.Equals(Model.Status, "Pending", StringComparison.OrdinalIgnoreCase);
+    bool isFailed = string.Equals(Model.Status, "Failed", StringComparison.OrdinalIgnoreCase);
 }
 
-<h1>Payment Details</h1>
+<div class="container-fluid mt-4 px-lg-4">
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background: var(--card-bg);">
+        <!-- Header -->
+        <div class="card-header d-flex justify-content-between align-items-center py-4 px-4 px-md-5 border-0"
+             style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-receipt fs-3 me-3 text-white opacity-90"></i>
+                <h4 class="mb-0 fw-semibold text-white">Payment Details</h4>
+            </div>
 
-<div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Payment Id</dt>
-            <dd class="col-sm-9">@Model.PaymentId</dd>
+            <!-- Status Badge -->
+            <div>
+                @if (isSuccess)
+                {
+                    <span class="badge bg-success-subtle text-success px-4 py-2 fs-6 fw-medium rounded-pill">
+                        <i class="bi bi-check-circle-fill me-1"></i> Success
+                    </span>
+                }
+                else if (isPending)
+                {
+                    <span class="badge bg-warning-subtle text-warning px-4 py-2 fs-6 fw-medium rounded-pill">
+                        <i class="bi bi-hourglass-split me-1"></i> Pending
+                    </span>
+                }
+                else if (isFailed)
+                {
+                    <span class="badge bg-danger-subtle text-danger px-4 py-2 fs-6 fw-medium rounded-pill">
+                        <i class="bi bi-x-circle-fill me-1"></i> Failed
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary-subtle text-secondary px-4 py-2 fs-6 fw-medium rounded-pill">
+                        @Model.Status
+                    </span>
+                }
+            </div>
+        </div>
 
-            <dt class="col-sm-3">Provider</dt>
-            <dd class="col-sm-9">@Model.Provider</dd>
+        <div class="card-body p-4 p-md-5">
+            <div class="row g-4">
+                <!-- Left Column - Main Transaction Info -->
+                <div class="col-lg-6">
+                    <div class="info-section border rounded-3 p-4 h-100 bg-light-subtle">
+                        <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom">
+                            <i class="bi bi-receipt-cut me-2"></i> Transaction Information
+                        </h5>
 
-            <dt class="col-sm-3">Provider Session Id</dt>
-            <dd class="col-sm-9">@Model.ProviderSessionId</dd>
+                        <dl class="row g-3 mb-0">
+                            <dt class="col-sm-5 fw-medium text-secondary">Payment ID</dt>
+                            <dd class="col-sm-7 fw-semibold">@Model.PaymentId</dd>
 
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9">@Model.Status</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Provider</dt>
+                            <dd class="col-sm-7">@Model.Provider</dd>
 
-            <dt class="col-sm-3">Transaction Id</dt>
-            <dd class="col-sm-9">@Model.TransactionId</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Transaction ID</dt>
+                            <dd class="col-sm-7 font-monospace">@Model.TransactionId</dd>
 
-            <dt class="col-sm-3">Validation Id</dt>
-            <dd class="col-sm-9">@Model.ValidationId</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Provider Session ID</dt>
+                            <dd class="col-sm-7 font-monospace">@Model.ProviderSessionId</dd>
 
-            <dt class="col-sm-3">Bank Name</dt>
-            <dd class="col-sm-9">@Model.BankName</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Validation ID</dt>
+                            <dd class="col-sm-7 font-monospace">@Model.ValidationId</dd>
 
-            <dt class="col-sm-3">Customer Name</dt>
-            <dd class="col-sm-9">@Model.CustomerName</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Amount</dt>
+                            <dd class="col-sm-7 fw-bold fs-5 text-primary">
+                                @Model.Amount.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                                <small class="text-muted ms-2">(@Model.Currency)</small>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
 
-            <dt class="col-sm-3">Customer Mobile</dt>
-            <dd class="col-sm-9">@Model.CustomerMobile</dd>
+                <!-- Right Column - Customer & Bank Info -->
+                <div class="col-lg-6">
+                    <div class="info-section border rounded-3 p-4 h-100 bg-light-subtle">
+                        <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom">
+                            <i class="bi bi-person-badge-fill me-2"></i> Customer & Payment Info
+                        </h5>
 
-            <dt class="col-sm-3">Amount</dt>
-            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+                        <dl class="row g-3 mb-4">
+                            <dt class="col-sm-5 fw-medium text-secondary">Customer Name</dt>
+                            <dd class="col-sm-7 fw-semibold">@Model.CustomerName</dd>
 
-            <dt class="col-sm-3">Currency</dt>
-            <dd class="col-sm-9">@Model.Currency</dd>
+                            <dt class="col-sm-5 fw-medium text-secondary">Mobile</dt>
+                            <dd class="col-sm-7">@Model.CustomerMobile</dd>
 
-            <dt class="col-sm-3">JSON Response</dt>
-            <dd class="col-sm-9"><pre>@Model.JsonResponse</pre></dd>
-        </dl>
+                            <dt class="col-sm-5 fw-medium text-secondary">Bank Name</dt>
+                            <dd class="col-sm-7">@Model.BankName</dd>
+                        </dl>
+
+                        <!-- Raw JSON Response -->
+                        @if (!string.IsNullOrWhiteSpace(Model.JsonResponse))
+                        {
+                            <div class="mt-4 pt-3 border-top">
+                                <h6 class="fw-medium text-secondary mb-2">
+                                    <i class="bi bi-code-slash me-1"></i> Raw Provider Response
+                                </h6>
+                                <pre class="bg-dark-subtle p-3 rounded-3 mb-0" style="font-size: 0.9rem; max-height: 220px; overflow-y: auto;">
+    @Model.JsonResponse
+                                    </pre>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-5 pt-4 border-top">
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-medium">
+                    <i class="bi bi-arrow-left-short me-2"></i> Back to List
+                </a>
+
+                <a asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-outline-warning px-5 py-2 rounded-pill fw-semibold shadow-sm">
+                    <i class="bi bi-pencil-square me-2"></i> Edit Payment
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer note -->
+        <div class="card-footer bg-transparent border-0 text-center text-muted small py-3">
+            Record ID: @Model.Id • Last viewed: @DateTime.Now.ToString("dd MMM yyyy • HH:mm")
+        </div>
     </div>
 </div>
 
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</p>
+@section Styles {
+    <style>
+        .info-section {
+            transition: all 0.2s ease;
+        }
+
+            .info-section:hover {
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+                transform: translateY(-2px);
+            }
+
+        dt {
+            color: var(--text-secondary);
+        }
+
+        dd {
+            color: var(--text-primary);
+            margin-bottom: 0;
+        }
+
+        .bg-light-subtle {
+            background-color: rgba(241,245,249,0.6) !important;
+        }
+
+        [data-bs-theme="dark"] .bg-light-subtle,
+        [data-bs-theme="dark"] .bg-dark-subtle {
+            background-color: rgba(30,41,59,0.4) !important;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .btn.rounded-pill:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+}

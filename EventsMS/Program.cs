@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 // Add DbContext
 
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
-// Add repository
+// Add services for dependency injection
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IFoodTokenRepository, FoodTokenRepository>();

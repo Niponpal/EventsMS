@@ -19,7 +19,7 @@ public class ApplicationDbContext: DbContext
             .HasOne(e => e.Category)
             .WithMany(c => c.Events)
             .HasForeignKey(e => e.CategoryId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); // safe, no conflict
 
         // ==============================
         // Event ↔ StudentRegistration
@@ -27,7 +27,7 @@ public class ApplicationDbContext: DbContext
             .HasOne(sr => sr.Event)
             .WithMany(e => e.Registrations)
             .HasForeignKey(sr => sr.EventId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); // safe
 
         // ==============================
         // StudentRegistration ↔ FoodToken (One-to-Many)
@@ -35,7 +35,7 @@ public class ApplicationDbContext: DbContext
             .HasOne(ft => ft.Registration)
             .WithMany(sr => sr.foodTokens)
             .HasForeignKey(ft => ft.RegistrationId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // avoid multiple cascade paths
 
         // ==============================
         // StudentRegistration ↔ Payment (One-to-One)
@@ -43,7 +43,7 @@ public class ApplicationDbContext: DbContext
             .HasOne(sr => sr.Payment)
             .WithOne(p => p.Registration)
             .HasForeignKey<Payment>(p => p.RegistrationId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); // safe, keep cascade
 
         // ==============================
         // Payment ↔ PaymentHistory (One-to-One)
@@ -51,7 +51,7 @@ public class ApplicationDbContext: DbContext
             .HasOne(ph => ph.Payment)
             .WithOne(p => p.PaymentHistory)
             .HasForeignKey<PaymentHistory>(ph => ph.PaymentId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); // safe
 
         // ==============================
         // Menu ↔ Menu (Self-referencing)
