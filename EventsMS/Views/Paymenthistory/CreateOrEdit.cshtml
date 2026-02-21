@@ -2,81 +2,193 @@
 
 @{
     ViewData["Title"] = Model.Id == 0 ? "Add Payment History" : "Edit Payment History";
+    bool isCreate = Model.Id == 0;
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container-fluid mt-4 px-lg-4">
+    <!-- Main Card -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background: var(--card-bg);">
+        <!-- Header -->
+        <div class="card-header d-flex align-items-center py-4 px-4 px-md-5 border-0"
+             style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-credit-card fs-3 me-3 text-white opacity-90"></i>
+                <h4 class="mb-0 fw-semibold text-white">
+                    @(isCreate ? "Add New Payment Record" : "Edit Payment Record")
+                </h4>
+            </div>
+        </div>
 
-<form asp-action="CreateOrEdit" method="post">
-    <input type="hidden" asp-for="Id" />
+        <div class="card-body p-4 p-md-5">
+            <form asp-action="CreateOrEdit" method="post">
+                <input type="hidden" asp-for="Id" />
 
-    <div class="form-group">
-        <label asp-for="PaymentId"></label>
-        <input asp-for="PaymentId" class="form-control" />
-        <span asp-validation-for="PaymentId" class="text-danger"></span>
+                <!-- Transaction Information -->
+                <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom">
+                    <i class="bi bi-receipt me-2"></i> Transaction Information
+                </h5>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="PaymentId" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="PaymentId" class="fw-medium text-primary">Payment ID</label>
+                            <span asp-validation-for="PaymentId" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="Provider" class="form-control border-primary-subtle shadow-sm" placeholder=" " required />
+                            <label asp-for="Provider" class="fw-medium text-primary">Payment Provider</label>
+                            <span asp-validation-for="Provider" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="TransactionId" class="form-control border-primary-subtle shadow-sm font-monospace" placeholder=" " />
+                            <label asp-for="TransactionId" class="fw-medium text-primary">Transaction ID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="ProviderSessionId" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="ProviderSessionId" class="fw-medium text-primary">Provider Session ID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="ValidationId" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="ValidationId" class="fw-medium text-primary">Validation ID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <select asp-for="Status" class="form-select border-primary-subtle shadow-sm" required>
+                                <option value="">-- Select Status --</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Success">Success</option>
+                                <option value="Failed">Failed</option>
+                                <option value="Refunded">Refunded</option>
+                            </select>
+                            <label asp-for="Status" class="fw-medium text-primary">Payment Status</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer & Payment Details -->
+                <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom">
+                    <i class="bi bi-person-badge me-2"></i> Customer & Payment Details
+                </h5>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="CustomerName" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="CustomerName" class="fw-medium text-primary">Customer Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="CustomerMobile" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="CustomerMobile" class="fw-medium text-primary">Customer Mobile</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="BankName" class="form-control border-primary-subtle shadow-sm" placeholder=" " />
+                            <label asp-for="BankName" class="fw-medium text-primary">Bank Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input asp-for="Amount" class="form-control border-primary-subtle shadow-sm text-end fw-bold"
+                                   placeholder=" " type="number" step="0.01" min="0" />
+                            <label asp-for="Amount" class="fw-medium text-primary">Amount</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input asp-for="Currency" class="form-control border-primary-subtle shadow-sm text-uppercase"
+                                   placeholder=" " maxlength="3" />
+                            <label asp-for="Currency" class="fw-medium text-primary">Currency</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JSON Response (collapsible / less prominent) -->
+                <h5 class="fw-semibold text-primary mb-3 pb-2 border-bottom">
+                    <i class="bi bi-code-slash me-2"></i> Raw Provider Response
+                </h5>
+                <div class="mb-5">
+                    <div class="form-floating">
+                        <textarea asp-for="JsonResponse" class="form-control border-primary-subtle shadow-sm"
+                                  style="height: 140px; font-family: 'Consolas', monospace; font-size: 0.92rem;"></textarea>
+                        <label asp-for="JsonResponse" class="fw-medium text-primary">JSON Response</label>
+                    </div>
+                    <small class="text-muted d-block mt-2">
+                        Full callback/response from payment gateway (usually read-only after creation)
+                    </small>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-5 pt-4 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-5 py-2 rounded-pill fw-medium">
+                        <i class="bi bi-arrow-left-short me-2"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill fw-semibold shadow-sm">
+                        <i class="bi bi-@(isCreate ? "plus-lg" : "floppy") me-2"></i>
+                        @(isCreate ? "Save Payment" : "Update Payment")
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer bg-transparent border-0 text-center text-muted small py-3">
+            All monetary values in @Model.Currency or default system currency • Fields marked are required
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Provider"></label>
-        <input asp-for="Provider" class="form-control" />
-        <span asp-validation-for="Provider" class="text-danger"></span>
-    </div>
+@section Styles {
+    <style>
+        .form-floating > label {
+            color: var(--text-secondary) !important;
+        }
 
-    <div class="form-group">
-        <label asp-for="ProviderSessionId"></label>
-        <input asp-for="ProviderSessionId" class="form-control" />
-    </div>
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: var(--primary) !important;
+        }
 
-    <div class="form-group">
-        <label asp-for="Status"></label>
-        <input asp-for="Status" class="form-control" />
-    </div>
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb, 59,130,246), 0.25);
+        }
 
-    <div class="form-group">
-        <label asp-for="TransactionId"></label>
-        <input asp-for="TransactionId" class="form-control" />
-    </div>
+        .btn.rounded-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.25);
+        }
 
-    <div class="form-group">
-        <label asp-for="ValidationId"></label>
-        <input asp-for="ValidationId" class="form-control" />
-    </div>
+        [data-bs-theme="dark"] .form-control {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-color: #4b5563;
+        }
 
-    <div class="form-group">
-        <label asp-for="BankName"></label>
-        <input asp-for="BankName" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CustomerName"></label>
-        <input asp-for="CustomerName" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CustomerMobile"></label>
-        <input asp-for="CustomerMobile" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Amount"></label>
-        <input asp-for="Amount" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Currency"></label>
-        <input asp-for="Currency" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="JsonResponse"></label>
-        <textarea asp-for="JsonResponse" class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+        [data-bs-theme="dark"] .form-floating > label {
+            color: #94a3b8 !important;
+        }
+    </style>
+}
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }
