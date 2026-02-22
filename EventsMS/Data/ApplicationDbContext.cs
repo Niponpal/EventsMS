@@ -1,14 +1,32 @@
-﻿using EventsMS.Models;
+﻿using EventsMS.Auth_IdentityModel;
+using EventsMS.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace EventsMS.Data;
 
-public class ApplicationDbContext: DbContext
+public class ApplicationDbContext : IdentityDbContext<
+    IdentityModel.User,
+    IdentityModel.Role,
+    long,
+    IdentityModel.UserClaim,
+    IdentityModel.UserRole,
+    IdentityModel.UserLogin,
+    IdentityModel.RoleClaim,
+    IdentityModel.UserToken>
+
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
+
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<FoodToken> FoodTokens { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Payment> payments { get; set; }
+    public DbSet<PaymentHistory> paymentHistories { get; set; }
+    public DbSet<StudentRegistration> studentRegistrations { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -68,15 +86,5 @@ public class ApplicationDbContext: DbContext
             .HasIndex(e => e.Slug)
             .IsUnique();
     }
-
-    public DbSet<Event> Events { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<FoodToken> FoodTokens { get; set; }
-    public DbSet<Menu> Menus { get; set; }
-    public DbSet<Payment>  payments { get; set; }
-    public DbSet<PaymentHistory> paymentHistories { get; set; }
-    public DbSet<StudentRegistration> studentRegistrations { get; set; }
-
-
 
 }
