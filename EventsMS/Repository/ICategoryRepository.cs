@@ -10,6 +10,5 @@ public interface ICategoryRepository
     Task<Category> AddCategoryAsync(Category  category, CancellationToken cancellationToken);
     Task<Category?> UpdateCategoryAsync(Category  category, CancellationToken cancellationToken);
     Task<Category> DeleteCategoryAsync(long id, CancellationToken cancellationToken);
-
     IEnumerable<SelectListItem> Dropdown();
 }
