@@ -1,57 +1,159 @@
 ﻿@model IEnumerable<EventsMS.Models.Payment>
 
 @{
-    ViewData["Title"] = "Payment List";
+    ViewData["Title"] = "Payments Overview";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
-        <h2>Payment List</h2>
-        <a asp-action="CreateOrEdit" class="btn btn-primary">Create New Payment</a>
+<!-- Header + Create Button -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Payments Overview</h2>
+    <a asp-action="CreateOrEdit" class="btn btn-primary rounded-pill px-4">
+        <i class="bi bi-plus-lg me-1"></i> New Payment
+    </a>
+</div>
+
+<!-- Filter & Quick Search (matches dashboard filter aesthetic) -->
+<div class="filter-section mb-5">
+    <div class="d-flex flex-wrap gap-3 align-items-center">
+        <span class="filter-label"><i class="bi bi-funnel me-1"></i> Filter:</span>
+
+        <select class="filter-select form-select" id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+            <option value="Failed">Failed</option>
+            <option value="Refunded">Refunded</option>
+        </select>
+
+        <input type="text" class="form-control filter-search" placeholder="Search invoice, student, transaction ID..." style="max-width: 340px;">
+
+        <button class="btn-apply" id="applyFilter">Apply</button>
+
+        <!-- Optional: Export / Refresh -->
+        <button class="btn btn-outline-secondary rounded-pill ms-auto">
+            <i class="bi bi-download me-1"></i> Export
+        </button>
+    </div>
+</div>
+
+<!-- KPI Summary Cards (consistent with dashboard stats) -->
+<div class="row g-4 mb-5">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center shadow-sm">
+            <i class="bi bi-receipt-cutoff stat-icon me-3 text-primary"></i>
+            <div>
+                <div class="stat-label text-uppercase">Total Transactions</div>
+                <div class="stat-value">@Model.Count()</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center shadow-sm">
+            <i class="bi bi-check2-circle stat-icon me-3 text-success"></i>
+            <div>
+                <div class="stat-label text-uppercase">Completed (Paid)</div>
+                <div class="stat-value">@Model.Count(p => p.Status == "Paid")</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center shadow-sm">
+            <i class="bi bi-hourglass-split stat-icon me-3 text-warning"></i>
+            <div>
+                <div class="stat-label text-uppercase">Pending</div>
+                <div class="stat-value">@Model.Count(p => p.Status == "Pending")</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card d-flex align-items-center shadow-sm">
+            <i class="bi bi-currency-dollar stat-icon me-3 text-info"></i>
+            <div>
+                <div class="stat-label text-uppercase">Total Amount</div>
+                <div class="stat-value">@Model.Sum(p => p.Amount).ToString("C0")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Table Card -->
+<div class="recent-reg-table mb-5">
+    <h5 class="fw-semibold mb-3 px-4 pt-4"><i class="bi bi-receipt me-2"></i> Transaction List</h5>
+
+    <div class="table-responsive px-4 pb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Invoice No</th>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Provider</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Transaction ID</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <div class="my-4">
+                                <i class="bi bi-receipt fs-1 opacity-50 d-block mb-3"></i>
+                                <p class="mb-1 fw-medium">No transactions found</p>
+                                <small>Create a new payment to start tracking.</small>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr class="border-bottom">
+                            <td class="fw-medium text-nowrap">#@item.InvoiceNumber</td>
+                            <td>@(item.Registration?.FullName ?? "<span class='text-muted'>—</span>")</td>
+                            <td class="text-muted">@(item.Provider ?? "—")</td>
+                            <td>
+                                @switch (item.Status)
+                                {
+                                    case "Paid":
+                                        <span class="badge bg-success-subtle text-success px-3 py-2 fw-medium">Paid</span>
+                                        break;
+                                    case "Pending":
+                                        <span class="badge bg-warning-subtle text-warning px-3 py-2 fw-medium">Pending</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-danger-subtle text-danger px-3 py-2 fw-medium">@item.Status</span>
+                                        break;
+                                }
+                            </td>
+                            <td class="fw-semibold">@item.Amount.ToString("C0")</td>
+                            <td class="small text-muted">@(item.TransactionId ?? "—")</td>
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning rounded-pill px-3">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Invoice No</th>
-                <th>Student</th>
-                <th>Provider</th>
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Transaction Id</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.InvoiceNumber</td>
-                    <td>@item.Registration?.FullName</td>
-                    <td>@item.Provider</td>
-                    <td>
-                        @if (item.Status == "Paid")
-                        {
-                            <span class="badge bg-success">Paid</span>
-                        }
-                        else if (item.Status == "Pending")
-                        {
-                            <span class="badge bg-warning text-dark">Pending</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">@item.Status</span>
-                        }
-                    </td>
-                    <td>@item.Amount.ToString("C")</td>
-                    <td>@item.TransactionId</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- Optional: Add pagination here if server-side paging is implemented -->
+    <!-- <nav aria-label="Page navigation" class="px-4 pb-4">
+        <ul class="pagination justify-content-center mb-0">
+            ...
+        </ul>
+    </nav> -->
 </div>
