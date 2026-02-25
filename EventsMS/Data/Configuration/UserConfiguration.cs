@@ -35,9 +35,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             Id = 3,
             Email = "Manager@localhost.com",
-            NormalizedEmail = "Manager@LOCALHOST.COM",
-            UserName = "Manager@localhost.com",
-            NormalizedUserName = "Manager@LOCALHOST.COM",
+            NormalizedEmail = "MANAGER@LOCALHOST.COM",
+            UserName = "manager@localhost.com",
+            NormalizedUserName = "MANAGER@LOCALHOST.COM",
             PasswordHash = hasher.HashPassword(null, "P@ssword1"),
             EmailConfirmed = true,
             SecurityStamp = Guid.NewGuid().ToString()
