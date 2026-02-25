@@ -66,6 +66,7 @@ public class EventRepository : IEventRepository
             data.EndDate = events.EndDate;
             data.RegistrationFee = events.RegistrationFee;
             data.Slug = events.Slug;
+            data.ImageUrl = events.ImageUrl; 
             data.MealsOffered = events.MealsOffered;
             data.IsFree = events.IsFree;
             await _context.SaveChangesAsync(cancellationToken);

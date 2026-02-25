@@ -1,5 +1,6 @@
 using EventsMS;
 using EventsMS.Data;
+using EventsMS.FileServices;
 using EventsMS.Helper;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +23,8 @@ builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
 builder.Services.AddScoped<IStudentRegistrationRepository, StudentRegistrationRepository>();
+// Add file service
+builder.Services.AddScoped<IFileService, FileService>();
 
 
 // Add Identity with custom classes and long key
