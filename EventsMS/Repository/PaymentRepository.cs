@@ -36,7 +36,9 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<IEnumerable<Payment>> GetAllPaymentAsync(CancellationToken cancellationToken)
     {
-      var data = await  _context.payments.ToListAsync(cancellationToken);
+       
+
+        var data = await  _context.payments.Include(x=>x.Registration).ToListAsync(cancellationToken);
         if (data != null)
         {
             return data;
