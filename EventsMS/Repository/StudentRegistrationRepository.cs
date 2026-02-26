@@ -14,11 +14,11 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
     }
     public async Task<StudentRegistration> AddStudentRegistrationAsync(StudentRegistration studentRegistration, CancellationToken cancellationToken)
     {
-       var data = await _context.studentRegistrations.AddAsync(studentRegistration, cancellationToken);
+        var data = await _context.studentRegistrations.AddAsync(studentRegistration, cancellationToken);
         if (data != null)
         {
             await _context.SaveChangesAsync(cancellationToken);
-            return studentRegistration;
+            return studentRegistration; // PhotoPath included
         }
         return null;
     }
