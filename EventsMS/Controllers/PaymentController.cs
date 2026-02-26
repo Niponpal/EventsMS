@@ -8,11 +8,14 @@ namespace EventsMS.Controllers;
 public class PaymentController : Controller
 {
     private readonly IPaymentRepository _paymentRepository;
+    private readonly IStudentRegistrationRepository _studentRegistrationRepository;
 
-    public PaymentController(IPaymentRepository paymentRepository)
+    public PaymentController(IPaymentRepository paymentRepository, IStudentRegistrationRepository studentRegistrationRepository)
     {
         _paymentRepository = paymentRepository;
+        _studentRegistrationRepository = studentRegistrationRepository;
     }
+
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var data = await _paymentRepository.GetAllPaymentAsync(cancellationToken);
@@ -26,6 +29,7 @@ public class PaymentController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long  id, CancellationToken cancellationToken)
     {
+        ViewData["RegistrationId"] = _studentRegistrationRepository.Dropdown();
         if (id == 0)
         {
             return View(new Payment());
@@ -43,6 +47,7 @@ public class PaymentController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(Payment payment, CancellationToken cancellationToken)
     {
+        ViewData["RegistrationId"] = _studentRegistrationRepository.Dropdown();
         if (payment.Id == 0)
         {
             await _paymentRepository.AddPaymentAsync(payment, cancellationToken);

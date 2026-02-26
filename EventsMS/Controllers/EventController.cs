@@ -32,7 +32,7 @@ public class EventController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
     {
-        ViewData["CategoryId"] = _categoryRepository.Dropdown();
+        ViewData["RegistrationId"] = _categoryRepository.Dropdown();
         if (id == 0)
         {
             return View(new Models.Event());

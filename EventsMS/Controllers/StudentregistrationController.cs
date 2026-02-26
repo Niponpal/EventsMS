@@ -56,7 +56,7 @@ public class StudentregistrationController : Controller
         else
         {
             // যদি photo upload না করা হয়
-            studentRegistration.PhotoPath ??= "default.png"; // DB তে কোনো default image নাম
+            studentRegistration.PhotoPath ??= "default.png"; 
         }
 
         if (studentRegistration.Id == 0)
