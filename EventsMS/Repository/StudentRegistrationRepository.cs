@@ -47,7 +47,7 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
 
     public async Task<IEnumerable<StudentRegistration>> GetAllStudentRegistrationAsync(CancellationToken cancellationToken)
     {
-       var data = await _context.studentRegistrations.ToListAsync(cancellationToken);
+       var data = await _context.studentRegistrations.Include(x=>x.Event).ToListAsync(cancellationToken);
         if (data != null)
         {
             return data;
