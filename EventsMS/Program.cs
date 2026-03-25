@@ -3,6 +3,7 @@ using EventsMS.Data;
 using EventsMS.FileServices;
 using EventsMS.Helper;
 using EventsMS.Repository;
+using EventsMS.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using static EventsMS.Auth_IdentityModel.IdentityModel;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
 builder.Services.AddScoped<IStudentRegistrationRepository, StudentRegistrationRepository>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 // Add file service
 builder.Services.AddScoped<IFileService, FileService>();
 

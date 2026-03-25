@@ -11,7 +11,6 @@
 
         // PaymentStatus can be "Pending", "Completed", "Failed"
         public string PaymentStatus { get; set; } = "Pending";
-
         public long EventId { get; set; }
         public Event Event { get; set; } = default!;
 
