@@ -1,111 +1,423 @@
 ﻿@model IEnumerable<EventsMS.Models.Event>
+@{
+    Layout = null;
+    ViewData["Title"] = "All Events";
+}
 
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<div class="container-fluid px-0 mt-5">
-    <!-- Page Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
-        <div>
-            <h1 class="fw-bold mb-1" style="color: var(--text-primary);">All Events</h1>
-            <p class="text-muted mb-0 fs-5">Discover and manage amazing events happening around you</p>
+    <!-- More Professional Title -->
+    <title>All Events | EventsMS - Discover & Manage Amazing Events</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --radius: 18px;
+            --text-primary: #0f172a;
+            --card-bg: #ffffff;
+            --primary: #3b82f6;
+        }
+
+        [data-bs-theme="dark"] {
+            --text-primary: #e2e8f0;
+            --card-bg: #1f2937;
+        }
+
+        body {
+            background: #f8fafc;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+
+        [data-bs-theme="dark"] body {
+            background: #0f172a;
+        }
+
+        /* Professional Top Navbar */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+            padding: 1.1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        [data-bs-theme="dark"] .top-navbar {
+            background: rgba(15, 23, 42, 0.98);
+            border-bottom: 1px solid #334155;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: var(--primary);
+            letter-spacing: -0.03em;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+            .nav-link:hover, .nav-link.active {
+                color: var(--primary);
+            }
+
+        /* Event Cards */
+        .event-card {
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+
+            .event-card:hover {
+                transform: translateY(-12px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            }
+
+        .event-image {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.08);
+        }
+
+        .bg-gradient-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.15));
+        }
+
+        .dept-badge {
+            font-size: 0.82rem;
+            padding: 6px 16px;
+            background: rgba(30, 64, 175, 0.08);
+            color: #1e40af;
+            border: 1px solid rgba(30, 64, 175, 0.25);
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .line-clamp-2, .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-2 {
+            -webkit-line-clamp: 2;
+        }
+
+        .line-clamp-3 {
+            -webkit-line-clamp: 3;
+        }
+
+        [data-bs-theme="dark"] .event-card {
+            background: var(--card-bg);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        [data-bs-theme="dark"] .dept-badge {
+            background: rgba(147, 197, 253, 0.12);
+            color: #93c5fd;
+            border-color: rgba(147, 197, 253, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Navigation Bar -->
+    <nav class="top-navbar">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <!-- Left Side: Logo + Menu -->
+                <div class="d-flex align-items-center gap-5">
+                    <a href="#" class="navbar-brand d-flex align-items-center gap-2 text-decoration-none">
+                        <i class="bi bi-calendar-event fs-3"></i>
+                        <span>EventsMS</span>
+                    </a>
+
+                    <!-- Main Navigation -->
+                    <ul class="nav gap-4">
+                        <li class="nav-item">
+                            <a asp-action="Index" class="nav-link active">
+                                <i class="bi bi-calendar3 me-1"></i> All Events
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="MyEvents" class="nav-link">
+                                <i class="bi bi-person-video2 me-1"></i> My Events
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Upcoming" class="nav-link">
+                                <i class="bi bi-arrow-up-circle me-1"></i> Upcoming
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Gallery" class="nav-link">
+                                <i class="bi bi-images me-1"></i> Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Videos" class="nav-link">
+                                <i class="bi bi-play-circle me-1"></i> Videos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Contact" class="nav-link">
+                                <i class="bi bi-telephone me-1"></i> Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right Side -->
+                <div class="d-flex align-items-center gap-4">
+                   
+
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                           href="#" data-bs-toggle="dropdown" role="button">
+                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark me-2"></i>My Registrations</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid px-4 mt-5">
+        <!-- Page Header -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
+            <div>
+                <h1 class="fw-bold mb-1 display-5" style="color: var(--text-primary);">All Events</h1>
+                <p class="text-muted mb-0 fs-5">Discover and manage amazing events happening around you</p>
+            </div>
         </div>
 
-        <a asp-action="CreateOrEdit"
-           class="btn btn-primary rounded-pill px-5 py-3 shadow-sm d-flex align-items-center gap-2 fw-medium">
-            <i class="bi bi-plus-lg"></i>
-            Create New Event
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 my-5">
+                <i class="bi bi-calendar-x display-1 text-muted opacity-50"></i>
+                <h3 class="fw-bold text-muted mt-4">No Events Found</h3>
+                <p class="text-muted col-md-6 mx-auto">You haven't created any events yet.<br>Start by adding your first one!</p>
+                <a asp-action="CreateOrEdit" class="btn btn-primary mt-4 rounded-pill px-5 py-3">
+                    <i class="bi bi-plus-circle me-2"></i>Add First Event
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="event-card border-0 shadow-sm">
+                            <div class="position-relative overflow-hidden">
+                                <img src="@item.ImageUrl"
+                                     class="event-image w-100"
+                                     style="height: 260px; object-fit: cover;"
+                                     alt="@item.Name" loading="lazy" />
+                                <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-gradient-overlay"></div>
+                                <div class="position-absolute top-3 end-3">
+                                    <div class="badge bg-white text-dark shadow-sm px-3 py-2 fw-semibold rounded-3">
+                                        @item.StartDate.ToString("dd MMM")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column">
+                                <span class="dept-badge mb-3 d-inline-block">@item.Category?.Name</span>
+                                <h5 class="card-title fw-semibold mb-3 line-clamp-2">@item.Name</h5>
+                                <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
+                                    <i class="bi bi-calendar3 text-primary"></i>
+                                    <span>@item.StartDate.ToString("dd MMM yyyy") — @item.EndDate.ToString("dd MMM yyyy")</span>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-4">
+                                    <span class="badge rounded-pill px-3 py-1.5 bg-light border text-primary fw-medium">
+                                        Meals: @item.MealsOffered
+                                    </span>
+                                    @if (item.IsFree)
+                                    {
+                                        <span class="badge rounded-pill px-3 py-1.5 bg-success-subtle text-success fw-medium">
+                                            <i class="bi bi-check2-circle me-1"></i> Free Event
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill px-3 py-1.5 bg-warning-subtle text-warning fw-medium">
+                                            Fee: @item.RegistrationFee ৳
+                                        </span>
+                                    }
+                            </div>
+                            <p class="card-text flex-grow-1 text-muted small line-clamp-3 mb-4">
+                                @(item.Description?.Length > 135
+                                                            ? item.Description.Substring(0, 135) + "..."
+                                                            : item.Description ?? "No description provided.")
+                        </p>
+                        <div class="mt-auto">
+                            <a asp-action="Apply" asp-route-id="@item.Id"
+                               class="btn btn-primary w-100 rounded-pill py-3 fw-medium shadow-sm">
+                                <i class="bi bi-check-circle me-2"></i> Apply Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        }
+            </div>
+        }
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+@* @model IEnumerable<EventsMS.Models.Event>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="container-fluid px-0 mt-4">
+    <!-- Page Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+        <h2 class="fw-bold mb-0" style="color: var(--text-primary);">All Events</h2>
+        <a asp-action="CreateOrEdit" class="btn btn-primary rounded-pill shadow-sm px-4 py-2">
+            <i class="bi bi-plus-circle me-2"></i> Create New Event
         </a>
     </div>
 
     @if (!Model.Any())
     {
         <div class="text-center py-5 my-5">
-            <i class="bi bi-calendar-x display-1 text-muted opacity-50"></i>
-            <h3 class="fw-bold text-muted mt-4">No Events Found</h3>
-            <p class="text-muted col-md-6 mx-auto">You haven't created any events yet.<br>Start by adding your first one!</p>
-            <a asp-action="CreateOrEdit" class="btn btn-primary mt-4 rounded-pill px-5 py-3">
-                <i class="bi bi-plus-circle me-2"></i>Add First Event
-            </a>
+            <i class="bi bi-calendar-x display-1 opacity-50" style="color: var(--text-secondary);"></i>
+            <h4 class="mt-4" style="color: var(--text-secondary);">No events found</h4>
+            <p style="color: var(--text-secondary);">Create your first event to get started.</p>
+            <a asp-action="CreateOrEdit" class="btn btn-primary mt-3 rounded-pill">Add Event</a>
         </div>
     }
     else
     {
+        <!-- Events Grid -->
         <div class="row g-4">
             @foreach (var item in Model)
             {
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="event-card h-100 border-0 shadow-sm overflow-hidden">
-
-                        <!-- Image with Gradient Overlay -->
-                        <div class="position-relative overflow-hidden">
+                    <div class="card event-card h-100 shadow-sm border-0 overflow-hidden">
+                        <!-- Event Image -->
+                        <div class="position-relative">
                             <img src="@item.ImageUrl"
-                                 class="event-image w-100"
-                                 style="height: 260px; object-fit: cover;"
+                                 class="card-img-top w-100"
+                                 style="height: 220px; object-fit: cover;"
                                  alt="@item.Name"
                                  loading="lazy" />
-
-                            <!-- Gradient Overlay -->
-                            <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-gradient-overlay"></div>
-
-                            <!-- Date Badge -->
-                            <div class="position-absolute top-3 end-3">
-                                <div class="badge bg-white text-dark shadow-sm px-3 py-2 fw-semibold rounded-3">
-                                    @item.StartDate.ToString("dd MMM")
-                                </div>
-                            </div>
                         </div>
 
-                        <div class="card-body p-4 d-flex flex-column">
+                        <div class="card-body d-flex flex-column p-4" style="background: var(--card-bg);">
+                            <!-- Event Name -->
+                            <h5 class="card-title fw-bold mb-2" style="color: var(--text-primary); font-size: 1.35rem; line-height: 1.3;">
+                                @item.Name
+                            </h5>
+
                             <!-- Category -->
                             <span class="dept-badge mb-3 d-inline-block">
                                 @item.Category?.Name
                             </span>
 
-                            <!-- Event Name -->
-                            <h5 class="card-title fw-semibold mb-3 line-clamp-2">
-                                @item.Name
-                            </h5>
-
-                            <!-- Date Range -->
-                            <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
-                                <i class="bi bi-calendar3 text-primary"></i>
-                                <span>
-                                    @item.StartDate.ToString("dd MMM yyyy") — @item.EndDate.ToString("dd MMM yyyy")
-                                </span>
-                            </div>
+                            <!-- Dates -->
+                            <p class="mb-3 small" style="color: var(--text-secondary);">
+                                <i class="bi bi-calendar-event me-2 text-primary"></i>
+                                @item.StartDate.ToString("dd MMM yyyy") – @item.EndDate.ToString("dd MMM yyyy")
+                            </p>
 
                             <!-- Meals & Fee -->
                             <div class="d-flex flex-wrap gap-2 mb-4">
-                                <span class="badge rounded-pill px-3 py-1.5 bg-light border text-primary fw-medium">
+                                <span class="badge rounded-pill bg-dark-subtle text-primary border border-primary-subtle px-3 py-2 fw-medium">
                                     Meals: @item.MealsOffered
                                 </span>
 
                                 @if (item.IsFree)
                                 {
-                                    <span class="badge rounded-pill px-3 py-1.5 bg-success-subtle text-success fw-medium">
-                                        <i class="bi bi-check2-circle me-1"></i> Free Event
+                                    <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2 fw-medium">
+                                        Free Event
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="badge rounded-pill px-3 py-1.5 bg-warning-subtle text-warning fw-medium">
+                                    <span class="badge rounded-pill bg-warning-subtle text-warning px-3 py-2 fw-medium">
                                         Fee: @item.RegistrationFee ৳
                                     </span>
                                 }
                         </div>
 
                         <!-- Description -->
-                        <p class="card-text flex-grow-1 text-muted small line-clamp-3 mb-4">
-                            @(item.Description?.Length > 135
-                                                    ? item.Description.Substring(0, 135) + "..."
+                        <p class="card-text mb-4 flex-grow-1 small" style="color: var(--text-secondary); line-height: 1.5;">
+                            @(item.Description?.Length > 110
+                                                    ? item.Description.Substring(0, 110) + "..."
                                                     : item.Description ?? "No description provided.")
                     </p>
 
-                            <!-- Action Button -->
-                            <div class="mt-auto">
-                                <a asp-action="Apply" asp-route-id="@item.Id"
-                                   class="btn btn-primary w-100 rounded-pill py-3 fw-medium shadow-sm">
-                                    <i class="bi bi-check-circle me-2"></i> Apply Now
+                            <!-- Buttons -->
+                            <div class="mt-auto d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-primary flex-fill rounded-pill">
+                                    <i class="bi bi-eye me-1"></i> Details
                                 </a>
+                                <a asp-action="CreateOrEdit" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-warning rounded-pill">
+                                    <i class="bi bi-pencil me-1"></i> Edit
+                                </a>
+                                <form method="post"
+                                      asp-controller="Event"
+                                      asp-action="Delete"
+                                      asp-route-id="@item.Id"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this event?');">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1"
+                                            data-bs-toggle="tooltip"
+                                            title="Delete Event">
+                                        <i class="bi bi-trash"></i>
+                                        <span class="d-none d-md-inline">Delete</span>
+                                    </button>
+
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -116,71 +428,40 @@
 </div>
 
 <style>
-    :root {
-        --radius: 18px;
-    }
-
     .event-card {
-        border-radius: var(--radius);
-        background: var(--card-bg, #ffffff);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(0,0,0,0.06);
+        border-radius: var(--radius-lg);
+        background: var(--card-bg);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid var(--border);
     }
 
         .event-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.13);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
         }
 
-    .event-image {
-        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .event-card:hover .event-image {
-        transform: scale(1.08);
-    }
-
-    .bg-gradient-overlay {
-        background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.15));
-    }
-
-    .dept-badge {
-        font-size: 0.82rem;
-        padding: 6px 16px;
-        background: rgba(30, 64, 175, 0.08);
-        color: #1e40af;
-        border: 1px solid rgba(30, 64, 175, 0.25);
-        border-radius: 50px;
-        font-weight: 500;
-    }
-
-    .line-clamp-2, .line-clamp-3 {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .line-clamp-2 {
-        -webkit-line-clamp: 2;
-    }
-
-    .line-clamp-3 {
-        -webkit-line-clamp: 3;
-    }
-
-    /* Dark Mode */
+    /* Dark mode specific tweaks */
     [data-bs-theme="dark"] .event-card {
-        background: var(--card-bg, #1f2937);
-        border-color: rgba(255,255,255,0.08);
+        border-color: rgba(59, 69, 92, 0.5);
     }
 
-    [data-bs-theme="dark"] .bg-gradient-overlay {
-        background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.25));
+    [data-bs-theme="dark"] .btn-outline-primary,
+    [data-bs-theme="dark"] .btn-outline-warning,
+    [data-bs-theme="dark"] .btn-outline-danger {
+        --bs-btn-color: var(--text-primary);
+        --bs-btn-border-color: rgba(255,255,255,0.18);
+        --bs-btn-hover-bg: rgba(255,255,255,0.08);
+        --bs-btn-hover-border-color: rgba(255,255,255,0.18);
+    }
+
+    [data-bs-theme="dark"] .badge.bg-dark-subtle {
+        background-color: #334155 !important;
+        color: #93c5fd !important;
     }
 
     [data-bs-theme="dark"] .dept-badge {
-        background: rgba(147, 197, 253, 0.12);
+        background: #1e40af33;
         color: #93c5fd;
-        border-color: rgba(147, 197, 253, 0.3);
+        border: 1px solid #1e40af55;
     }
-</style>
+</style> *@
