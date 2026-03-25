@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260224125157_ints")]
+    [Migration("20260325065701_ints")]
     partial class ints
     {
         /// <inheritdoc />
