@@ -25,10 +25,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             new User
             {
                 Id = 2,
-                Email = "employee@localhost.com",
-                NormalizedEmail = "EMPLOYEE@LOCALHOST.COM",
-                UserName = "employee@localhost.com",
-                NormalizedUserName = "EMPLOYEE@LOCALHOST.COM",
+                Email = "student@localhost.com",
+                NormalizedEmail = "STUDENT@LOCALHOST.COM",
+                UserName = "student@localhost.com",
+                NormalizedUserName = "STUDENT@LOCALHOST.COM",
                 PasswordHash = hasher.HashPassword(null, "P@ssword1"),
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString()
