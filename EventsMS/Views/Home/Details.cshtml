@@ -1,4 +1,589 @@
-﻿@model EventsMS.Models.Event
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model EventsMS.Models.Event
+
+@{
+    Layout = null;
+    ViewData["Title"] = Model?.Name ?? "Event Details";
+    var isUpcoming = Model.StartDate > DateTime.Now;
+    var isOngoing = Model.StartDate <= DateTime.Now && Model.EndDate >= DateTime.Now;
+    var isCompleted = Model.EndDate < DateTime.Now;
+    var canRegister = isUpcoming; // Registration only allowed before event starts
+}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.Name - EventsMS</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-light: #334155;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        body {
+            background: var(--bg-body);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Modern Navbar */
+        .navbar-modern {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--bg-body);
+            border: 1px solid var(--border-light);
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+            .theme-toggle:hover {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+            }
+
+        /* Hero Image */
+        .hero-image {
+            height: 520px;
+            object-fit: cover;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .image-container:hover .hero-image {
+            transform: scale(1.02);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2;
+        }
+
+        /* Event Header Card */
+        .event-header {
+            background: var(--bg-card);
+            border-radius: 1.75rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.25s;
+            box-shadow: var(--shadow-sm);
+        }
+
+            .info-card:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+                border-color: var(--primary-light);
+            }
+
+        .detail-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+
+        /* Badges */
+        .badge-custom {
+            padding: 0.5rem 1.1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Buttons */
+        .back-btn {
+            transition: all 0.2s ease;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+        }
+
+            .back-btn:hover {
+                transform: translateX(-4px);
+                background: rgba(59, 130, 246, 0.1);
+            }
+
+        .apply-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+
+            .apply-btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 20px 30px -10px rgba(59, 130, 246, 0.5);
+                background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            }
+
+            .apply-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        /* Countdown Timer */
+        .countdown-timer {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(37,99,235,0.05));
+            border-radius: 1rem;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Share Dropdown */
+        .share-dropdown .dropdown-menu {
+            background: var(--bg-card);
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-md);
+            border-radius: 1rem;
+            padding: 0.5rem;
+        }
+
+        .share-dropdown .dropdown-item {
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+        }
+
+            .share-dropdown .dropdown-item:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+        /* Footer */
+        .footer-modern {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-light);
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .hero-image {
+                height: 380px;
+            }
+
+            .event-header {
+                margin-top: 1.5rem;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .hero-image {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navbar -->
+    <nav class="navbar-modern sticky-top">
+        <div class="container">
+            <a asp-action="Index" class="navbar-brand text-decoration-none">
+                <i class="bi bi-calendar-event-fill me-2"></i>EventsMS
+            </a>
+            <div class="d-flex gap-2">
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="bi bi-sun-fill me-1"></i>
+                    <span>Light</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 py-lg-5">
+        <!-- Back Button Row -->
+        <div class="mb-4">
+            <a asp-action="Index" class="btn btn-link text-decoration-none back-btn">
+                <i class="bi bi-arrow-left-short me-1"></i> Back to Events
+            </a>
+        </div>
+
+        <div class="row g-5">
+            <!-- Left Column - Image & Badges -->
+            <div class="col-lg-7">
+                <div class="image-container position-relative">
+                    <img src="@Model.ImageUrl"
+                         class="hero-image w-100"
+                         alt="@Model.Name"
+                         onerror="this.src='https://placehold.co/800x520/1e293b/ffffff?text=Event+Image'" />
+                    <div class="image-badge d-flex gap-2">
+                        @if (Model.IsFree)
+                        {
+                            <span class="badge bg-success badge-custom shadow-sm">
+                                <i class="bi bi-gift-fill me-1"></i> FREE
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark badge-custom shadow-sm">
+                                <i class="bi bi-cash-stack me-1"></i> ৳ @Model.RegistrationFee
+                            </span>
+                        }
+                        <span class="badge bg-primary badge-custom shadow-sm">
+                            <i class="bi bi-tag-fill me-1"></i> @Model.Category?.Name
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Event Details -->
+            <div class="col-lg-5">
+                <div class="event-header">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                        <div class="share-dropdown dropdown">
+                            <button class="btn btn-outline-secondary rounded-circle p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-share-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="copyPageUrl()"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
+                                <li><i class="bi bi-facebook me-2"></i>Facebook</li>
+                                <li><i class="bi bi-twitter-x me-2"></i>Twitter</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Date & Time -->
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-4 text-muted">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar3"></i>
+                            <span class="ms-2">@Model.StartDate.ToString("dddd, dd MMMM yyyy")</span>
+                        </div>
+                        <div class="vr d-none d-sm-block"></div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock"></i>
+                            <span class="ms-2">@Model.StartDate.ToString("hh:mm tt") - @Model.EndDate.ToString("hh:mm tt")</span>
+                        </div>
+                    </div>
+
+                    <!-- Countdown Timer (if upcoming) -->
+                    @if (isUpcoming)
+                    {
+                        <div class="countdown-timer mb-4" id="countdownTimer">
+                            <i class="bi bi-hourglass-split me-2"></i>
+                            <span id="countdownText">Loading...</span>
+                        </div>
+                    }
+
+                    <!-- Action Button -->
+                    @if (canRegister)
+                    {
+                        <a asp-controller="Studentregistration"
+                           asp-action="CreateOrEdit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-primary w-100 apply-btn mb-4">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            Register Now
+                        </a>
+                    }
+                    else if (isOngoing)
+                    {
+                        <button class="btn btn-secondary w-100 apply-btn mb-4" disabled>
+                            <i class="bi bi-play-circle-fill me-2"></i>
+                            Event In Progress
+                        </button>
+                    }
+                    else if (isCompleted)
+                    {
+                        <button class="btn btn-secondary w-100 apply-btn mb-4" disabled>
+                            <i class="bi bi-flag-fill me-2"></i>
+                            Event Concluded
+                        </button>
+                    }
+
+                    <hr class="my-4" />
+
+                    <!-- Key Information Grid -->
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="info-card text-center">
+                                <div class="detail-label">Start Date</div>
+                                <div class="detail-value">@Model.StartDate.ToString("dd MMM yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-card text-center">
+                                <div class="detail-label">End Date</div>
+                                <div class="detail-value">@Model.EndDate.ToString("dd MMM yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-card text-center">
+                                <div class="detail-label">Meals Offered</div>
+                                <div class="detail-value">@(Model.MealsOffered == 1 ? "Yes" : "No")</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-card text-center">
+                                <div class="detail-label">Status</div>
+                                <div class="detail-value">
+                                    @if (isCompleted)
+                                    {
+                                        <span class="text-danger"><i class="bi bi-check-circle-fill me-1"></i>Completed</span>
+                                    }
+                                    else if (isOngoing)
+                                    {
+                                        <span class="text-warning"><i class="bi bi-play-fill me-1"></i>Ongoing</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success"><i class="bi bi-calendar-week me-1"></i>Upcoming</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Description Section -->
+            <div class="col-12">
+                <div class="info-card">
+                    <h4 class="fw-semibold mb-4">
+                        <i class="bi bi-info-circle-fill me-2 text-primary"></i>
+                        About This Event
+                    </h4>
+                    <div class="text-secondary" style="line-height: 1.8;">
+                        @Html.Raw(Model.Description?.Replace("\n", "<br/>") ?? "No detailed description available.")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info Row -->
+        <div class="row mt-5 g-4">
+            <div class="col-lg-8">
+                <div class="info-card">
+                    <h5 class="fw-semibold mb-3">
+                        <i class="bi bi-building me-2 text-primary"></i>
+                        Organizer Information
+                    </h5>
+                    <p class="text-muted mb-2">
+                        This event is proudly organized by the EventsMS team. We strive to deliver exceptional experiences.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <div><i class="bi bi-envelope me-2 text-primary"></i> support@eventsms.com</div>
+                        <div><i class="bi bi-telephone me-2 text-primary"></i> +880 1234-567890</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="info-card text-center">
+                    <i class="bi bi-people-fill display-5 text-primary mb-3"></i>
+                    <h5 class="fw-semibold">Limited Availability</h5>
+                    <p class="text-muted small">Register early to secure your participation</p>
+                    <div class="mt-2">
+                        <i class="bi bi-shield-check text-success me-1"></i>
+                        <span class="small">Official Event</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <span class="text-muted small">&copy; @DateTime.Now.Year EventsMS. Premium event management.</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-muted text-decoration-none me-3 small">Privacy Policy</a>
+                    <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Dark/Light mode toggle with persistence
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+
+        function setTheme(theme) {
+            html.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = themeToggle.querySelector('i');
+            const text = themeToggle.querySelector('span');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-moon-fill me-1';
+                text.innerText = 'Dark';
+            } else {
+                icon.className = 'bi bi-sun-fill me-1';
+                text.innerText = 'Light';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-bs-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        });
+
+        // Countdown timer for upcoming events
+        @if (isUpcoming)
+        {
+                var startDate = Model.StartDate;
+                <text>
+                const eventStart = new Date('@startDate.ToString("yyyy-MM-ddTHH:mm:ss")').getTime();
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = eventStart - now;
+
+                    if (distance < 0) {
+                        document.getElementById('countdownTimer').innerHTML = '<i class="bi bi-calendar-check me-2"></i>Event has started!';
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    let countdownText = '';
+                    if (days > 0) countdownText += `<span class="countdown-number">${days}</span>d `;
+                    if (hours > 0 || days > 0) countdownText += `<span class="countdown-number">${hours}</span>h `;
+                    countdownText += `<span class="countdown-number">${minutes}</span>m <span class="countdown-number">${seconds}</span>s`;
+
+                    document.getElementById('countdownText').innerHTML = `Starts in: ${countdownText}`;
+                }
+
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+                </text>
+        }
+
+        // Copy page URL function
+        function copyPageUrl() {
+            navigator.clipboard.writeText(window.location.href);
+            // Show a temporary tooltip or alert
+            const toastHtml = `<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-primary text-white">
+                        <i class="bi bi-link-45deg me-2"></i>
+                        <strong class="me-auto">Link copied</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        Event URL copied to clipboard!
+                    </div>
+                </div>
+            </div>`;
+            const container = document.createElement('div');
+            container.innerHTML = toastHtml;
+            document.body.appendChild(container);
+            setTimeout(() => container.remove(), 3000);
+        }
+
+        // Add smooth scroll behavior for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
+
+@* @model EventsMS.Models.Event
 
 @{
     Layout = null;
@@ -265,4 +850,4 @@
         // Optional: Add share buttons or more interactivity later
     </script>
 </body>
-</html>
+</html> *@
