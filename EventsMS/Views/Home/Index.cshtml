@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<EventsMS.Models.Event>
 @{
     Layout = null;
+
     ViewData["Title"] = "All Events";
 }
 
@@ -421,7 +422,7 @@
                                 <p class="event-description flex-grow-1">
                                     @(item.Description?.Length > 120 ? item.Description.Substring(0, 120) + "..." : item.Description ?? "No description")
                                 </p>
-                                <a asp-action="Apply" asp-route-id="@item.Id" class="btn btn-primary btn-apply mt-auto">
+                                <a asp-controller="Studentregistration" asp-action="CreateOrEdit" class="btn btn-primary btn-apply mt-auto">
                                     <i class="bi bi-check-circle me-1"></i> Apply Now
                                 </a>
                             </div>
