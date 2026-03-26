@@ -23,10 +23,15 @@ namespace EventsMS.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> Details()
+        [HttpGet]
+        public async Task<IActionResult> Details(long id, CancellationToken cancellationToken)
         {
-            var data = await _eventRepository.GetAllEventAsync(,CancellationToken.None);
-            return View(data);
+            var data = await _eventRepository.GeEventByIdAsync(id, cancellationToken);
+            if (data != null)
+            {
+                return View(data);
+            }
+            return NotFound();
         }
 
 
