@@ -23,6 +23,13 @@ namespace EventsMS.Controllers
             return View(data);
         }
 
+        public async Task<IActionResult> Details()
+        {
+            var data = await _eventRepository.GetAllEventAsync(,CancellationToken.None);
+            return View(data);
+        }
+
+
         public IActionResult Privacy()
         {
             return View();
