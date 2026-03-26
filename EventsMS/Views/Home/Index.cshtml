@@ -78,7 +78,7 @@
 
         }
 
-        /* Hero with professional animation */
+        /* Hero */
         .hero {
             position: relative;
             background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(147,51,234,0.04) 100%);
@@ -105,7 +105,6 @@
                 height: 500px;
                 top: -150px;
                 left: -100px;
-                animation-delay: 0s;
             }
 
             .hero::after {
@@ -137,8 +136,8 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            position: relative;
             z-index: 2;
+            position: relative;
         }
 
         .hero p {
@@ -198,6 +197,25 @@
         .event-card:hover .card-img-top {
             transform: scale(1.1);
         }
+
+        /* Buttons */
+        .btn-apply, .btn-details {
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-details {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+            .btn-details:hover {
+                background-color: var(--primary);
+                color: white;
+                transform: translateY(-2px);
+            }
 
         .btn-apply {
             position: relative;
@@ -265,7 +283,7 @@
 </head>
 <body>
 
-    <!-- Professional Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
@@ -352,7 +370,6 @@
         }
         else
         {
-            <!-- Events Grid - 3 items per row on large screens -->
             <div class="row g-4" id="eventsContainer">
                 @foreach (var item in Model)
                 {
@@ -388,10 +405,20 @@
                                 <p class="flex-grow-1 text-muted small">
                                     @(item.Description?.Length > 130 ? item.Description.Substring(0, 130) + "..." : item.Description ?? "No description available.")
                                 </p>
-                                <a asp-controller="Studentregistration" asp-action="CreateOrEdit"
-                                   class="btn btn-primary btn-apply mt-auto rounded-pill py-3 fw-semibold">
-                                    <i class="bi bi-check-circle me-2"></i>Apply Now
-                                </a>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-2 mt-auto">
+                                    <!-- Details Button -->
+                                    <a asp-controller="Event" asp-action="Details" asp-route-id="@item.Id"
+                                       class="btn btn-details flex-grow-1 text-center">
+                                        <i class="bi bi-info-circle me-2"></i>Details
+                                    </a>
+                                    <!-- Apply Button -->
+                                    <a asp-controller="Studentregistration" asp-action="CreateOrEdit"
+                                       class="btn btn-primary btn-apply flex-grow-1 text-center">
+                                        <i class="bi bi-check-circle me-2"></i>Apply Now
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -400,7 +427,7 @@
         }
     </div>
 
-    <!-- Professional Footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row gy-5">
@@ -487,7 +514,7 @@
             footerSections.forEach(section => observer.observe(section));
         }
 
-        // Filter Functionality
+        // Filter
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
         const priceFilter = document.getElementById('priceFilter');
@@ -518,7 +545,6 @@
             filterEvents();
         });
 
-        // Initialize
         window.addEventListener('load', () => {
             animateElements();
         });
@@ -526,546 +552,6 @@
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-@* @model IEnumerable<EventsMS.Models.Event>
-@{
-    Layout = null;
-    ViewData["Title"] = "All Events";
-}
-
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>All Events - EventsMS</title>
-
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5.3 + Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-
-    <style>
-        /* ---------- CSS Variables ---------- */
-        :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --primary-light: #60a5fa;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-light: #e2e8f0;
-            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-bs-theme="dark"] {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --border-light: #334155;
-            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.4);
-        }
-
-        * {
-            transition: background-color 0.2s, border-color 0.2s;
-        }
-
-        body {
-            background: var(--bg-body);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            color: var(--text-primary);
-            line-height: 1.5;
-        }
-
-        /* ---------- Hero Section ---------- */
-        .hero {
-            background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(59,130,246,0.02) 100%);
-            border-radius: 2rem;
-            padding: 3rem 2rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        [data-bs-theme="dark"] .hero {
-            background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(59,130,246,0.03) 100%);
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* ---------- Navbar (Responsive) ---------- */
-        .navbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-light);
-            padding: 0.8rem 0;
-        }
-
-        [data-bs-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.8);
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.6rem;
-            color: var(--primary);
-        }
-
-        .nav-link {
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin: 0 0.25rem;
-        }
-
-            .nav-link:hover, .nav-link.active {
-                color: var(--primary);
-            }
-
-        .navbar-toggler {
-            border: none;
-            padding: 0.5rem;
-        }
-
-            .navbar-toggler:focus {
-                box-shadow: none;
-            }
-
-        /* ---------- Search & Filter Bar ---------- */
-        .filter-bar {
-            background: var(--bg-card);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2.5rem;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .filter-input {
-            border-radius: 2rem;
-            padding: 0.6rem 1.2rem;
-            border: 1px solid var(--border-light);
-            background: var(--bg-body);
-            color: var(--text-primary);
-        }
-
-            .filter-input:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-            }
-
-        .btn-outline-secondary {
-            border-radius: 2rem;
-            padding: 0.6rem 1.2rem;
-        }
-
-        /* ---------- Event Cards ---------- */
-        .event-card {
-            background: var(--bg-card);
-            border-radius: 1.5rem;
-            border: 1px solid var(--border-light);
-            overflow: hidden;
-            transition: var(--transition);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-sm);
-        }
-
-            .event-card:hover {
-                transform: translateY(-6px);
-                box-shadow: var(--shadow-lg);
-                border-color: transparent;
-            }
-
-        .card-img-top {
-            height: 220px;
-            object-fit: cover;
-            transition: transform 0.4s;
-        }
-
-        .event-card:hover .card-img-top {
-            transform: scale(1.03);
-        }
-
-        .date-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .category-badge {
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.2rem 0.8rem;
-            background: rgba(59,130,246,0.1);
-            color: var(--primary);
-            border-radius: 2rem;
-            display: inline-block;
-        }
-
-        .event-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-meta {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .event-badge {
-            font-size: 0.7rem;
-            font-weight: 500;
-            padding: 0.2rem 0.6rem;
-            border-radius: 2rem;
-        }
-
-        .event-description {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .btn-apply {
-            border-radius: 2rem;
-            padding: 0.6rem;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-            .btn-apply:hover {
-                transform: translateY(-2px);
-            }
-
-        /* ---------- Footer ---------- */
-        .footer {
-            margin-top: 5rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border-light);
-            color: var(--text-secondary);
-        }
-
-        .social-links a {
-            color: var(--text-secondary);
-            margin: 0 0.5rem;
-            transition: var(--transition);
-        }
-
-            .social-links a:hover {
-                color: var(--primary);
-            }
-
-        /* ---------- Empty State ---------- */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--bg-card);
-            border-radius: 1.5rem;
-            border: 1px solid var(--border-light);
-        }
-
-        /* ---------- Utilities ---------- */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Responsive Navbar (Bootstrap Navbar component) -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <i class="bi bi-calendar-event fs-3"></i>
-                <span>EventsMS</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto gap-2">
-                    <li class="nav-item"><a asp-action="Index" class="nav-link active">All Events</a></li>
-                    <li class="nav-item"><a asp-action="MyEvents" class="nav-link">My Events</a></li>
-                    <li class="nav-item"><a asp-action="Upcoming" class="nav-link">Upcoming</a></li>
-                </ul>
-                <div class="d-flex align-items-center gap-3">
-                    <button id="themeToggle" class="btn btn-outline-secondary rounded-circle p-2" style="width: 38px; height: 38px;" aria-label="Toggle dark mode">
-                        <i class="bi bi-moon-stars-fill"></i>
-                    </button>
-
-                    <div class="dropdown">
-                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li>
-                                <a asp-action="index" asp-controller="Dashboard" class="dropdown-item">
-                                    <i class="bi bi-gear me-2"></i>Profile
-                                </a>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container-fluid px-4 mt-4">
-        <!-- Hero Section -->
-        <div class="hero">
-            <h1>Discover Amazing Events</h1>
-            <p>Explore, connect, and create unforgettable experiences with EventsMS</p>
-        </div>
-
-        <!-- Search & Filter Bar -->
-        <div class="filter-bar">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-5">
-                    <label class="form-label fw-semibold mb-1">Search events</label>
-                    <input type="text" id="searchInput" class="form-control filter-input" placeholder="Event name, category...">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold mb-1">Category</label>
-                    <select id="categoryFilter" class="form-select filter-input">
-                        <option value="">All Categories</option>
-                        @{
-                            var categories = Model.Select(e => e.Category?.Name).Where(c => !string.IsNullOrEmpty(c)).Distinct();
-                            foreach (var cat in categories)
-                            {
-                                <option value="@cat">@cat</option>
-                            }
-                        }
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold mb-1">Price</label>
-                    <select id="priceFilter" class="form-select filter-input">
-                        <option value="">All</option>
-                        <option value="free">Free</option>
-                        <option value="paid">Paid</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button id="resetFilters" class="btn btn-outline-secondary w-100 rounded-pill">Reset Filters</button>
-                </div>
-            </div>
-        </div>
-
-        @if (!Model.Any())
-        {
-            <div class="empty-state">
-                <i class="bi bi-calendar-x display-1 text-muted opacity-50"></i>
-                <h3 class="fw-bold mt-4">No Events Found</h3>
-                <p class="text-muted col-md-6 mx-auto">You haven't created any events yet. Start by adding your first one!</p>
-                <a asp-action="CreateOrEdit" class="btn btn-primary mt-3 rounded-pill px-5 py-3">
-                    <i class="bi bi-plus-circle me-2"></i>Add First Event
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="row g-4" id="eventsContainer">
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3 event-item"
-                         data-name="@item.Name.ToLower()"
-                         data-category="@(item.Category?.Name?.ToLower() ?? "")"
-                         data-price="@(item.IsFree ? "free" : "paid")">
-                        <div class="event-card">
-                            <div class="position-relative overflow-hidden">
-                                <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" loading="lazy" />
-                                <div class="date-badge">
-                                    @item.StartDate.ToString("dd MMM")
-                                </div>
-                            </div>
-                            <div class="p-4 d-flex flex-column flex-grow-1">
-                                <span class="category-badge align-self-start mb-2">@(item.Category?.Name ?? "General")</span>
-                                <h5 class="event-title line-clamp-2">@item.Name</h5>
-                                <div class="event-meta">
-                                    <i class="bi bi-calendar3"></i>
-                                    <span>@item.StartDate.ToString("dd MMM yyyy") – @item.EndDate.ToString("dd MMM yyyy")</span>
-                                </div>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="event-badge bg-light border text-dark">Meals: @item.MealsOffered</span>
-                                    @if (item.IsFree)
-                                    {
-                                        <span class="event-badge bg-success text-white">Free Event</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="event-badge bg-warning text-dark">Fee: @item.RegistrationFee ৳</span>
-                                    }
-                                </div>
-                                <p class="event-description flex-grow-1">
-                                    @(item.Description?.Length > 120 ? item.Description.Substring(0, 120) + "..." : item.Description ?? "No description")
-                                </p>
-                                <a asp-controller="Studentregistration" asp-action="CreateOrEdit" class="btn btn-primary btn-apply mt-auto">
-                                    <i class="bi bi-check-circle me-1"></i> Apply Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer text-center">
-        <div class="container-fluid px-4">
-            <div class="social-links mb-3">
-                <a href="#" aria-label="Facebook"><i class="bi bi-facebook fs-5"></i></a>
-                <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x fs-5"></i></a>
-                <a href="#" aria-label="Instagram"><i class="bi bi-instagram fs-5"></i></a>
-                <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin fs-5"></i></a>
-            </div>
-            <p class="mb-0">&copy; @DateTime.Now.Year EventsMS — All rights reserved. Crafted with <i class="bi bi-heart-fill text-danger"></i> for the community.</p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Filter & Dark Mode Scripts -->
-    <script>
-        // Dark mode toggle
-        const toggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        const saved = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-bs-theme', saved);
-        updateIcon(saved);
-
-        function updateIcon(theme) {
-            const icon = toggle.querySelector('i');
-            if (theme === 'light') {
-                icon.classList.remove('bi-moon-stars-fill');
-                icon.classList.add('bi-sun-fill');
-            } else {
-                icon.classList.remove('bi-sun-fill');
-                icon.classList.add('bi-moon-stars-fill');
-            }
-        }
-
-        toggle.addEventListener('click', () => {
-            let newTheme = html.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateIcon(newTheme);
-        });
-
-        // Client-side search & filter
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const priceFilter = document.getElementById('priceFilter');
-        const resetBtn = document.getElementById('resetFilters');
-        const eventItems = document.querySelectorAll('.event-item');
-
-        function filterEvents() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const category = categoryFilter.value.toLowerCase();
-            const price = priceFilter.value;
-
-            eventItems.forEach(item => {
-                const name = item.getAttribute('data-name');
-                const itemCategory = item.getAttribute('data-category');
-                const itemPrice = item.getAttribute('data-price');
-
-                const matchesSearch = name.includes(searchTerm);
-                const matchesCategory = category === '' || itemCategory === category;
-                const matchesPrice = price === '' || itemPrice === price;
-
-                if (matchesSearch && matchesCategory && matchesPrice) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        searchInput.addEventListener('input', filterEvents);
-        categoryFilter.addEventListener('change', filterEvents);
-        priceFilter.addEventListener('change', filterEvents);
-        resetBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            categoryFilter.value = '';
-            priceFilter.value = '';
-            filterEvents();
-        });
-
-        // Active nav link based on current URL (simple)
-        const currentPath = window.location.pathname;
-        document.querySelectorAll('.nav-link').forEach(link => {
-            if (link.getAttribute('href') === currentPath) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    </script>
-</body>
-</html>
-
- *@
 
 
 
