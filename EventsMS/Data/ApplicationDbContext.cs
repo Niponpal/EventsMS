@@ -65,11 +65,17 @@ public class ApplicationDbContext : IdentityDbContext<
 
         // ==============================
         // Payment ↔ PaymentHistory (One-to-One)
-        modelBuilder.Entity<PaymentHistory>()
-            .HasOne(ph => ph.Payment)
-            .WithOne(p => p.PaymentHistory)
-            .HasForeignKey<PaymentHistory>(ph => ph.PaymentId)
-            .OnDelete(DeleteBehavior.Cascade); // safe
+        //modelBuilder.Entity<PaymentHistory>()
+        //    .HasOne(ph => ph.Payment)
+        //    .WithOne(p => p.PaymentHistory)
+        //    .HasForeignKey<PaymentHistory>(ph => ph.PaymentId)
+        //    .OnDelete(DeleteBehavior.Cascade); // safe
+
+         modelBuilder.Entity<PaymentHistory>()
+        .HasOne(ph => ph.Payment)
+        .WithMany(p => p.PaymentHistories)
+        .HasForeignKey(ph => ph.PaymentId)
+        .OnDelete(DeleteBehavior.Restrict);
 
         // ==============================
         // Menu ↔ Menu (Self-referencing)

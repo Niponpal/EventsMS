@@ -40,7 +40,6 @@ namespace EventsMS.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrEdit(PaymentHistory paymentHistory, CancellationToken cancellationToken)
         {
-
             if (paymentHistory.Id == 0)
             {
                 await _paymentHistoryRepository.AddPaymentHistoryAsync(paymentHistory, cancellationToken);
@@ -51,8 +50,8 @@ namespace EventsMS.Controllers
                 await _paymentHistoryRepository.UpdatePaymentHistoryAsync(paymentHistory, cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
-
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
         {
