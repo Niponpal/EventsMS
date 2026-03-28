@@ -7,4 +7,6 @@ public class FoodToken:BaseEntities.BaseEntity<long>
     public DateTimeOffset IssuedUtc { get; set; } = DateTimeOffset.UtcNow;
     public long RegistrationId { get; set; }
     public StudentRegistration Registration { get; set; }
+    public long? EventId { get; set; }   // nullable
+    public Event Event { get; set; }
 }

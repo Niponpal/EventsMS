@@ -36,9 +36,9 @@ public class FoodTokenRepository : IFoodTokenRepository
     public async Task<IEnumerable<FoodToken>> GetAllFoodTokenAsync(CancellationToken cancellationToken)
     {
         var data = await _context.FoodTokens
-    .Include(x => x.Registration)
- 
-    .ToListAsync(cancellationToken);
+      .Include(x => x.Registration)
+          .ThenInclude(r => r.Event) // Registration থেকে Event
+      .ToListAsync(cancellationToken);
 
         if (data != null)
         {
