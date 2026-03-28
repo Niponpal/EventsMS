@@ -35,7 +35,7 @@
 
                 <div class="detail-item d-flex justify-content-between py-3 border-bottom">
                     <div class="fw-medium text-muted">Student</div>
-                    <div class="fw-semibold">@(Model.Registration?.FullName ?? "—")</div>
+                    <div class="fw-semibold">@(Model.Registration.FullName ?? "—")</div>
                 </div>
 
                 <div class="detail-item d-flex justify-content-between py-3 border-bottom">
@@ -84,10 +84,11 @@
                     <div class="fw-semibold text-muted">@(Model.ValidationId ?? "—")</div>
                 </div>
 
-              
                 <div class="detail-item d-flex justify-content-between py-3 border-bottom">
                     <div class="fw-medium text-muted">Created / Payment Date</div>
-                    <div class="fw-semibold">—</div>  <!-- ← Default safe display when no date property exists -->
+                    <div class="fw-semibold">
+                        @DateTime.Now.ToString("dd MMM yyyy HH:mm")  <!-- Present local date & time -->
+                    </div>
                 </div>
 
             </div>

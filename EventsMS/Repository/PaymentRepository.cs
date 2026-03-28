@@ -48,7 +48,10 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<Payment?> GetPaymentByIdAsync(long id, CancellationToken cancellationToken)
     {
-       var data = await _context.payments.FindAsync(id, cancellationToken);
+        var data = await _context.payments
+          .Include(p => p.Registration)
+          .Include(p => p.PaymentHistories)
+          .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         if (data != null)
         {
             return data;
