@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EventsMS.Models.Menu>
+
 @{
     ViewData["Title"] = "Menu List";
 }
@@ -40,7 +41,10 @@
                             <tr>
                                 <td class="ps-4 fw-medium text-secondary">@count</td>
                                 <td>
-                                    <span class="fw-semibold">@item.Title</span>
+                                    <!-- Title limited to maximum 2 lines -->
+                                    <span class="fw-semibold menu-title">
+                                        @item.Title
+                                    </span>
                                 </td>
                                 <td class="font-monospace text-secondary small">
                                     @item.Url
@@ -48,7 +52,7 @@
                                 <td class="text-secondary">
                                     @if (item.Parent != null)
                                     {
-                                        <span>@item.Parent.Title</span>
+                                        <span>@item.Parent.Url</span>
                                     }
                                     else
                                     {
@@ -74,18 +78,15 @@
                                 </td>
                                 <td class="text-end pe-4">
                                     <div class="d-flex gap-2 justify-content-end flex-wrap">
-                                        <!-- Details Button - Unique & Professional Design -->
                                         <a asp-action="Details" asp-route-id="@item.Id"
                                            class="btn btn-sm btn-outline-info rounded-pill px-3 d-flex align-items-center gap-1">
                                             <i class="bi bi-info-circle"></i>
                                             <span>Details</span>
                                         </a>
-
                                         <a asp-action="CreateOrEdit" asp-route-id="@item.Id"
                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                             <i class="bi bi-pencil-square me-1"></i> Edit
                                         </a>
-
                                         <a asp-action="Delete" asp-route-id="@item.Id"
                                            class="btn btn-sm btn-outline-danger rounded-pill px-3"
                                            onclick="return confirm('Are you sure you want to delete this menu item?')">
@@ -137,7 +138,29 @@
         overflow: hidden;
     }
 
-    /* Unique & Professional Details Button Styling */
+    /* ===== MENU TITLE - MAX 2 LINES ===== */
+    .menu-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: 2.8em; /* Approx height for 2 lines */
+        word-break: break-word;
+    }
+
+        /* Hover effect to show full title */
+        .menu-title:hover {
+            overflow: visible;
+            white-space: normal;
+            max-height: none;
+            z-index: 10;
+            position: relative;
+            background-color: inherit;
+        }
+
+    /* Button styles */
     .btn-outline-info {
         border-color: #0ea5e9;
         color: #0ea5e9;
@@ -151,23 +174,12 @@
             transform: translateY(-1px);
         }
 
-    .btn-outline-primary, .btn-outline-danger {
-        transition: all 0.25s ease;
+    .btn-outline-primary:hover,
+    .btn-outline-danger:hover {
+        color: white;
     }
 
-        .btn-outline-primary:hover {
-            background-color: #0d6efd;
-            color: white;
-            border-color: #0d6efd;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-            border-color: #dc3545;
-        }
-
-    /* Hover effect on table rows */
+    /* Table hover */
     .table-hover tbody tr:hover {
         background-color: rgba(0, 123, 255, 0.03);
     }
@@ -181,13 +193,7 @@
         color: #adb5bd;
     }
 
-    [data-bs-theme="dark"] .btn-outline-info {
-        border-color: #67e8f9;
-        color: #67e8f9;
+    [data-bs-theme="dark"] .menu-title:hover {
+        background-color: #2b2f38;
     }
-
-        [data-bs-theme="dark"] .btn-outline-info:hover {
-            background-color: #67e8f9;
-            color: #0f172a;
-        }
 </style>

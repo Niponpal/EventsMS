@@ -19,8 +19,15 @@ namespace EventsMS.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var data = await _eventRepository.GetAllEventAsync(CancellationToken.None);
-            return View(data);
+            // Repository ???? ?? ?????? fetch ???
+            var allEvents = await _eventRepository.GetAllEventAsync(CancellationToken.None);
+
+            // ????????? ????? ?????? filter ???
+            var ongoingEvents = allEvents
+                                .Where(e => e.EndDate >= DateTime.UtcNow)
+                                .ToList();
+
+            return View(ongoingEvents);
         }
 
         [HttpGet]
