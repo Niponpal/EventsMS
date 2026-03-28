@@ -24,7 +24,7 @@
 
                 <div class="row g-4">
                     <!-- Registration Dropdown -->
-                    <div class="col-md-6">
+                  @*   <div class="col-md-6">
                         <div class="form-floating">
                             <select asp-for="RegistrationId"
                                     asp-items="ViewBag.RegistrationList"
@@ -41,7 +41,30 @@
                             </div>
                             <span asp-validation-for="RegistrationId" class="text-danger small mt-1 d-block"></span>
                         </div>
+                    </div> *@
+
+
+                    <div class="col-md-4">
+                        <label asp-for="RegistrationId" class="form-label fw-semibold" style="color: var(--text-primary);">
+                            Select Student / Registration <span class="text-danger">*</span>
+                        </label>
+
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-check"></i>
+                            </span>
+                            <select asp-for="RegistrationId"
+                                    class="form-select shadow-sm"
+                                    asp-items="@ViewBag.RegistrationId"
+                                    required>
+                                <option value="">-- Select Registration --</option>
+                            </select>
+                        </div>
+
+                        <span asp-validation-for="RegistrationId" class="text-danger small mt-1 d-block"></span>
                     </div>
+
+
 
                     <!-- Token Code (readonly) -->
                     <div class="col-md-6">
