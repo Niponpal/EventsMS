@@ -2,6 +2,7 @@
 using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
@@ -31,20 +32,56 @@ public class StudentregistrationController : Controller
         }
         return NotFound();
     }
+    //[HttpGet]
+    //public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
+    //{
+    //    ViewData["EventId"] = _eventRepository.Dropdown();
+    //    if (id == 0)
+    //        return View(new StudentRegistration()); // নতুন রেজিস্ট্রেশন
+    //    else
+    //    {
+    //        var data = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
+    //        if (data != null)
+    //            return View(data); // Edit view
+    //        return NotFound();
+    //    }
+    //}
+
     [HttpGet]
-    public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     {
-        ViewData["EventId"] = _eventRepository.Dropdown();
+        var events = await _eventRepository.GetAllEventAsync(cancellationToken);
+
+        ViewData["EventId"] = new SelectList(
+            events,
+            "Id",
+            "Name",
+            eventId
+        );
+
         if (id == 0)
-            return View(new StudentRegistration()); // নতুন রেজিস্ট্রেশন
+        {
+            var model = new StudentRegistration();
+
+            // 🔥 এইটাই main (event auto select)
+            if (eventId != null)
+            {
+                model.EventId = eventId.Value;
+            }
+
+            return View(model);
+        }
         else
         {
             var data = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
+
             if (data != null)
-                return View(data); // Edit view
+                return View(data);
+
             return NotFound();
         }
     }
+
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
     {
