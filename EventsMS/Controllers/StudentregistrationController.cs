@@ -50,37 +50,52 @@ public class StudentregistrationController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     {
-        var events = await _eventRepository.GetAllEventAsync(cancellationToken);
-
-        ViewData["EventId"] = new SelectList(
-            events,
-            "Id",
-            "Name",
-            eventId
-        );
+        StudentRegistration model;
 
         if (id == 0)
         {
-            var model = new StudentRegistration();
+            // নতুন রেজিস্ট্রেশন
+            model = new StudentRegistration();
 
-            // 🔥 এইটাই main (event auto select)
             if (eventId != null)
             {
                 model.EventId = eventId.Value;
             }
-
-            return View(model);
         }
         else
         {
-            var data = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
+            // Edit mode
+            model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
 
-            if (data != null)
-                return View(data);
-
-            return NotFound();
+            if (model == null)
+                return NotFound();
         }
+
+        // selected event fetch
+        long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
+
+        if (selectedEventId != 0)
+        {
+            var selectedEvent = await _eventRepository.GeEventByIdAsync(selectedEventId, cancellationToken);
+
+            if (selectedEvent != null)
+            {
+                ViewData["EventId"] = new SelectList(
+                    new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } }, // শুধু selected event
+                    "Id",
+                    "Name",
+                    selectedEvent.Id
+                );
+            }
+        }
+        else
+        {
+            ViewData["EventId"] = null; // যদি কোন event na select হয়
+        }
+
+        return View(model);
     }
+
 
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
