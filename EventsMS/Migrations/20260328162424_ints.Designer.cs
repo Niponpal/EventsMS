@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260328060927_RemoveEventFromFoodToken")]
-    partial class RemoveEventFromFoodToken
+    [Migration("20260328162424_ints")]
+    partial class ints
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,38 @@ namespace EventsMS.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedBy = 0L,
+                            CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Default role assigned to all employees.",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR",
+                            StatusId = 0
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreatedBy = 0L,
+                            CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Default role assigned to all employees.",
+                            Name = "Student",
+                            NormalizedName = "STUDENT",
+                            StatusId = 0
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            CreatedBy = 0L,
+                            CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Default role assigned to all customers.",
+                            Name = "Mangement",
+                            NormalizedName = "MANGEMENT",
+                            StatusId = 0
+                        });
                 });
 
             modelBuilder.Entity("EventsMS.Auth_IdentityModel.IdentityModel+RoleClaim", b =>
@@ -191,6 +223,74 @@ namespace EventsMS.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AccessFailedCount = 0,
+                            Address = "",
+                            ConcurrencyStamp = "7e81b46c-3bf8-428c-8af9-41e80bed5e92",
+                            CreatedBy = 0L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "admin@localhost.com",
+                            EmailConfirmed = true,
+                            FullName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
+                            NormalizedUserName = "ADMIN@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMatL/qykECvk9eSUVq5Ol9cAdcqFPzmHOAtMPqfVyknSA18YlRXIfxQbGbKYItQSg==",
+                            Phone = "",
+                            PhoneNumberConfirmed = false,
+                            RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "0a1b487c-b2b8-4ead-99b2-a69a4d10c254",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@localhost.com"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            AccessFailedCount = 0,
+                            Address = "",
+                            ConcurrencyStamp = "f86b15ed-1996-4ea3-be49-d4fcde1199be",
+                            CreatedBy = 0L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "student@localhost.com",
+                            EmailConfirmed = true,
+                            FullName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STUDENT@LOCALHOST.COM",
+                            NormalizedUserName = "STUDENT@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBAaZL9grCEH36LUh3a2tuBAlQ7HCd3zUf8zGed+b4qcuZuho30V+5nvqh9DoE/OPQ==",
+                            Phone = "",
+                            PhoneNumberConfirmed = false,
+                            RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "f81f2561-2e69-4feb-b321-52fce6a38435",
+                            TwoFactorEnabled = false,
+                            UserName = "student@localhost.com"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            AccessFailedCount = 0,
+                            Address = "",
+                            ConcurrencyStamp = "72a0e717-da70-4624-a451-ac64ac26762a",
+                            CreatedBy = 0L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "manager@localhost.com",
+                            EmailConfirmed = true,
+                            FullName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER@LOCALHOST.COM",
+                            NormalizedUserName = "MANAGER@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEuIFrucY6dDi9qV3a3D7MtRjkIP2fwRbkqbfBLhyvrn7coUeHtqSm/hBnbNrdM7+A==",
+                            Phone = "",
+                            PhoneNumberConfirmed = false,
+                            RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "75656885-31cd-4100-b2b4-42a86a5b2de1",
+                            TwoFactorEnabled = false,
+                            UserName = "manager@localhost.com"
+                        });
                 });
 
             modelBuilder.Entity("EventsMS.Auth_IdentityModel.IdentityModel+UserClaim", b =>
@@ -251,6 +351,23 @@ namespace EventsMS.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1L,
+                            RoleId = 1L
+                        },
+                        new
+                        {
+                            UserId = 2L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            UserId = 3L,
+                            RoleId = 3L
+                        });
                 });
 
             modelBuilder.Entity("EventsMS.Auth_IdentityModel.IdentityModel+UserToken", b =>
@@ -452,7 +569,7 @@ namespace EventsMS.Migrations
                     b.HasIndex("RegistrationId")
                         .IsUnique();
 
-                    b.ToTable("payments");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("EventsMS.Models.PaymentHistory", b =>
@@ -513,7 +630,7 @@ namespace EventsMS.Migrations
 
                     b.HasIndex("PaymentId");
 
-                    b.ToTable("paymentHistories");
+                    b.ToTable("PaymentHistories");
                 });
 
             modelBuilder.Entity("EventsMS.Models.StudentRegistration", b =>

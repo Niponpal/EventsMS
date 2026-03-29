@@ -13,7 +13,7 @@ namespace EventsMS.Repository
         }
         public async Task<PaymentHistory> AddPaymentHistoryAsync(PaymentHistory paymentHistory, CancellationToken cancellationToken)
         {
-           var data =await _context.paymentHistories.AddAsync(paymentHistory, cancellationToken);
+           var data =await _context.PaymentHistories.AddAsync(paymentHistory, cancellationToken);
             if (data != null)
             {
                 await _context.SaveChangesAsync(cancellationToken);
@@ -24,10 +24,10 @@ namespace EventsMS.Repository
 
         public async Task<PaymentHistory> DeletePaymentHistoryAsync(long id, CancellationToken cancellationToken)
         {
-           var data = await _context.paymentHistories.FindAsync(new object[] { id }, cancellationToken);
+           var data = await _context.PaymentHistories.FindAsync(new object[] { id }, cancellationToken);
             if (data != null)
             {
-                _context.paymentHistories.Remove(data);
+                _context.PaymentHistories.Remove(data);
                 await _context.SaveChangesAsync(cancellationToken);
                 return data;
             }
@@ -36,7 +36,7 @@ namespace EventsMS.Repository
 
         public async Task<IEnumerable<PaymentHistory>> GetAllPaymentHistoryAsync(CancellationToken cancellationToken)
         {
-           var data = await _context.paymentHistories.ToListAsync(cancellationToken);
+           var data = await _context.PaymentHistories.ToListAsync(cancellationToken);
             if (data != null) { 
             return data;
             }
@@ -45,7 +45,7 @@ namespace EventsMS.Repository
 
         public async Task<PaymentHistory?> GetPaymentHistoryByIdAsync(long id, CancellationToken cancellationToken)
         {
-            var data = await _context.paymentHistories.FindAsync(id,cancellationToken);
+            var data = await _context.PaymentHistories.FindAsync(id,cancellationToken);
             if (data != null)
             {
                 return data;
@@ -57,7 +57,7 @@ namespace EventsMS.Repository
 
         public async Task<PaymentHistory?> UpdatePaymentHistoryAsync(PaymentHistory paymentHistory, CancellationToken cancellationToken)
         {
-          var data = await _context.paymentHistories.FindAsync(new object[] { paymentHistory.Id }, cancellationToken);
+          var data = await _context.PaymentHistories.FindAsync(new object[] { paymentHistory.Id }, cancellationToken);
             if (data != null)
             {
                 data.PaymentId = paymentHistory.PaymentId;
@@ -72,7 +72,7 @@ namespace EventsMS.Repository
                 data.Amount = paymentHistory.Amount;
                 data.Currency = paymentHistory.Currency;
                 data.JsonResponse = paymentHistory.JsonResponse;
-                _context.paymentHistories.Update(data);
+                _context.PaymentHistories.Update(data);
                 await _context.SaveChangesAsync(cancellationToken);
                 return data;
             }

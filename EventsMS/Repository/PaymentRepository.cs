@@ -13,7 +13,7 @@ public class PaymentRepository : IPaymentRepository
     }
     public async Task<Payment> AddPaymentAsync(Payment payment, CancellationToken cancellationToken)
     {
-        var data = await _context.payments.AddAsync(payment, cancellationToken);
+        var data = await _context.Payments.AddAsync(payment, cancellationToken);
         if (data != null)
         {
             await _context.SaveChangesAsync(cancellationToken);
@@ -24,10 +24,10 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<Payment> DeletePaymentyAsync(long id, CancellationToken cancellationToken)
     {
-       var data = await _context.payments.FindAsync(new object[] { id }, cancellationToken);
+       var data = await _context.Payments.FindAsync(new object[] { id }, cancellationToken);
         if (data != null)
         {
-            _context.payments.Remove(data);
+            _context.Payments.Remove(data);
             await _context.SaveChangesAsync(cancellationToken);
             return data;
         }
@@ -38,7 +38,7 @@ public class PaymentRepository : IPaymentRepository
     {
        
 
-        var data = await  _context.payments.Include(x=>x.Registration).ToListAsync(cancellationToken);
+        var data = await  _context.Payments.Include(x=>x.Registration).ToListAsync(cancellationToken);
         if (data != null)
         {
             return data;
@@ -48,7 +48,7 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<Payment?> GetPaymentByIdAsync(long id, CancellationToken cancellationToken)
     {
-        var data = await _context.payments
+        var data = await _context.Payments
           .Include(p => p.Registration)
           .Include(p => p.PaymentHistories)
           .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
@@ -62,7 +62,7 @@ public class PaymentRepository : IPaymentRepository
 
     public async Task<Payment?> UpdatePaymentAsync(Payment payment, CancellationToken cancellationToken)
     {
-       var data = await _context.payments.FindAsync(new object[] { payment.Id }, cancellationToken);
+       var data = await _context.Payments.FindAsync(new object[] { payment.Id }, cancellationToken);
         if (data != null)
         {
             data.InvoiceNumber = payment.InvoiceNumber;
