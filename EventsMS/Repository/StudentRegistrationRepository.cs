@@ -34,7 +34,6 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }
         return null;
     }
-
     public IEnumerable<SelectListItem> Dropdown()
     {
       var data = _context.studentRegistrations.Select(x => new SelectListItem
@@ -44,7 +43,6 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }).ToList();
         return data;
     }
-
     public async Task<IEnumerable<StudentRegistration>> GetAllStudentRegistrationAsync(CancellationToken cancellationToken)
     {
        var data = await _context.studentRegistrations.Include(x=>x.Event).ToListAsync(cancellationToken);
@@ -54,7 +52,6 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }
         return null;
     }
-
     public async Task<StudentRegistration?> GetStudentRegistrationByIdAsync(long id, CancellationToken cancellationToken)
     {
        var data = await  _context.studentRegistrations.FindAsync(id, cancellationToken);
@@ -85,7 +82,4 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }
         return null;
     }
-
-    
-
 }
