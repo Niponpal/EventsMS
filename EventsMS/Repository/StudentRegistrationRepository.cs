@@ -18,7 +18,7 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         if (data != null)
         {
             await _context.SaveChangesAsync(cancellationToken);
-            return studentRegistration; // PhotoPath included
+            return studentRegistration; 
         }
         return null;
     }

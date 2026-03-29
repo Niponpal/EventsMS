@@ -61,14 +61,24 @@ public class AccountController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        if (!ModelState.IsValid)
-            return View(model);
+        try
+        {
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-        if (result.Succeeded)
-            return LocalRedirect("/Dashboard/Index");
-        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        return View(model);
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Dashboard");
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+  
     }
     [HttpPost]
     public async Task<IActionResult> Logout()

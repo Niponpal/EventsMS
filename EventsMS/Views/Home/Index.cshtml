@@ -1,5 +1,265 @@
 ﻿@model IEnumerable<EventsMS.Models.Event>
 @{
+    Layout = "_PublicLayout";   // Using your Public Layout
+    ViewData["Title"] = "All Events";
+}
+
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="hero mb-5">
+        <h1>Discover Amazing Events</h1>
+        <p>Explore, connect, and create unforgettable experiences with EventsMS</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar bg-white border rounded-4 p-4 shadow-sm mb-5">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold">Search events</label>
+                <input type="text" id="searchInput" class="form-control"
+                       placeholder="Event name, category..."
+                       style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Category</label>
+                <select id="categoryFilter" class="form-select"
+                        style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
+                    <option value="">All Categories</option>
+                    @foreach (var cat in Model.Select(e => e.Category?.Name).Where(c => !string.IsNullOrEmpty(c)).Distinct())
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Price</label>
+                <select id="priceFilter" class="form-select"
+                        style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
+                    <option value="">All</option>
+                    <option value="free">Free</option>
+                    <option value="paid">Paid</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button id="resetFilters" class="btn btn-outline-secondary w-100 rounded-pill py-3">Reset Filters</button>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-calendar-x display-1 text-muted"></i>
+            <h3 class="mt-4 fw-bold">No Events Found</h3>
+            <p class="text-muted">Start by creating your first event.</p>
+            <a asp-action="CreateOrEdit" class="btn btn-primary btn-lg rounded-pill px-5 py-3 mt-3">
+                <i class="bi bi-plus-circle me-2"></i>Add First Event
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4" id="eventsContainer">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4 event-item"
+                     data-name="@item.Name.ToLower()"
+                     data-category="@(item.Category?.Name?.ToLower() ?? "")"
+                     data-price="@(item.IsFree ? "free" : "paid")">
+                    <div class="event-card">
+                        <div class="position-relative">
+                            <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" loading="lazy" />
+                            <div class="date-badge position-absolute top-0 end-0 m-3 bg-dark bg-opacity-75 text-white px-3 py-1 rounded-pill small fw-semibold">
+                                @item.StartDate.ToString("dd MMM")
+                            </div>
+                        </div>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <span class="category-badge align-self-start mb-3">@(item.Category?.Name ?? "General")</span>
+                            <h5 class="event-title mb-3">@item.Name</h5>
+                            <div class="event-meta mb-3 small text-muted">
+                                <i class="bi bi-calendar3 me-1"></i>
+                                @item.StartDate.ToString("dd MMM yyyy") – @item.EndDate.ToString("dd MMM yyyy")
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                <span class="badge bg-light border text-dark">Meals: @item.MealsOffered</span>
+                                @if (item.IsFree)
+                                {
+                                    <span class="badge bg-success">Free</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">৳ @item.RegistrationFee</span>
+                                }
+                            </div>
+                            <p class="flex-grow-1 text-muted small">
+                                @(item.Description?.Length > 130 ? item.Description.Substring(0, 130) + "..." : item.Description ?? "No description available.")
+                            </p>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-details flex-grow-1 text-center">
+                                    <i class="bi bi-info-circle me-2"></i>Details
+                                </a>
+                                <a asp-controller="Studentregistration" asp-action="CreateOrEdit" asp-route-eventId="@item.Id"
+                                   class="btn btn-primary btn-apply flex-grow-1 text-center">
+                                    <i class="bi bi-check-circle me-2"></i>Apply Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+        }
+
+        body {
+            background: var(--bg-body);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(147,51,234,0.04) 100%);
+            border-radius: 2.5rem;
+            padding: 5rem 2rem;
+            margin-bottom: 3.5rem;
+            overflow: hidden;
+            text-align: center;
+        }
+
+            .hero h1 {
+                font-size: 3.4rem;
+                font-weight: 800;
+                background: linear-gradient(90deg, var(--primary), var(--primary-light));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        /* Event Card */
+        .event-card {
+            background: var(--bg-card);
+            border-radius: 1.75rem;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+        }
+
+            .event-card:hover {
+                transform: translateY(-12px) scale(1.02);
+                box-shadow: 0 25px 50px -12px rgba(59,130,246,0.25);
+            }
+
+        .card-img-top {
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .event-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+        .btn-apply, .btn-details {
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-details {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+            .btn-details:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+        .btn-apply {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Dark Mode Toggle
+        const toggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-bs-theme', currentTheme);
+
+        function updateIcon() {
+            const icon = toggle.querySelector('i');
+            icon.classList.toggle('bi-moon-stars-fill', currentTheme === 'dark');
+            icon.classList.toggle('bi-sun-fill', currentTheme === 'light');
+        }
+        updateIcon();
+
+        toggle.addEventListener('click', () => {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-bs-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateIcon();
+        });
+
+        // Filter Functionality
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const priceFilter = document.getElementById('priceFilter');
+        const resetBtn = document.getElementById('resetFilters');
+        const eventItems = document.querySelectorAll('.event-item');
+
+        function filterEvents() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const category = categoryFilter.value.toLowerCase();
+            const price = priceFilter.value;
+
+            eventItems.forEach(item => {
+                const nameMatch = item.getAttribute('data-name').includes(searchTerm);
+                const catMatch = !category || item.getAttribute('data-category') === category;
+                const priceMatch = !price || item.getAttribute('data-price') === price;
+                item.style.display = (nameMatch && catMatch && priceMatch) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterEvents);
+        categoryFilter.addEventListener('change', filterEvents);
+        priceFilter.addEventListener('change', filterEvents);
+
+        resetBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            categoryFilter.value = '';
+            priceFilter.value = '';
+            filterEvents();
+        });
+    </script>
+}
+
+
+@* @model IEnumerable<EventsMS.Models.Event>
+@{
     Layout = null;
     ViewData["Title"] = "All Events";
 }
@@ -49,7 +309,6 @@
             overflow-x: hidden;
         }
 
-            /* Subtle animated body background */
             body::before {
                 content: '';
                 position: fixed;
@@ -77,6 +336,66 @@
         }
 
         }
+
+        /* Premium Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.55rem;
+            color: var(--text-primary);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+            .nav-link.active,
+            .nav-link:hover {
+                color: var(--primary);
+            }
+
+        /* Auth Buttons */
+        .auth-btn {
+            border-radius: 9999px;
+            padding: 0.65rem 1.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+            .btn-login:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+            .btn-register:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            }
 
         /* Hero */
         .hero {
@@ -136,8 +455,8 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            z-index: 2;
             position: relative;
+            z-index: 2;
         }
 
         .hero p {
@@ -147,19 +466,6 @@
             margin: 0 auto;
             position: relative;
             z-index: 2;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
-            padding: 1rem 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-        }
-
-        [data-bs-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.96);
         }
 
         /* Event Cards */
@@ -198,7 +504,6 @@
             transform: scale(1.1);
         }
 
-        /* Buttons */
         .btn-apply, .btn-details {
             border-radius: 9999px;
             padding: 0.75rem 1.5rem;
@@ -214,7 +519,6 @@
             .btn-details:hover {
                 background-color: var(--primary);
                 color: white;
-                transform: translateY(-2px);
             }
 
         .btn-apply {
@@ -243,52 +547,21 @@
 
         }
 
-        /* Footer */
         .footer {
             background: var(--bg-card);
             border-top: 1px solid var(--border-light);
             padding: 4.5rem 0 2.5rem;
             margin-top: 7rem;
         }
-
-        .footer-section {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-            .footer-section.visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-        .social-links a {
-            width: 46px;
-            height: 46px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-body);
-            color: var(--text-secondary);
-            border-radius: 50%;
-            font-size: 1.25rem;
-        }
-
-            .social-links a:hover {
-                background: var(--primary);
-                color: white;
-                transform: translateY(-4px) scale(1.1);
-            }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <!-- Navbar -->
+    <!-- Premium Navbar with Login & Register -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <i class="bi bi-calendar-event-fill fs-2"></i>
+                <i class="bi bi-calendar-event-fill fs-2 text-primary"></i>
                 <span>EventsMS</span>
             </a>
 
@@ -298,16 +571,21 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a asp-action="Index" class="nav-link active">All Events</a></li>
-                    <li class="nav-item"><a asp-controller="Home" asp-action="index" class="nav-link">My Events</a></li>
-                    <li class="nav-item"><a asp-controller="Home" asp-action="index" class="nav-link">Upcoming</a></li>
+                    <li class="nav-item">
+                        <a asp-action="Index" class="nav-link active">All Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">My Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">Upcoming</a>
+                    </li>
                 </ul>
 
-                <!-- Auth Buttons -->
-                <div class="d-flex align-items-center gap-2">
+                <!-- Auth Section -->
+                <div class="d-flex align-items-center gap-3">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <!-- Logged In User -->
                         <div class="dropdown">
                             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle fs-3 text-secondary"></i>
@@ -316,20 +594,25 @@
                                 <li><a asp-action="Index" asp-controller="Dashboard" class="dropdown-item"><i class="bi bi-person me-2"></i>Profile</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item text-danger">Logout</a></li>
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     }
                     else
                     {
-                        <!-- Login & Register Buttons -->
+                        <!-- Login and Register Buttons -->
                         <a asp-controller="Account" asp-action="Login"
-                           class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold">
+                           class="auth-btn btn-login px-4">
                             Login
                         </a>
-
                         <a asp-controller="Account" asp-action="Register"
-                           class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">
+                           class="auth-btn btn-register px-4">
                             Register
                         </a>
                     }
@@ -343,9 +626,8 @@
         </div>
     </nav>
 
-
     <div class="container mt-5">
-        <!-- Hero -->
+        <!-- Hero Section -->
         <div class="hero">
             <h1>Discover Amazing Events</h1>
             <p>Explore, connect, and create unforgettable experiences with EventsMS</p>
@@ -430,18 +712,12 @@
                                 <p class="flex-grow-1 text-muted small">
                                     @(item.Description?.Length > 130 ? item.Description.Substring(0, 130) + "..." : item.Description ?? "No description available.")
                                 </p>
-
-                                <!-- Action Buttons -->
                                 <div class="d-flex gap-2 mt-auto">
-                                    <!-- Details Button -->
                                     <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id"
                                        class="btn btn-details flex-grow-1 text-center">
                                         <i class="bi bi-info-circle me-2"></i>Details
                                     </a>
-                                    <!-- Apply Button -->
-                                    <a asp-controller="Studentregistration"
-                                       asp-action="CreateOrEdit"
-                                       asp-route-eventId="@item.Id"
+                                    <a asp-controller="Studentregistration" asp-action="CreateOrEdit" asp-route-eventId="@item.Id"
                                        class="btn btn-primary btn-apply flex-grow-1 text-center">
                                         <i class="bi bi-check-circle me-2"></i>Apply Now
                                     </a>
@@ -502,7 +778,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dark Mode
+        // Dark Mode Toggle
         const toggle = document.getElementById('themeToggle');
         const html = document.documentElement;
         let currentTheme = localStorage.getItem('theme') || 'light';
@@ -522,17 +798,14 @@
             updateIcon();
         });
 
-        // Animations
+        // Animations & Filter (unchanged)
         function animateElements() {
             const cards = document.querySelectorAll('.event-card');
             const footerSections = document.querySelectorAll('.footer-section');
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry, idx) => {
                     if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, idx * 60);
+                        setTimeout(() => entry.target.classList.add('visible'), idx * 60);
                     }
                 });
             }, { threshold: 0.2 });
@@ -541,7 +814,6 @@
             footerSections.forEach(section => observer.observe(section));
         }
 
-        // Filter
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
         const priceFilter = document.getElementById('priceFilter');
@@ -564,7 +836,6 @@
         searchInput.addEventListener('input', filterEvents);
         categoryFilter.addEventListener('change', filterEvents);
         priceFilter.addEventListener('change', filterEvents);
-
         resetBtn.addEventListener('click', () => {
             searchInput.value = '';
             categoryFilter.value = '';
@@ -577,4 +848,4 @@
         });
     </script>
 </body>
-</html>
+</html> *@
