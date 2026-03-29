@@ -284,40 +284,65 @@
 <body>
 
     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <i class="bi bi-calendar-event-fill fs-2"></i>
                 <span>EventsMS</span>
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto gap-1">
                     <li class="nav-item"><a asp-action="Index" class="nav-link active">All Events</a></li>
                     <li class="nav-item"><a asp-controller="Home" asp-action="index" class="nav-link">My Events</a></li>
                     <li class="nav-item"><a asp-controller="Home" asp-action="index" class="nav-link">Upcoming</a></li>
                 </ul>
-                <div class="d-flex align-items-center gap-3">
+
+                <!-- Auth Buttons -->
+                <div class="d-flex align-items-center gap-2">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <!-- Logged In User -->
+                        <div class="dropdown">
+                            <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a asp-action="Index" asp-controller="Dashboard" class="dropdown-item"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item text-danger">Logout</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Login & Register Buttons -->
+                        <a asp-controller="Account" asp-action="Login"
+                           class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold">
+                            Login
+                        </a>
+
+                        <a asp-controller="Account" asp-action="Register"
+                           class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">
+                            Register
+                        </a>
+                    }
+
+                    <!-- Theme Toggle -->
                     <button id="themeToggle" class="btn btn-outline-secondary rounded-circle p-2" style="width: 42px; height: 42px;">
                         <i class="bi bi-moon-stars-fill"></i>
                     </button>
-                    <div class="dropdown">
-                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow">
-                            <li><a asp-action="Index" asp-controller="Dashboard" class="dropdown-item"><i class="bi bi-person me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
     </nav>
+
 
     <div class="container mt-5">
         <!-- Hero -->
