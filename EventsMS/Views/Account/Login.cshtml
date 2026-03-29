@@ -22,19 +22,23 @@
             --primary: #0ea5e9;
             --primary-dark: #0284c7;
             --accent: #7c3aed;
-            --bg: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            --card-bg: rgba(255, 255, 255, 0.78);
-            --blur: blur(16px);
-            --shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
-            --text: #0f172a;
-            --muted: #64748b;
-            --radius: 1.25rem;
+            --gradient: linear-gradient(135deg, #0ea5e9, #7c3aed, #ec4899);
+            --bg: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --blur: blur(20px);
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --radius: 1.75rem;
+        }
+
+        * {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             min-height: 100vh;
             background: var(--bg);
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: var(--text);
             display: flex;
             align-items: center;
@@ -44,236 +48,304 @@
             overflow: hidden;
         }
 
-        body::before {
-            content: '';
+            /* Animated Background */
+            body::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: var(--gradient);
+                opacity: 0.15;
+                animation: gradientShift 25s ease infinite;
+                z-index: -2;
+            }
+
+        @@keyframes gradientShift {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        /* Floating Orbs */
+        .orb {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, rgba(14,165,233,0.04), rgba(124,58,237,0.04));
-            animation: gradient 18s ease infinite;
-            z-index: -2;
-        }
-
-        @@keyframes gradient {
-            0%   { background-position: 0% 50%; }
-            50%  { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .particles {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(14, 165, 233, 0.5);
             border-radius: 50%;
-            box-shadow: 0 0 12px rgba(14, 165, 233, 0.7);
-            animation: float-up linear infinite;
+            filter: blur(40px);
+            opacity: 0.25;
+            z-index: -1;
+            animation: floatOrb 30s ease-in-out infinite;
         }
 
-        @@keyframes float-up {
-            0%   { transform: translateY(110vh) scale(0.3); opacity: 0; }
-            10%  { opacity: 0.7; }
-            90%  { opacity: 0.7; }
-            100% { transform: translateY(-15vh) scale(0.9); opacity: 0; }
+        .orb1 {
+            width: 600px;
+            height: 600px;
+            background: #0ea5e9;
+            top: -15%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb2 {
+            width: 500px;
+            height: 500px;
+            background: #7c3aed;
+            bottom: -20%;
+            right: -15%;
+            animation-delay: -10s;
+        }
+
+        .orb3 {
+            width: 400px;
+            height: 400px;
+            background: #ec4899;
+            top: 30%;
+            right: 10%;
+            animation-delay: -20s;
+        }
+
+        @@keyframes floatOrb {
+            0%, 100%
+
+        {
+            transform: translate(0, 0) rotate(0deg);
+        }
+
+        50% {
+            transform: translate(80px, -80px) rotate(10deg);
+        }
+
         }
 
         .login-card {
             background: var(--card-bg);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
-            border: 1px solid rgba(255,255,255,0.35);
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            padding: 3rem 2.75rem;
             width: 100%;
-            max-width: 460px;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 480px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-card:hover {
-            transform: translateY(-12px) scale(1.015);
-        }
+            .login-card::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12) 0%, transparent 60%);
+                pointer-events: none;
+            }
 
         .header-line {
-            height: 4px;
-            width: 80px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 2px;
-            margin: 0 auto 1.25rem;
+            height: 5px;
+            width: 70px;
+            background: var(--gradient);
+            border-radius: 9999px;
+            margin: 0 auto 1.5rem;
         }
 
         h2 {
             font-weight: 800;
-            font-size: 2.1rem;
+            font-size: 2.4rem;
             text-align: center;
             margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, #e0f2fe, #c4b5fd, #f9a8d4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.03em;
         }
 
         .login-subtitle {
             text-align: center;
             color: var(--muted);
-            font-size: 1rem;
-            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            margin-bottom: 2.25rem;
         }
 
         .form-label {
             font-weight: 600;
-            color: var(--text);
-            margin-bottom: 0.4rem;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .form-control {
-            background: rgba(255,255,255,0.65);
-            border: 1px solid rgba(203,213,225,0.7);
-            border-radius: 0.9rem;
-            padding: 0.75rem 1.25rem;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 1rem;
+            padding: 0.85rem 1.25rem;
+            color: white;
+            font-size: 1rem;
         }
 
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(14,165,233,0.18);
-            background: white;
-        }
+            .form-control:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.3rem rgba(14, 165, 233, 0.25);
+                background: rgba(255, 255, 255, 0.12);
+                color: white;
+            }
+
+            .form-control::placeholder {
+                color: #64748b;
+            }
 
         .password-toggle {
-            right: 1rem;
+            right: 1.25rem;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: var(--muted);
+            color: #94a3b8;
             cursor: pointer;
-            transition: color 0.2s;
+            font-size: 1.3rem;
         }
 
-        .password-toggle:hover {
-            color: var(--primary);
-        }
+            .password-toggle:hover {
+                color: var(--primary);
+            }
 
         .btn-login {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: var(--gradient);
             border: none;
             font-weight: 700;
-            padding: 0.9rem;
-            border-radius: 0.9rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border-radius: 1rem;
             color: white;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.5);
             position: relative;
             overflow: hidden;
-            width: 100%;
         }
 
-        .btn-login:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(14,165,233,0.4);
-        }
+            .btn-login:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.6);
+            }
 
-        .btn-login::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.35) 10%, transparent 40%);
-            opacity: 0;
-            transition: opacity 0.6s;
-        }
-
-        .btn-login:active::after {
-            opacity: 1;
-        }
+            .btn-login:active {
+                transform: scale(0.98);
+            }
 
         .forgot-password {
-            color: var(--primary);
-            font-size: 0.9rem;
+            color: #60a5fa;
+            font-size: 0.95rem;
             text-decoration: none;
-            display: block;
-            text-align: right;
-            margin-bottom: 1.5rem;
         }
 
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
+            .forgot-password:hover {
+                color: #93c5fd;
+                text-decoration: underline;
+            }
 
         .social-login {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.25rem;
+            margin: 2rem 0 1.5rem;
         }
 
         .btn-social {
-            background: rgba(255,255,255,0.5);
-            border: 1px solid rgba(203,213,225,0.7);
-            border-radius: 0.9rem;
-            padding: 0.75rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(148,163,184,0.25);
+            border-radius: 1rem;
+            padding: 0.85rem;
             font-weight: 600;
-            color: var(--text);
-            transition: all 0.3s ease;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .btn-social:hover {
-            background: rgba(255,255,255,0.8);
-            border-color: var(--primary);
-            transform: translateY(-2px);
+            .btn-social:hover {
+                background: rgba(255,255,255,0.15);
+                border-color: var(--primary);
+                transform: translateY(-3px);
+            }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--muted);
+            font-size: 0.9rem;
         }
+
+            .divider::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: rgba(148,163,184,0.2);
+            }
+
+            .divider span {
+                background: var(--bg);
+                padding: 0 1.25rem;
+            }
 
         .register-link {
             text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
+            margin-top: 1.75rem;
             color: var(--muted);
         }
 
-        .register-link a {
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-        }
+            .register-link a {
+                color: #60a5fa;
+                font-weight: 600;
+                text-decoration: none;
+            }
 
-        .register-link a:hover {
-            text-decoration: underline;
-        }
+                .register-link a:hover {
+                    color: #93c5fd;
+                }
 
         @@media (max-width: 576px) {
-            .login-card { padding: 2rem 1.5rem; }
-            h2 { font-size: 1.8rem; }
+            .login-card
+
+        {
+            padding: 2.25rem 1.75rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
         }
     </style>
 </head>
 <body>
 
-    <!-- Floating particles background -->
-    <div class="particles">
-        <div class="particle" style="left:8%; width:7px; height:7px; animation-duration:16s; animation-delay:0s;"></div>
-        <div class="particle" style="left:22%; width:9px; height:9px; animation-duration:24s; animation-delay:3s; background:rgba(124,58,237,0.5);"></div>
-        <div class="particle" style="left:38%; width:6px; height:6px; animation-duration:19s; animation-delay:1.5s;"></div>
-        <div class="particle" style="left:55%; width:8px; height:8px; animation-duration:28s; animation-delay:6s; background:rgba(124,58,237,0.5);"></div>
-        <div class="particle" style="left:68%; width:5px; height:5px; animation-duration:21s; animation-delay:4s;"></div>
-        <div class="particle" style="left:85%; width:10px; height:10px; animation-duration:32s; animation-delay:8s;"></div>
-        <div class="particle" style="left:15%; width:8px; height:8px; animation-duration:26s; animation-delay:2s; background:rgba(124,58,237,0.5);"></div>
-        <div class="particle" style="left:45%; width:7px; height:7px; animation-duration:18s; animation-delay:5s;"></div>
-    </div>
+    <!-- Floating Orbs -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
 
     <div class="login-card">
         <div class="header-line"></div>
         <h2>Welcome Back</h2>
-        <p class="login-subtitle">Sign in to continue your EventsMS journey</p>
+        <p class="login-subtitle">Sign in to manage your amazing events</p>
 
         <form asp-action="Login" method="post" class="needs-validation" novalidate id="loginForm">
-            <div class="mb-3">
+            <div class="mb-4">
                 <label asp-for="Email" class="form-label">Email or Username</label>
                 <input asp-for="Email" class="form-control" placeholder="you@example.com or username" required autofocus />
                 <div class="invalid-feedback">
@@ -295,16 +367,16 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
-                    <label class="form-check-label small" for="rememberMe">Remember me</label>
+                    <label class="form-check-label small" for="rememberMe">Keep me signed in</label>
                 </div>
                 <a href="#" class="forgot-password">Forgot password?</a>
             </div>
 
-            <button type="submit" class="btn btn-login">
+            <button type="submit" class="btn btn-login w-100">
                 <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
             </button>
 
-            <div class="divider my-4">
+            <div class="divider">
                 <span>Or continue with</span>
             </div>
 
@@ -318,23 +390,29 @@
             </div>
 
             <div class="register-link">
-                Don't have an account? <a asp-controller="Account" asp-action="Register">Create one now</a>
+                Don't have an account?
+                <a asp-controller="Account" asp-action="Register">Create free account</a>
             </div>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Password visibility toggle
-        document.getElementById('togglePassword')?.addEventListener('click', () => {
+        // Password toggle
+        document.getElementById('togglePassword').addEventListener('click', () => {
             const pw = document.getElementById('password');
             const icon = document.querySelector('#togglePassword i');
-            pw.type = pw.type === 'password' ? 'text' : 'password';
-            icon.classList.toggle('bi-eye');
-            icon.classList.toggle('bi-eye-slash');
+
+            if (pw.type === 'password') {
+                pw.type = 'text';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                pw.type = 'password';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
         });
 
-        // Bootstrap form validation
+        // Form validation
         (() => {
             'use strict';
             const form = document.getElementById('loginForm');
