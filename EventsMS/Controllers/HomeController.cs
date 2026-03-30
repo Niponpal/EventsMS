@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using EventsMS.Helper;
 using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,17 @@ namespace EventsMS.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IEventRepository _eventRepository;
+        private readonly ISignInHelper _signInHelper;
 
-       
-        public HomeController(ILogger<HomeController> logger, IEventRepository eventRepository)
+        public HomeController(ILogger<HomeController> logger, IEventRepository eventRepository, ISignInHelper signInHelper)
         {
             _logger = logger;
             _eventRepository = eventRepository;
+            _signInHelper = signInHelper;
         }
 
         public async Task<IActionResult> Index()
+        
         {
             /// Fetch all events from the repository
             var allEvents = await _eventRepository.GetAllEventAsync(CancellationToken.None);

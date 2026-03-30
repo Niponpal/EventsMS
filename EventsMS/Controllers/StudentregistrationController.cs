@@ -47,41 +47,93 @@ public class StudentregistrationController : Controller
     //    }
     //}
 
+    //[HttpGet]
+    //public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
+    //{
+    //    StudentRegistration model;
+
+    //    if (id == 0)
+    //    {
+    //        // নতুন রেজিস্ট্রেশন
+    //        model = new StudentRegistration();
+
+    //        if (eventId != null)
+    //        {
+    //            model.EventId = eventId.Value;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        // Edit mode
+    //        model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
+
+    //        if (model == null)
+    //            return NotFound();
+    //    }
+
+    //    // selected event fetch
+    //    long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
+
+    //    if (selectedEventId != 0)
+    //    {
+    //        var selectedEvent = await _eventRepository.GeEventByIdAsync(selectedEventId, cancellationToken);
+
+    //        if (selectedEvent != null)
+    //        {
+    //            ViewData["EventId"] = new SelectList(
+    //                new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } }, // শুধু selected event
+    //                "Id",
+    //                "Name",
+    //                selectedEvent.Id
+    //            );
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ViewData["EventId"] = null; // যদি কোন event na select হয়
+    //    }
+
+    //    return View(model);
+    //}
+
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     {
+        // 🔒 Check if user is logged in
+        if (!User.Identity.IsAuthenticated)
+        {
+            // Login না থাকলে Register page-এ পাঠাও এবং returnUrl set করো
+            return RedirectToAction("Login", "Account", new
+            {
+                returnUrl = Url.Action("CreateOrEdit", "Studentregistration", new { id, eventId })
+            });
+        }
+
         StudentRegistration model;
 
         if (id == 0)
         {
             // নতুন রেজিস্ট্রেশন
             model = new StudentRegistration();
-
-            if (eventId != null)
-            {
-                model.EventId = eventId.Value;
-            }
+            if (eventId != null) model.EventId = eventId.Value;
         }
         else
         {
             // Edit mode
             model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
-
-            if (model == null)
-                return NotFound();
+            if (model == null) return NotFound();
         }
 
-        // selected event fetch
+        // Selected Event fetch
         long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
 
         if (selectedEventId != 0)
         {
             var selectedEvent = await _eventRepository.GeEventByIdAsync(selectedEventId, cancellationToken);
-
             if (selectedEvent != null)
             {
                 ViewData["EventId"] = new SelectList(
-                    new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } }, // শুধু selected event
+                    new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } },
                     "Id",
                     "Name",
                     selectedEvent.Id
@@ -90,7 +142,7 @@ public class StudentregistrationController : Controller
         }
         else
         {
-            ViewData["EventId"] = null; // যদি কোন event na select হয়
+            ViewData["EventId"] = null;
         }
 
         return View(model);
