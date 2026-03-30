@@ -19,10 +19,10 @@ namespace EventsMS.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Repository ???? ?? ?????? fetch ???
+            /// Fetch all events from the repository
             var allEvents = await _eventRepository.GetAllEventAsync(CancellationToken.None);
 
-            // ????????? ????? ?????? filter ???
+            // Filter events to include only those that are ongoing (current date is between start and end date)
             var ongoingEvents = allEvents
                                 .Where(e => e.EndDate >= DateTime.UtcNow)
                                 .ToList();

@@ -116,7 +116,7 @@ public class StudentregistrationController : Controller
         else
             await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
