@@ -44,8 +44,11 @@ namespace EventsMS.Controllers
             return NotFound();
         }
 
-
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult Contact()
         {
             return View();
         }
