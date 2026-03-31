@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<EventsMS.Models.Event>
+
 @{
-    Layout = "_PublicLayout";   // Using your Public Layout
+    Layout = "_PublicLayout";   // ← This is the most important line
     ViewData["Title"] = "All Events";
 }
 
 <div class="container mt-5">
     <!-- Hero Section -->
-    <div class="hero mb-5">
+    <div class="hero mb-5 text-center">
         <h1>Discover Amazing Events</h1>
-        <p>Explore, connect, and create unforgettable experiences with EventsMS</p>
+        <p class="lead">Explore, connect, and create unforgettable experiences with EventsMS</p>
     </div>
 
     <!-- Filter Bar -->
@@ -22,8 +23,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Category</label>
-                <select id="categoryFilter" class="form-select"
-                        style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
+                <select id="categoryFilter" class="form-select" style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
                     <option value="">All Categories</option>
                     @foreach (var cat in Model.Select(e => e.Category?.Name).Where(c => !string.IsNullOrEmpty(c)).Distinct())
                     {
@@ -33,8 +33,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label fw-semibold">Price</label>
-                <select id="priceFilter" class="form-select"
-                        style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
+                <select id="priceFilter" class="form-select" style="border-radius: 9999px; padding: 0.75rem 1.25rem;">
                     <option value="">All</option>
                     <option value="free">Free</option>
                     <option value="paid">Paid</option>
@@ -66,6 +65,7 @@
                      data-name="@item.Name.ToLower()"
                      data-category="@(item.Category?.Name?.ToLower() ?? "")"
                      data-price="@(item.IsFree ? "free" : "paid")">
+
                     <div class="event-card">
                         <div class="position-relative">
                             <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" loading="lazy" />
@@ -99,28 +99,10 @@
                                    class="btn btn-details flex-grow-1 text-center">
                                     <i class="bi bi-info-circle me-2"></i>Details
                                 </a>
-                                 <a asp-controller="Studentregistration" asp-action="CreateOrEdit" asp-route-eventId="@item.Id"
+                                <a asp-controller="Studentregistration" asp-action="CreateOrEdit" asp-route-eventId="@item.Id"
                                    class="btn btn-primary btn-apply flex-grow-1 text-center">
                                     <i class="bi bi-check-circle me-2"></i>Apply Now
-                                </a> 
-@* 
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <!-- User login আছে → Apply page-এ যাবে -->
-                                    <a asp-controller="Studentregistration" asp-action="CreateOrEdit" asp-route-eventId="@item.Id"
-                                       class="btn btn-primary btn-apply">
-                                        Apply Now
-                                    </a>
-                                }
-                                else
-                                {
-                                    <!-- User login নেই → Register page-এ যাবে, returnUrl পাঠানো হবে -->
-                                    <a asp-controller="Account" asp-action="Login"
-                                       asp-route-returnUrl="@Url.Action("CreateOrEdit", "Studentregistration", new { eventId = item.Id })"
-                                       class="btn btn-primary btn-apply">
-                                        Apply
-                                    </a>
-                                } *@
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -132,43 +114,20 @@
 
 @section Styles {
     <style>
-        :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --primary-light: #60a5fa;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-light: #e2e8f0;
-        }
-
-        body {
-            background: var(--bg-body);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            color: var(--text-primary);
-        }
-
-        /* Hero */
         .hero {
-            position: relative;
             background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(147,51,234,0.04) 100%);
             border-radius: 2.5rem;
             padding: 5rem 2rem;
-            margin-bottom: 3.5rem;
-            overflow: hidden;
-            text-align: center;
         }
 
             .hero h1 {
                 font-size: 3.4rem;
                 font-weight: 800;
-                background: linear-gradient(90deg, var(--primary), var(--primary-light));
+                background: linear-gradient(90deg, #3b82f6, #60a5fa);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
 
-        /* Event Card */
         .event-card {
             background: var(--bg-card);
             border-radius: 1.75rem;
@@ -212,37 +171,11 @@
                 background: var(--primary);
                 color: white;
             }
-
-        .btn-apply {
-            position: relative;
-            overflow: hidden;
-        }
     </style>
 }
 
 @section Scripts {
     <script>
-        // Dark Mode Toggle
-        const toggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        let currentTheme = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-bs-theme', currentTheme);
-
-        function updateIcon() {
-            const icon = toggle.querySelector('i');
-            icon.classList.toggle('bi-moon-stars-fill', currentTheme === 'dark');
-            icon.classList.toggle('bi-sun-fill', currentTheme === 'light');
-        }
-        updateIcon();
-
-        toggle.addEventListener('click', () => {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-bs-theme', currentTheme);
-            localStorage.setItem('theme', currentTheme);
-            updateIcon();
-        });
-
-        // Filter Functionality
         const searchInput = document.getElementById('searchInput');
         const categoryFilter = document.getElementById('categoryFilter');
         const priceFilter = document.getElementById('priceFilter');
@@ -258,6 +191,7 @@
                 const nameMatch = item.getAttribute('data-name').includes(searchTerm);
                 const catMatch = !category || item.getAttribute('data-category') === category;
                 const priceMatch = !price || item.getAttribute('data-price') === price;
+
                 item.style.display = (nameMatch && catMatch && priceMatch) ? '' : 'none';
             });
         }
@@ -274,7 +208,6 @@
         });
     </script>
 }
-
 
 @* @model IEnumerable<EventsMS.Models.Event>
 @{
