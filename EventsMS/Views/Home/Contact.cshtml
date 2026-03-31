@@ -1,49 +1,70 @@
 ﻿@model EventsMS.Models.ContactViewModel
+
 @{
     Layout = "_PublicLayout";
     ViewData["Title"] = "Contact Us";
 }
 
 <div class="container mt-5">
-
-    <!-- Hero Header -->
+    <!-- Hero Header - More Dramatic -->
     <div class="text-center mb-5">
-        <div class="hero-contact rounded-4 overflow-hidden mb-5"
-             style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 5rem 2rem;">
-            <h1 class="display-4 fw-bold mb-3">Get in Touch</h1>
-            <p class="lead mb-0">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        <div class="hero-contact rounded-5 overflow-hidden position-relative mb-5">
+            <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1e40af 100%);
+                        color: white;
+                        padding: 6rem 2rem;
+                        position: relative;">
+                <div class="position-absolute top-0 start-0 w-100 h-100"
+                     style="background: url('https://picsum.photos/id/1015/2000/1200') center/cover; opacity: 0.15;"></div>
+
+                <div class="position-relative">
+                    <h1 class="display-3 fw-bold mb-3">Get in Touch</h1>
+                    <p class="lead fs-4 opacity-90 mb-0">
+                        We'd love to hear from you. Drop us a message and we'll get back to you quickly.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row g-5">
-        <!-- Contact Info Card -->
+        <!-- Contact Information -->
         <div class="col-lg-5">
-            <div class="card border-0 shadow-lg h-100" style="background: var(--bg-card);">
+            <div class="card border-0 shadow-xl h-100 rounded-4 overflow-hidden"
+                 style="background: var(--bg-card);">
                 <div class="card-body p-5">
-                    <h4 class="fw-semibold mb-4">Contact Information</h4>
+                    <h4 class="fw-bold mb-4 text-primary">Contact Information</h4>
 
-                    <div class="d-flex mb-4">
-                        <i class="bi bi-envelope fs-3 text-primary me-3"></i>
+                    <div class="contact-item d-flex align-items-start mb-5">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-4"
+                             style="width: 52px; height: 52px;">
+                            <i class="bi bi-envelope fs-4"></i>
+                        </div>
                         <div>
-                            <h6 class="mb-1">Email</h6>
-                            <a href="mailto:info@eventsms.com" class="text-decoration-none text-muted">info@eventsms.com</a>
+                            <h6 class="fw-semibold mb-1">Email Us</h6>
+                            <a href="mailto:info@eventsms.com" class="text-decoration-none fs-5">info@eventsms.com</a>
                         </div>
                     </div>
 
-                    <div class="d-flex mb-4">
-                        <i class="bi bi-telephone fs-3 text-primary me-3"></i>
+                    <div class="contact-item d-flex align-items-start mb-5">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-4"
+                             style="width: 52px; height: 52px;">
+                            <i class="bi bi-telephone fs-4"></i>
+                        </div>
                         <div>
-                            <h6 class="mb-1">Phone</h6>
-                            <a href="tel:+8801234567890" class="text-decoration-none text-muted">+880 123 456 7890</a>
+                            <h6 class="fw-semibold mb-1">Call Us</h6>
+                            <a href="tel:+8801712345678" class="text-decoration-none fs-5">+880 1712-345678</a>
                         </div>
                     </div>
 
-                    <div class="d-flex">
-                        <i class="bi bi-geo-alt fs-3 text-primary me-3"></i>
+                    <div class="contact-item d-flex align-items-start">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-4"
+                             style="width: 52px; height: 52px;">
+                            <i class="bi bi-geo-alt fs-4"></i>
+                        </div>
                         <div>
-                            <h6 class="mb-1">Address</h6>
-                            <p class="text-muted mb-0">
-                                123 Gulshan Avenue<br>
+                            <h6 class="fw-semibold mb-1">Visit Us</h6>
+                            <p class="text-muted mb-0 fs-6">
+                                123 Gulshan Avenue, Block-A<br>
                                 Dhaka 1212, Bangladesh
                             </p>
                         </div>
@@ -52,32 +73,42 @@
             </div>
         </div>
 
-        <!-- Contact Form Card -->
+        <!-- Contact Form -->
         <div class="col-lg-7">
-            <div class="card border-0 shadow-lg" style="background: var(--bg-card);">
+            <div class="card border-0 shadow-xl rounded-4 overflow-hidden"
+                 style="background: var(--bg-card);">
                 <div class="card-body p-5">
-                    <h4 class="fw-semibold mb-4">Send a Message</h4>
+                    <h4 class="fw-bold mb-4 text-primary">Send us a Message</h4>
 
-                    <form asp-action="Contact" method="post">
+                    <form asp-controller="Home" asp-action="Contact" method="post">
+                        @Html.AntiForgeryToken()
+
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Your Name</label>
-                                <input type="text" name="Name" class="form-control form-control-lg rounded-3" placeholder="Your Name" required>
+                                <label class="form-label fw-semibold">Your Name</label>
+                                <input asp-for="Name" class="form-control form-control-lg rounded-4"
+                                       placeholder="Enter your full name" required />
+                                <span asp-validation-for="Name" class="text-danger small mt-1"></span>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-medium">Your Email</label>
-                                <input type="email" name="Email" class="form-control form-control-lg rounded-3" placeholder="your@email.com" required>
+                                <label class="form-label fw-semibold">Your Email</label>
+                                <input asp-for="Email" type="email" class="form-control form-control-lg rounded-4"
+                                       placeholder="your@email.com" required />
+                                <span asp-validation-for="Email" class="text-danger small mt-1"></span>
                             </div>
                         </div>
 
                         <div class="mt-4">
-                            <label class="form-label fw-medium">Your Message</label>
-                            <textarea name="Message" class="form-control form-control-lg rounded-3" rows="6" placeholder="How can we help you today?" required></textarea>
+                            <label class="form-label fw-semibold">Your Message</label>
+                            <textarea asp-for="Message" class="form-control form-control-lg rounded-4"
+                                      rows="7" placeholder="Tell us how we can help you..." required></textarea>
+                            <span asp-validation-for="Message" class="text-danger small mt-1"></span>
                         </div>
 
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 py-3 fw-semibold">
-                                <i class="bi bi-send me-2"></i>Send Message
+                        <div class="mt-5">
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg w-100 rounded-4 py-3 fw-bold shadow-sm">
+                                <i class="bi bi-send-fill me-2"></i> Send Message
                             </button>
                         </div>
                     </form>
@@ -88,236 +119,78 @@
 
     <!-- Google Map -->
     <div class="mt-5">
-        <div class="card border-0 shadow-lg overflow-hidden rounded-4">
-            <div class="card-header bg-white border-0 py-4">
-                <h5 class="mb-0 fw-semibold">Our Location</h5>
+        <div class="card border-0 shadow-xl rounded-4 overflow-hidden">
+            <div class="card-header bg-transparent border-0 py-4 px-5 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">Our Location in Dhaka</h5>
+                <span class="badge bg-primary">Gulshan</span>
             </div>
             <div class="ratio ratio-21x9">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.234567890123!2d90.41234567890123!3d23.7890123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a0f0f0f0f0%3A0x1234567890abcdef!2sGulshan%2C+Dhaka!5e0!3m2!1sen!2sbd!4v1234567890123"
-                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.8!2d90.4125!3d23.790!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a0f0f0f0f0%3A0x1234567890abcdef!2sGulshan%2C+Dhaka!5e0!3m2!1sen!2sbd!4v1700000000000"
+                        width="100%" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </div>
-
 </div>
 
 @section Styles {
     <style>
-        /* Hero Contact */
         .hero-contact {
-            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.5);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 60px -15px rgba(59, 130, 246, 0.6);
         }
 
-        /* Card Hover */
         .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
             .card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15) !important;
+                transform: translateY(-12px) scale(1.02);
+                box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.2) !important;
             }
 
-        /* Form Inputs */
+        .icon-circle {
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover .icon-circle {
+            transform: scale(1.15);
+            background-color: rgba(59, 130, 246, 0.2) !important;
+        }
+
         .form-control {
             border: 2px solid var(--border-light);
+            border-radius: 16px;
+            padding: 14px 20px;
+            font-size: 1.05rem;
             transition: all 0.3s ease;
         }
 
             .form-control:focus {
                 border-color: var(--primary);
-                box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+                box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.15);
+                outline: none;
             }
 
         [data-bs-theme="dark"] .form-control {
             background-color: #1e2937;
-            border-color: #334155;
+            border-color: #475569;
             color: #e2e8f0;
         }
 
-        /* Button */
         .btn-primary {
             background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             border: none;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
         }
 
             .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px rgba(59,130,246,0.4);
+                transform: translateY(-4px);
+                box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
             }
 
-        /* Responsive tweaks */
-        @@media (max-width: 992px) {
-            .hero-contact
-
-        {
-            padding: 3rem 1.5rem;
-        }
-
+        /* Extra polish */
+        .card-header {
+            background: var(--bg-card) !important;
         }
     </style>
 }
-
-@* @model EventsMS.Models.ContactViewModel // You can create a simple model or use null
-@{
-    Layout = "_PublicLayout";
-    ViewData["Title"] = "Contact Us";
-}
-
-<div class="container mt-5">
-    <!-- Hero Header -->
-    <div class="text-center mb-5">
-        <div class="hero-contact rounded-4 overflow-hidden mb-5" 
-             style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 4rem 2rem;">
-            <h1 class="display-4 fw-bold mb-3">Get in Touch</h1>
-            <p class="lead mb-0">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
-        </div>
-    </div>
-
-    <div class="row g-5">
-        <!-- Contact Information -->
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm h-100" style="background: var(--bg-card);">
-                <div class="card-body p-5">
-                    <h4 class="fw-semibold mb-4">Contact Information</h4>
-                    
-                    <div class="d-flex mb-4">
-                        <div class="flex-shrink-0">
-                            <i class="bi bi-envelope fs-3 text-primary"></i>
-                        </div>
-                        <div class="ms-4">
-                            <h6 class="mb-1">Email</h6>
-                            <a href="mailto:info@eventsms.com" class="text-decoration-none text-muted">info@eventsms.com</a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex mb-4">
-                        <div class="flex-shrink-0">
-                            <i class="bi bi-telephone fs-3 text-primary"></i>
-                        </div>
-                        <div class="ms-4">
-                            <h6 class="mb-1">Phone</h6>
-                            <a href="tel:+8801234567890" class="text-decoration-none text-muted">+880 123 456 7890</a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="flex-shrink-0">
-                            <i class="bi bi-geo-alt fs-3 text-primary"></i>
-                        </div>
-                        <div class="ms-4">
-                            <h6 class="mb-1">Address</h6>
-                            <p class="text-muted mb-0">
-                                123 Gulshan Avenue<br>
-                                Dhaka 1212, Bangladesh
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Send a Message Form -->
-        <div class="col-lg-7">
-            <div class="card border-0 shadow-sm" style="background: var(--bg-card);">
-                <div class="card-body p-5">
-                    <h4 class="fw-semibold mb-4">Send a Message</h4>
-                    
-                    <form asp-action="Contact" method="post">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">Your Name</label>
-                                <input type="text" class="form-control form-control-lg rounded-3" 
-                                       placeholder="Your Name" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">Your Email</label>
-                                <input type="email" class="form-control form-control-lg rounded-3" 
-                                       placeholder="your@email.com" required>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="form-label fw-medium">Your Message</label>
-                            <textarea class="form-control form-control-lg rounded-3" rows="6" 
-                                      placeholder="How can we help you today?" required></textarea>
-                        </div>
-
-                        <div class="mt-4">
-                            <button type="submit" 
-                                    class="btn btn-primary btn-lg w-100 rounded-3 py-3 fw-semibold">
-                                <i class="bi bi-send me-2"></i>Send Message
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Google Map Section -->
-    <div class="mt-5">
-        <div class="card border-0 shadow-sm overflow-hidden rounded-4">
-            <div class="card-header bg-white border-0 py-4">
-                <h5 class="mb-0 fw-semibold">Our Location</h5>
-            </div>
-            <div class="ratio ratio-21x9">
-                <!-- Replace with your actual Google Map embed link -->
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.234567890123!2d90.41234567890123!3d23.7890123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a0f0f0f0f0%3A0x1234567890abcdef!2sGulshan%2C+Dhaka!5e0!3m2!1sen!2sbd!4v1234567890123"
-                    width="100%" 
-                    height="450" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Styles {
-    <style>
-        .hero-contact {
-            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.4);
-        }
-
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        .form-control {
-            border: 2px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-        }
-
-        [data-bs-theme="dark"] .form-control {
-            background-color: #1e2937;
-            border-color: #334155;
-            color: #e2e8f0;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
-        }
-    </style>
-} *@
