@@ -20,8 +20,6 @@ public interface IRolePermissionService
     Dictionary<string, PermissionResult> GetRoleWisePermission(List<string> roles);
 }
 
-
-
 public class RolePermissionService : IRolePermissionService
 {
     // Role → permission mapping
@@ -88,3 +86,5 @@ public class RolePermissionService : IRolePermissionService
         return result;
     }
 }
+
+

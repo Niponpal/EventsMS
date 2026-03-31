@@ -24,7 +24,6 @@ builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
 builder.Services.AddScoped<IStudentRegistrationRepository, StudentRegistrationRepository>();
-
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
 // Add file service
