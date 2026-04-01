@@ -12,14 +12,16 @@ public class StudentregistrationController : Controller
     private readonly IStudentRegistrationRepository _studentRegistrationRepository;
     private readonly IEventRepository _eventRepository;
     private readonly IFileService _fileService;
+    private readonly IPaymentRepository _paymentRepository;
 
 
-
-    public StudentregistrationController(IStudentRegistrationRepository studentRegistrationRepository, IEventRepository eventRepository, IFileService fileService)
+    public StudentregistrationController(IStudentRegistrationRepository studentRegistrationRepository, IEventRepository eventRepository, IPaymentRepository paymentRepository,IFileService fileService)
     {
         _studentRegistrationRepository = studentRegistrationRepository;
         _eventRepository = eventRepository;
         _fileService = fileService;
+        _paymentRepository = paymentRepository;
+
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -208,15 +210,55 @@ public class StudentregistrationController : Controller
         return NotFound();
     }
 
+    //// StudentregistrationController.cs
+    //[HttpGet]
+    //public async Task<IActionResult> Congratulations(long registrationId, CancellationToken cancellationToken)
+    //{
+    //    var registration = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(registrationId, cancellationToken);
+    //    if (registration == null)
+    //        return NotFound();
+
+    //    // 🔹 Ensure EventName is available
+    //    string eventName = string.Empty;
+    //    if (registration.EventId != 0)
+    //    {
+    //        var evnt = await _eventRepository.GeEventByIdAsync(registration.EventId, cancellationToken);
+    //        if (evnt != null)
+    //            eventName = evnt.Name;
+    //    }
+
+    //    ViewData["EventName"] = eventName;
+
+    //    return View(registration); // send registration if needed for more details
+    //}
+
+
     [HttpGet]
     public async Task<IActionResult> Congratulations(long registrationId, CancellationToken cancellationToken)
     {
         var registration = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(registrationId, cancellationToken);
-        if (registration == null) return NotFound();
+        if (registration == null)
+            return NotFound();
 
-        var ev = await _eventRepository.GeEventByIdAsync(registration.EventId, cancellationToken);
-        ViewData["EventName"] = ev?.Name ?? "Event";
+        // Event name
+        string eventName = string.Empty;
+        if (registration.EventId != 0)
+        {
+            var evnt = await _eventRepository.GeEventByIdAsync(registration.EventId, cancellationToken);
+            if (evnt != null)
+                eventName = evnt.Name;
+        }
+        ViewData["EventName"] = eventName;
 
-        return View();
+        // Payment info (if exists)
+        var payment = await _paymentRepository.GetPaymentByRegistrationIdAsync(registrationId, cancellationToken);
+
+        var vm = new CongratulationsViewModel
+        {
+            Registration = registration,
+            Payment = payment
+        };
+
+        return View(vm);
     }
 }

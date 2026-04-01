@@ -79,5 +79,11 @@ public class PaymentRepository : IPaymentRepository
         return null;
     }
 
+    public async Task<Payment?> GetPaymentByRegistrationIdAsync(long registrationId, CancellationToken cancellationToken)
+    {
+        return await _context.Payments
+            .Include(p => p.Registration)
+            .FirstOrDefaultAsync(p => p.RegistrationId == registrationId, cancellationToken);
+    }
 
 }
