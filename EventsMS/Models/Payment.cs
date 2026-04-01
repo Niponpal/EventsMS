@@ -12,5 +12,5 @@ public class Payment:BaseEntities.BaseEntity<long>
     public string TransactionId { get; set; } = string.Empty;
     public string ValidationId { get; set; } = string.Empty;
     public string ProviderSessionId { get; set; } = default!;
-
+    public long EventId { get; set; }
 }

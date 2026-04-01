@@ -13,5 +13,6 @@ public class Event:BaseEntities.BaseEntity<long>
     public bool IsFree { get; set; }
     public long CategoryId { get; set; }
     public Category Category { get; set; }
+    
     public ICollection<StudentRegistration> Registrations { get; set; } = new List<StudentRegistration>();
 }
