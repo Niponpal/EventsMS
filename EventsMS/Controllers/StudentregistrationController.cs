@@ -32,56 +32,46 @@ public class StudentregistrationController : Controller
         }
         return NotFound();
     }
-    //[HttpGet]
-    //public async Task<IActionResult> CreateOrEdit(long id, CancellationToken cancellationToken)
-    //{
-    //    ViewData["EventId"] = _eventRepository.Dropdown();
-    //    if (id == 0)
-    //        return View(new StudentRegistration()); // নতুন রেজিস্ট্রেশন
-    //    else
-    //    {
-    //        var data = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
-    //        if (data != null)
-    //            return View(data); // Edit view
-    //        return NotFound();
-    //    }
-    //}
+
 
     //[HttpGet]
     //public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     //{
+    //    // 🔒 Check if user is logged in
+    //    if (!User.Identity.IsAuthenticated)
+    //    {
+    //        // Login না থাকলে Register page-এ পাঠাও এবং returnUrl set করো
+    //        return RedirectToAction("Login", "Account", new
+    //        {
+    //            returnUrl = Url.Action("CreateOrEdit", "Studentregistration", new { id, eventId })
+    //        });
+    //    }
+
     //    StudentRegistration model;
 
     //    if (id == 0)
     //    {
     //        // নতুন রেজিস্ট্রেশন
     //        model = new StudentRegistration();
-
-    //        if (eventId != null)
-    //        {
-    //            model.EventId = eventId.Value;
-    //        }
+    //        if (eventId != null) model.EventId = eventId.Value;
     //    }
     //    else
     //    {
     //        // Edit mode
     //        model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
-
-    //        if (model == null)
-    //            return NotFound();
+    //        if (model == null) return NotFound();
     //    }
 
-    //    // selected event fetch
+    //    // Selected Event fetch
     //    long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
 
     //    if (selectedEventId != 0)
     //    {
     //        var selectedEvent = await _eventRepository.GeEventByIdAsync(selectedEventId, cancellationToken);
-
     //        if (selectedEvent != null)
     //        {
     //            ViewData["EventId"] = new SelectList(
-    //                new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } }, // শুধু selected event
+    //                new[] { new { Id = selectedEvent.Id, Name = selectedEvent.Name } },
     //                "Id",
     //                "Name",
     //                selectedEvent.Id
@@ -90,7 +80,7 @@ public class StudentregistrationController : Controller
     //    }
     //    else
     //    {
-    //        ViewData["EventId"] = null; // যদি কোন event na select হয়
+    //        ViewData["EventId"] = null;
     //    }
 
     //    return View(model);
@@ -99,10 +89,8 @@ public class StudentregistrationController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     {
-        // 🔒 Check if user is logged in
         if (!User.Identity.IsAuthenticated)
         {
-            // Login না থাকলে Register page-এ পাঠাও এবং returnUrl set করো
             return RedirectToAction("Login", "Account", new
             {
                 returnUrl = Url.Action("CreateOrEdit", "Studentregistration", new { id, eventId })
@@ -113,18 +101,15 @@ public class StudentregistrationController : Controller
 
         if (id == 0)
         {
-            // নতুন রেজিস্ট্রেশন
             model = new StudentRegistration();
             if (eventId != null) model.EventId = eventId.Value;
         }
         else
         {
-            // Edit mode
             model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
             if (model == null) return NotFound();
         }
 
-        // Selected Event fetch
         long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
 
         if (selectedEventId != 0)
@@ -149,6 +134,29 @@ public class StudentregistrationController : Controller
     }
 
 
+
+    //[HttpPost]
+    //public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
+    //{
+    //    if (photo != null)
+    //    {
+    //        var fileName = await _fileService.Upload(photo, "StudentPhotos");
+    //        studentRegistration.PhotoPath = fileName;
+    //    }
+    //    else
+    //    {
+    //        // যদি photo upload না করা হয়
+    //        studentRegistration.PhotoPath ??= "default.png"; 
+    //    }
+
+    //    if (studentRegistration.Id == 0)
+    //        await _studentRegistrationRepository.AddStudentRegistrationAsync(studentRegistration, cancellationToken);
+    //    else
+    //        await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
+
+    //    return RedirectToAction("Index", "Home");
+    //}
+
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
     {
@@ -159,8 +167,7 @@ public class StudentregistrationController : Controller
         }
         else
         {
-            // যদি photo upload না করা হয়
-            studentRegistration.PhotoPath ??= "default.png"; 
+            studentRegistration.PhotoPath ??= "default.png";
         }
 
         if (studentRegistration.Id == 0)
@@ -168,7 +175,20 @@ public class StudentregistrationController : Controller
         else
             await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
 
-        return RedirectToAction("Index", "Home");
+        // 🔹 Free/Paid redirect logic
+        var ev = await _eventRepository.GeEventByIdAsync(studentRegistration.EventId, cancellationToken);
+        if (ev == null) return NotFound();
+
+        if (ev.IsFree)
+        {
+            // Free event → congratulations page
+            return RedirectToAction("Congratulations", new { registrationId = studentRegistration.Id });
+        }
+        else
+        {
+            // Paid event → payment page
+            return RedirectToAction("CreateOrEdit", "Payment", new { id = 0, registrationId = studentRegistration.Id });
+        }
     }
 
     [HttpPost]
