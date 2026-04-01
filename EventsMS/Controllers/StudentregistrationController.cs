@@ -208,4 +208,15 @@ public class StudentregistrationController : Controller
         return NotFound();
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Congratulations(long registrationId, CancellationToken cancellationToken)
+    {
+        var registration = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(registrationId, cancellationToken);
+        if (registration == null) return NotFound();
+
+        var ev = await _eventRepository.GeEventByIdAsync(registration.EventId, cancellationToken);
+        ViewData["EventName"] = ev?.Name ?? "Event";
+
+        return View();
+    }
 }

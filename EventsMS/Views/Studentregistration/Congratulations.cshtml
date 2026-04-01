@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Congratulations!";
+}
+
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold">🎉 Congratulations!</h1>
+    <p class="lead">You have successfully registered for the event: <strong>@ViewData["EventName"]</strong></p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg rounded-pill mt-4">
+        Back to Events
+    </a>
+</div>
