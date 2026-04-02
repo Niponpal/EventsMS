@@ -1,6 +1,848 @@
 ﻿@model EventsMS.Models.CongratulationsViewModel
 @{
     Layout = "_PublicLayout";
+    ViewData["Title"] = "Registration Confirmed!";
+    var eventName = ViewData["EventName"]?.ToString() ?? "the event";
+    var registrationDate = DateTime.Now;
+}
+
+<div class="registration-success-wrapper">
+    <div class="container py-4 py-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-xl-8">
+
+                <!-- Animated success header -->
+                <div class="text-center mb-5">
+                    <div class="success-icon-wrapper mb-4">
+                        <div class="success-animation">
+                            <svg class="checkmark-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none" stroke="#10b981" stroke-width="2" />
+                                <path class="checkmark-check" fill="none" stroke="#10b981" stroke-width="3" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h1 class="display-5 fw-bold text-gradient mb-3">Registration Confirmed!</h1>
+                    <p class="lead fs-4 text-secondary">
+                        You're all set for <span class="fw-semibold text-primary">@eventName</span>
+                    </p>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show mt-4 shadow-sm border-0 rounded-4" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                </div>
+
+                <!-- Registration Details Card -->
+                <div class="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
+                    <div class="card-header bg-gradient-primary text-white py-3 px-4 border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-white bg-opacity-25 p-2 me-3">
+                                <i class="bi bi-person-badge fs-5"></i>
+                            </div>
+                            <h5 class="mb-0 fw-semibold">Student Registration Details</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="bi bi-person-fill text-primary me-1"></i> Full Name
+                                    </div>
+                                    <div class="info-value fw-semibold fs-5">@Model.Registration.FullName</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="bi bi-envelope-fill text-primary me-1"></i> Email Address
+                                    </div>
+                                    <div class="info-value fs-5">
+                                        @Model.Registration.Email
+                                        <button class="btn-copy-icon" onclick="copyToClipboard('@Model.Registration.Email')" title="Copy email">
+                                            <i class="bi bi-files"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="bi bi-telephone-fill text-primary me-1"></i> Phone Number
+                                    </div>
+                                    <div class="info-value fs-5">
+                                        @Model.Registration.PhoneNumber
+                                        <button class="btn-copy-icon" onclick="copyToClipboard('@Model.Registration.PhoneNumber')" title="Copy phone">
+                                            <i class="bi bi-files"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="info-label">
+                                    <i class="bi bi-calendar-check text-primary me-1"></i> Registration Date
+                                </div>
+                                <div class="info-value">@registrationDate.ToString("dddd, MMMM d, yyyy 'at' h:mm tt")</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-label">
+                                    <i class="bi bi-ticket-perforated text-primary me-1"></i> Registration ID
+                                </div>
+                                <div class="info-value fw-mono">REG-@DateTime.Now.ToString("yyyyMMdd")-@Model.Registration.Email.GetHashCode().ToString().Substring(0, 6).ToUpper()</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details Card -->
+                @if (Model.Payment != null)
+                {
+                    <div class="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
+                        <div class="card-header bg-gradient-success text-white py-3 px-4 border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-white bg-opacity-25 p-2 me-3">
+                                    <i class="bi bi-credit-card-2-front fs-5"></i>
+                                </div>
+                                <h5 class="mb-0 fw-semibold">Payment Confirmation</h5>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="bi bi-receipt text-success me-1"></i> Invoice Number
+                                        </div>
+                                        <div class="info-value fw-bold fs-5">
+                                            #@Model.Payment.InvoiceNumber
+                                            <button class="btn-copy-icon" onclick="copyToClipboard('@Model.Payment.InvoiceNumber')" title="Copy invoice">
+                                                <i class="bi bi-files"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="info-item mt-3">
+                                        <div class="info-label">
+                                            <i class="bi bi-cash-stack text-success me-1"></i> Amount Paid
+                                        </div>
+                                        <div class="info-value fw-bold text-success fs-3">@Model.Payment.Amount.ToString("C0")</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <div class="info-label">
+                                            <i class="bi bi-check-circle text-success me-1"></i> Payment Status
+                                        </div>
+                                        <div class="info-value">
+                                            @{
+                                                var statusClass = Model.Payment.Status.ToLower() == "completed" ? "bg-success" :
+                                                (Model.Payment.Status.ToLower() == "pending" ? "bg-warning" : "bg-danger");
+                                            }
+                                            <span class="badge @statusClass px-3 py-2 rounded-pill fs-6">
+                                                <i class="bi @(Model.Payment.Status.ToLower() == "completed" ? "bi-check-lg" : "bi-clock-history") me-1"></i>
+                                                @Model.Payment.Status
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="info-item mt-3">
+                                        <div class="info-label">
+                                            <i class="bi bi-building text-success me-1"></i> Payment Provider
+                                        </div>
+                                        <div class="info-value">@Model.Payment.Provider</div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(Model.Payment.TransactionId))
+                                    {
+                                        <div class="info-item mt-3">
+                                            <div class="info-label">
+                                                <i class="bi bi-upc-scan text-success me-1"></i> Transaction ID
+                                            </div>
+                                            <div class="info-value fw-mono small">@Model.Payment.TransactionId</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center">
+                                <a asp-controller="Payment"
+                                   asp-action="DownloadReceipt"
+                                   asp-route-id="@Model.Payment.Id"
+                                   class="btn btn-gradient-success btn-lg rounded-pill px-5">
+                                    <i class="bi bi-download me-2"></i>
+                                    Download Receipt (PDF)
+                                </a>
+                                <div class="text-muted small">
+                                    <i class="bi bi-shield-check me-1"></i> Payment verified
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
+                        <div class="card-body p-4 p-lg-5 text-center">
+                            <div class="mb-3">
+                                <div class="bg-warning bg-opacity-10 d-inline-flex p-3 rounded-circle">
+                                    <i class="bi bi-credit-card fs-1 text-warning"></i>
+                                </div>
+                            </div>
+                            <h5 class="fw-semibold mb-2">Payment Information Pending</h5>
+                            <p class="text-secondary mb-0">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                Payment details are not yet available. If payment is required, please complete it to confirm your registration.
+                            </p>
+                            <hr class="my-4">
+                            <a href="#" class="btn btn-outline-warning rounded-pill px-4">
+                                <i class="bi bi-question-circle me-2"></i> Contact Support
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                <!-- Next Steps Section -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+                    <div class="card-body p-4 p-lg-5">
+                        <h5 class="fw-semibold mb-4">
+                            <i class="bi bi-calendar-heart text-primary me-2"></i>
+                            What's Next?
+                        </h5>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <div class="step-icon">1</div>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="fw-semibold mb-1">Check Your Email</h6>
+                                        <p class="small text-secondary mb-0">Confirmation details sent to @Model.Registration.Email</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <div class="step-icon">2</div>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="fw-semibold mb-1">Save the Date</h6>
+                                        <p class="small text-secondary mb-0">Add the event to your calendar to stay reminded</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <div class="step-icon">3</div>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="fw-semibold mb-1">Prepare for Event</h6>
+                                        <p class="small text-secondary mb-0">Review event guidelines and bring your ID</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg rounded-pill px-5">
+                        <i class="bi bi-house-door me-2"></i> Browse Events
+                    </a>
+                    <button onclick="window.print();" class="btn btn-outline-secondary btn-lg rounded-pill px-5">
+                        <i class="bi bi-printer me-2"></i> Print Confirmation
+                    </button>
+                    @if (Model.Payment != null)
+                    {
+                        <a href="mailto:?subject=My%20Registration%20for%20@Uri.EscapeDataString(eventName)&body=I%27ve%20successfully%20registered%20for%20@Uri.EscapeDataString(eventName)"
+                           class="btn btn-outline-info btn-lg rounded-pill px-4">
+                            <i class="bi bi-envelope-paper me-2"></i> Share via Email
+                        </a>
+                    }
+                </div>
+
+                <!-- Footer Note -->
+                <div class="text-center mt-5 pt-3">
+                    <div class="border-top pt-4">
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-envelope-check-fill me-1"></i>
+                            Questions? Contact us at <a href="mailto:support@eventsms.com" class="text-decoration-none">support@eventsms.com</a>
+                        </p>
+                        <p class="text-muted small mt-2 mb-0">
+                            <i class="bi bi-qr-code me-1"></i>
+                            Present this confirmation (digital or printed) at the event entrance
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Professional design enhancements */
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+    .registration-success-wrapper {
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+        min-height: 100vh;
+    }
+
+    /* Success animation */
+    .success-animation {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .checkmark-circle {
+        width: 80px;
+        height: 80px;
+        display: block;
+    }
+
+    .checkmark-circle-bg {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        animation: stroke-bg 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .checkmark-check {
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke-check 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards;
+    }
+
+    @@keyframes stroke-bg {
+        100%
+
+    {
+        stroke-dashoffset: 0;
+    }
+
+    }
+
+    @@keyframes stroke-check {
+        100%
+
+    {
+        stroke-dashoffset: 0;
+    }
+
+    }
+
+    /* Text gradient */
+    .text-gradient {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Gradient backgrounds */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    /* Card styling */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+    /* Info items */
+    .info-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        color: #1e293b;
+        word-break: break-word;
+    }
+
+    /* Copy button */
+    .btn-copy-icon {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        padding: 0 0 0 8px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: color 0.2s;
+        vertical-align: middle;
+    }
+
+        .btn-copy-icon:hover {
+            color: #10b981;
+        }
+
+    /* Step icons */
+    .step-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    /* Button gradients */
+    .btn-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        color: white;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+        .btn-gradient-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            color: white;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+    /* Print styles */
+    @@media print {
+        .registration-success-wrapper
+
+    {
+        background: white;
+        padding: 0;
+    }
+
+    .btn, .btn-copy-icon, .alert-dismissible .btn-close, .card-header .bg-opacity-25 {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6 !important;
+        transform: none !important;
+    }
+
+    .text-gradient {
+        -webkit-text-fill-color: #10b981;
+        color: #10b981;
+    }
+
+    .step-icon {
+        background: #10b981 !important;
+        print-color-adjust: exact;
+    }
+
+    .bg-gradient-primary, .bg-gradient-success {
+        background: #1e3c72 !important;
+        print-color-adjust: exact;
+    }
+
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .display-5 {
+            font-size: 1.8rem;
+        }
+
+        .lead.fs-4 {
+            font-size: 1.2rem !important;
+        }
+
+        .btn-lg {
+            font-size: 0.9rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .checkmark-circle {
+            width: 60px;
+            height: 60px;
+        }
+    }
+
+    /* Toast notification for copy */
+    .copy-toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e293b;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        z-index: 1050;
+        animation: fadeInUp 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+</style>
+
+<script>
+    // Professional copy to clipboard function with toast notification
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('Copied: ' + text);
+        }).catch(function(err) {
+            console.error('Could not copy: ', err);
+            // Fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('Copied to clipboard');
+        });
+    }
+
+    function showToast(message) {
+        let toast = document.querySelector('.copy-toast');
+        if (toast) toast.remove();
+
+        toast = document.createElement('div');
+        toast.className = 'copy-toast';
+        toast.innerHTML = '<i class="bi bi-check-circle-fill me-2 text-success"></i>' + message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
+    // Optional: Light confetti effect on page load for celebration (professional touch)
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.canvasConfetti === 'undefined') {
+            // Simple inline confetti effect using canvas if desired, but keep lightweight
+            // For a subtle celebration effect
+            setTimeout(() => {
+                if (typeof window.confetti === 'function') {
+                    window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                } else {
+                    // Very lightweight DOM celebration
+                    const icons = ['🎉', '✨', '🎊', '⭐'];
+                    for (let i = 0; i < 8; i++) {
+                        const span = document.createElement('span');
+                        span.textContent = icons[Math.floor(Math.random() * icons.length)];
+                        span.style.position = 'fixed';
+                        span.style.left = Math.random() * 100 + '%';
+                        span.style.top = '20%';
+                        span.style.fontSize = '1.5rem';
+                        span.style.opacity = '0';
+                        span.style.pointerEvents = 'none';
+                        span.style.zIndex = '9999';
+                        span.style.transition = 'all 1s ease-out';
+                        document.body.appendChild(span);
+                        setTimeout(() => {
+                            span.style.opacity = '1';
+                            span.style.transform = `translateY(${Math.random() * 200 + 50}px) rotate(${Math.random() * 360}deg)`;
+                        }, i * 50);
+                        setTimeout(() => span.remove(), 1500);
+                    }
+                }
+            }, 300);
+        }
+    });
+</script>
+
+<!-- Optional: Include lightweight confetti library (CDN) for enhanced celebration -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+
+@* @model EventsMS.Models.CongratulationsViewModel
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Congratulations!";
+    var eventName = ViewData["EventName"]?.ToString() ?? "the event";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-md-11">
+
+            <!-- Hero Success Section -->
+            <div class="text-center mb-5 position-relative">
+                <!-- Floating Confetti Background Effect -->
+                <div class="confetti-container"></div>
+
+                <div class="mb-4">
+                    <span class="display-1 fw-light" style="font-size: 6rem; animation: bounce 1.5s ease;">🎉</span>
+                </div>
+
+                <h1 class="display-3 fw-bold text-success mb-3" style="letter-spacing: -1px;">
+                    Congratulations!
+                </h1>
+
+                <p class="lead fs-2 text-muted mb-4">
+                    You have successfully registered for
+                </p>
+
+                <h2 class="display-5 fw-semibold text-primary mb-5">
+                    @eventName
+                </h2>
+
+                <!-- Success Message -->
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm mx-auto"
+                         style="max-width: 600px;" role="alert">
+                        <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+            </div>
+
+            <div class="row g-4">
+                <!-- Registration Card -->
+                <div class="col-lg-7">
+                    <div class="card shadow-lg border-0 h-100 overflow-hidden">
+                        <div class="card-header bg-gradient text-white py-4">
+                            <h5 class="mb-0 fs-4">
+                                <i class="bi bi-person-check-fill me-3"></i>
+                                Registration Details
+                            </h5>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="bi bi-person-fill fs-1 text-primary"></i>
+                                        <div>
+                                            <small class="text-muted">Full Name</small>
+                                            <p class="fs-4 fw-semibold mb-0">@Model.Registration.FullName</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="bi bi-envelope-fill fs-1 text-info"></i>
+                                        <div>
+                                            <small class="text-muted">Email Address</small>
+                                            <p class="fs-5 fw-medium mb-0">@Model.Registration.Email</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="bi bi-telephone-fill fs-1 text-success"></i>
+                                        <div>
+                                            <small class="text-muted">Phone Number</small>
+                                            <p class="fs-4 fw-semibold mb-0">@Model.Registration.PhoneNumber</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Card -->
+                @if (Model.Payment != null)
+                {
+                    <div class="col-lg-5">
+                        <div class="card shadow-lg border-0 h-100 overflow-hidden">
+                            <div class="card-header bg-success text-white py-4">
+                                <h5 class="mb-0 fs-4">
+                                    <i class="bi bi-check-circle-fill me-3"></i>
+                                    Payment Successful
+                                </h5>
+                            </div>
+                            <div class="card-body p-5">
+                                <div class="text-center mb-4">
+                                    <span class="badge bg-success fs-5 px-4 py-2 rounded-pill">
+                                        PAID
+                                    </span>
+                                </div>
+
+                                <div class="border rounded-4 p-4 bg-light mb-4">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="text-muted">Invoice No.</span>
+                                        <strong>#@Model.Payment.InvoiceNumber</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="text-muted">Amount Paid</span>
+                                        <strong class="text-success fs-4">@Model.Payment.Amount.ToString("C0")</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-muted">Transaction ID</span>
+                                        <strong class="text-muted">@(string.IsNullOrEmpty(Model.Payment.TransactionId) ? "—" : Model.Payment.TransactionId)</strong>
+                                    </div>
+                                </div>
+
+                                <a asp-controller="Payment"
+                                   asp-action="DownloadReceipt"
+                                   asp-route-id="@Model.Payment.Id"
+                                   class="btn btn-success btn-lg w-100 py-3 rounded-pill shadow-sm">
+                                    <i class="bi bi-download me-2"></i>
+                                    Download Receipt (PDF)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="alert alert-warning shadow border-0 p-4">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Payment details will appear here once the transaction is completed.
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-5">
+                <a asp-controller="Home" asp-action="Index"
+                   class="btn btn-primary btn-lg px-5 py-3 rounded-pill me-3 shadow">
+                    <i class="bi bi-house-door-fill me-2"></i> Back to Events
+                </a>
+
+                @if (Model.Payment != null)
+                {
+                    <button onclick="addToCalendar()"
+                            class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill shadow">
+                        <i class="bi bi-calendar-plus me-2"></i> Add to Calendar
+                    </button>
+                }
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    We're excited to have you join us!<br>
+                    <small>Thank you for being part of @eventName</small>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS + Animations -->
+<style>
+    .confetti-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    @@keyframes bounce {
+        0%, 100%
+
+    {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    }
+
+    .card {
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+        }
+
+    .card-header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca) !important;
+    }
+
+    .display-3 {
+        font-weight: 700;
+        background: linear-gradient(to right, #198754, #0d6efd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .btn-rounded-pill {
+        border-radius: 50px;
+        font-weight: 600;
+    }
+</style>
+
+<!-- Optional: Simple Confetti JS (Add this if you want real confetti) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    // Trigger confetti on page load
+    window.onload = function() {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    };
+
+    function addToCalendar() {
+        alert("Calendar integration coming soon! 🎯");
+        // You can later integrate Google Calendar / ICS download here
+    }
+</script> *@
+
+
+@* @model EventsMS.Models.CongratulationsViewModel
+@{
+    Layout = "_PublicLayout";
     ViewData["Title"] = "Congratulations!";
     var eventName = ViewData["EventName"]?.ToString() ?? "the event";
 }
@@ -160,4 +1002,4 @@
     .display-1 {
         font-size: 4.5rem;
     }
-</style>
+</style> *@
