@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventsMS.Controllers
+namespace EventsMS.Controllers;
+
+[Authorize]
+public class DashboardController : Controller
 {
-    [Authorize]
-    public class DashboardController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

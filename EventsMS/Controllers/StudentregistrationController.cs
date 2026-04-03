@@ -261,4 +261,7 @@ public class StudentregistrationController : Controller
 
         return View(vm);
     }
+
+  
+
 }

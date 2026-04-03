@@ -85,7 +85,7 @@ public class AccountController : Controller
             var permission = _permissionService.CheckPermission(roles);
 
             // Admin / Manager → Dashboard
-            if (roles.Contains("Administrator") || roles.Contains("Manager"))
+            if (roles.Contains("Administrator") || roles.Contains("Mangement"))
             {
                 if (permission.View)
                     return RedirectToAction("Index", "Dashboard");
@@ -137,7 +137,7 @@ public class AccountController : Controller
             var permission = _permissionService.CheckPermission(roles);
 
             // 🔐 Role-based redirect
-            if ((roles.Contains("Administrator") || roles.Contains("Manager")) && permission.View)
+            if ((roles.Contains("Administrator") || roles.Contains("Mangement")) && permission.View)
                 return RedirectToAction("Index", "Dashboard");
 
             if (roles.Contains("Student"))

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260328171754_update")]
-    partial class update
+    [Migration("20260402111704_ints")]
+    partial class ints
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,7 +79,7 @@ namespace EventsMS.Migrations
                             Id = 1L,
                             CreatedBy = 0L,
                             CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Default role assigned to all employees.",
+                            Description = "System Administrator",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR",
                             StatusId = 0
@@ -89,9 +89,9 @@ namespace EventsMS.Migrations
                             Id = 2L,
                             CreatedBy = 0L,
                             CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Default role assigned to all employees.",
-                            Name = "Student",
-                            NormalizedName = "STUDENT",
+                            Description = "Manages events",
+                            Name = "EventManager",
+                            NormalizedName = "EVENTMANAGER",
                             StatusId = 0
                         },
                         new
@@ -99,9 +99,9 @@ namespace EventsMS.Migrations
                             Id = 3L,
                             CreatedBy = 0L,
                             CreatedDateUtc = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Default role assigned to all customers.",
-                            Name = "Mangement",
-                            NormalizedName = "MANGEMENT",
+                            Description = "Student user",
+                            Name = "Student",
+                            NormalizedName = "STUDENT",
                             StatusId = 0
                         });
                 });
@@ -230,7 +230,7 @@ namespace EventsMS.Migrations
                             Id = 1L,
                             AccessFailedCount = 0,
                             Address = "",
-                            ConcurrencyStamp = "5f73d10f-0e10-4372-9ab6-67f60b17bd65",
+                            ConcurrencyStamp = "a5ea3c61-a16c-4e40-9e49-f927dbec262e",
                             CreatedBy = 0L,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "admin@localhost.com",
@@ -239,11 +239,11 @@ namespace EventsMS.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEO+iuwRGFc4q2+wBW9F4/bJ2R0LWBWGP2GZlAF1un6xkBEv9fE9M5flb+WbQPX61w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGJDOrArRV1a8fzVuvXr+1IaVTL6GjFPiCKAlMpa9D8UTx1kQe3KgJscg4M3/HZSQw==",
                             Phone = "",
                             PhoneNumberConfirmed = false,
                             RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "3cef7363-354c-4023-af3b-c3196b48d265",
+                            SecurityStamp = "d8df40ed-8945-45e2-9aac-37dd9127e9b9",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -252,7 +252,29 @@ namespace EventsMS.Migrations
                             Id = 2L,
                             AccessFailedCount = 0,
                             Address = "",
-                            ConcurrencyStamp = "aa5f52b9-3bbb-4492-999b-6a0d79efb616",
+                            ConcurrencyStamp = "34b6714f-e009-42a2-9df2-10d6f152fb30",
+                            CreatedBy = 0L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "eventmanager@localhost.com",
+                            EmailConfirmed = true,
+                            FullName = "",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EVENTMANAGER@LOCALHOST.COM",
+                            NormalizedUserName = "EVENTMANAGER@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGirGA2NrVmTm8ir//Rk4OvybPkiAZYu8i57tScJNXixR9WSRbZzkv6qBd/FG95tIQ==",
+                            Phone = "",
+                            PhoneNumberConfirmed = false,
+                            RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "888bd16d-513a-4681-a148-78204518e715",
+                            TwoFactorEnabled = false,
+                            UserName = "eventmanager@localhost.com"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            AccessFailedCount = 0,
+                            Address = "",
+                            ConcurrencyStamp = "8d52d56d-ac2a-4e74-88dd-12fa16fe0a3f",
                             CreatedBy = 0L,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "student@localhost.com",
@@ -261,35 +283,13 @@ namespace EventsMS.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STUDENT@LOCALHOST.COM",
                             NormalizedUserName = "STUDENT@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKUNJZfkmxDYLc5ewCDfKluUfMqAWr1o7fbq0xDO9fWab2GOOX4pHeKlDby6BDqdIw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK+Jc6KCcFFWrM+Ld39ci8JppXYH5zze0MjsAk+5eUXPLRoyF4Umb+8AT205kYIf8g==",
                             Phone = "",
                             PhoneNumberConfirmed = false,
                             RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "338bca42-5b8f-4b65-b5de-8a828d0f3f7a",
+                            SecurityStamp = "64f9369f-6ff9-42ab-a4da-e071e9514731",
                             TwoFactorEnabled = false,
                             UserName = "student@localhost.com"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            AccessFailedCount = 0,
-                            Address = "",
-                            ConcurrencyStamp = "f7d79fcb-49b5-4f26-a7de-5e834e3ff54c",
-                            CreatedBy = 0L,
-                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Email = "manager@localhost.com",
-                            EmailConfirmed = true,
-                            FullName = "",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MANAGER@LOCALHOST.COM",
-                            NormalizedUserName = "MANAGER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEM7QZXv6C1fRW0jYZp0A36o4qklW3TOkCox29UGSZsTUr5y8BoPl0KqEFgMHtOBlyg==",
-                            Phone = "",
-                            PhoneNumberConfirmed = false,
-                            RegisterDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "1976e371-f07a-4272-bf6b-bfedbb7aeb86",
-                            TwoFactorEnabled = false,
-                            UserName = "manager@localhost.com"
                         });
                 });
 
@@ -536,6 +536,9 @@ namespace EventsMS.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("EventId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()

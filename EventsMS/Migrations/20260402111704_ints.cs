@@ -307,7 +307,8 @@ namespace EventsMS.Migrations
                     RegistrationId = table.Column<long>(type: "bigint", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValidationId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProviderSessionId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProviderSessionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EventId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -355,9 +356,9 @@ namespace EventsMS.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedBy", "CreatedDateUtc", "Description", "Name", "NormalizedName", "StatusId", "UpdatedBy", "UpdatedDateUtc" },
                 values: new object[,]
                 {
-                    { 1L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Default role assigned to all employees.", "Administrator", "ADMINISTRATOR", 0, null, null },
-                    { 2L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Default role assigned to all employees.", "Student", "STUDENT", 0, null, null },
-                    { 3L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Default role assigned to all customers.", "Mangement", "MANGEMENT", 0, null, null }
+                    { 1L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "System Administrator", "Administrator", "ADMINISTRATOR", 0, null, null },
+                    { 2L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Manages events", "EventManager", "EVENTMANAGER", 0, null, null },
+                    { 3L, null, 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Student user", "Student", "STUDENT", 0, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -365,9 +366,9 @@ namespace EventsMS.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreatedBy", "CreatedDate", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Phone", "PhoneNumber", "PhoneNumberConfirmed", "RegisterDate", "SecurityStamp", "TwoFactorEnabled", "UpdatedBy", "UpdatedDate", "UserName" },
                 values: new object[,]
                 {
-                    { 1L, 0, "", "7e81b46c-3bf8-428c-8af9-41e80bed5e92", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "admin@localhost.com", true, "", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEMatL/qykECvk9eSUVq5Ol9cAdcqFPzmHOAtMPqfVyknSA18YlRXIfxQbGbKYItQSg==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0a1b487c-b2b8-4ead-99b2-a69a4d10c254", false, null, null, "admin@localhost.com" },
-                    { 2L, 0, "", "f86b15ed-1996-4ea3-be49-d4fcde1199be", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "student@localhost.com", true, "", false, null, "STUDENT@LOCALHOST.COM", "STUDENT@LOCALHOST.COM", "AQAAAAIAAYagAAAAEBAaZL9grCEH36LUh3a2tuBAlQ7HCd3zUf8zGed+b4qcuZuho30V+5nvqh9DoE/OPQ==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "f81f2561-2e69-4feb-b321-52fce6a38435", false, null, null, "student@localhost.com" },
-                    { 3L, 0, "", "72a0e717-da70-4624-a451-ac64ac26762a", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "manager@localhost.com", true, "", false, null, "MANAGER@LOCALHOST.COM", "MANAGER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEEuIFrucY6dDi9qV3a3D7MtRjkIP2fwRbkqbfBLhyvrn7coUeHtqSm/hBnbNrdM7+A==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "75656885-31cd-4100-b2b4-42a86a5b2de1", false, null, null, "manager@localhost.com" }
+                    { 1L, 0, "", "a5ea3c61-a16c-4e40-9e49-f927dbec262e", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "admin@localhost.com", true, "", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEGJDOrArRV1a8fzVuvXr+1IaVTL6GjFPiCKAlMpa9D8UTx1kQe3KgJscg4M3/HZSQw==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "d8df40ed-8945-45e2-9aac-37dd9127e9b9", false, null, null, "admin@localhost.com" },
+                    { 2L, 0, "", "34b6714f-e009-42a2-9df2-10d6f152fb30", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "eventmanager@localhost.com", true, "", false, null, "EVENTMANAGER@LOCALHOST.COM", "EVENTMANAGER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEGirGA2NrVmTm8ir//Rk4OvybPkiAZYu8i57tScJNXixR9WSRbZzkv6qBd/FG95tIQ==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "888bd16d-513a-4681-a148-78204518e715", false, null, null, "eventmanager@localhost.com" },
+                    { 3L, 0, "", "8d52d56d-ac2a-4e74-88dd-12fa16fe0a3f", 0L, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "student@localhost.com", true, "", false, null, "STUDENT@LOCALHOST.COM", "STUDENT@LOCALHOST.COM", "AQAAAAIAAYagAAAAEK+Jc6KCcFFWrM+Ld39ci8JppXYH5zze0MjsAk+5eUXPLRoyF4Umb+8AT205kYIf8g==", "", null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "64f9369f-6ff9-42ab-a4da-e071e9514731", false, null, null, "student@localhost.com" }
                 });
 
             migrationBuilder.InsertData(
