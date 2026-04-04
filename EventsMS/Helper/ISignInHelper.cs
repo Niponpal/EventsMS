@@ -41,5 +41,4 @@ public class SignInHelper : ISignInHelper
     long.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirst("MemberId")?.Value, out var id)
         ? id
         : null;
-
 }

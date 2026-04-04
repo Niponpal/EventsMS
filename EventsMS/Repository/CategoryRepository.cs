@@ -80,6 +80,4 @@ public class CategoryRepository : ICategoryRepository
         }).ToList();
         return data;
     }
-
-
 }
