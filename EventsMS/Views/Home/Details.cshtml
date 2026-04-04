@@ -76,12 +76,30 @@
                     </div>
                 </div>
 
-                <!-- Countdown Timer -->
+               @*  <!-- Countdown Timer -->
                 @if (isUpcoming)
                 {
                     <div class="glass-card rounded-4 p-4 mb-4 text-center border border-light">
                         <div class="small text-muted fw-medium mb-2">EVENT STARTS IN</div>
                         <div id="countdownTimer" class="countdown-text fs-3 fw-bold text-dark"></div>
+                    </div>
+                } *@
+                <!-- Countdown Timer -->
+                <!-- Countdown Timer -->
+                <!-- Countdown Timer -->
+                <!-- Countdown Timer -->
+                @if (isUpcoming)
+                {
+                    <div class="glass-card rounded-4 p-4 mb-4 text-center border border-light dark:border-zinc-700"
+                         style="background-color: #1e2937 !important;">
+
+                        <div class="small fw-medium mb-3" style="color: #ffffff !important; font-size: 0.95rem;">
+                            EVENT STARTS IN
+                        </div>
+
+                        <div id="countdownTimer" class="countdown-text fs-3 fw-bold"
+                             style="color: #ffffff !important;">
+                        </div>
                     </div>
                 }
 
