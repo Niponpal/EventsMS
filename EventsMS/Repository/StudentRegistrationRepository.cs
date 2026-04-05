@@ -98,4 +98,11 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
                              .Where(r => r.Email.Trim().ToLower() == normalizedEmail)
                              .ToListAsync(cancellationToken);
     }
+
+    // 🔹 New method to check for duplicate email registrations for the same event
+    public async Task<bool> IsEmailAlreadyRegistered(string email, long eventId, CancellationToken cancellationToken)
+    {
+        return await _context.studentRegistrations
+            .AnyAsync(x => x.Email == email && x.EventId == eventId, cancellationToken);
+    }
 }

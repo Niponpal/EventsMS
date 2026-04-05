@@ -139,9 +139,55 @@ public class StudentregistrationController : Controller
 
 
 
+    //[HttpPost]
+    //public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
+    //{
+    //    if (photo != null)
+    //    {
+    //        var fileName = await _fileService.Upload(photo, "StudentPhotos");
+    //        studentRegistration.PhotoPath = fileName;
+    //    }
+    //    else
+    //    {
+    //        studentRegistration.PhotoPath ??= "default.png";
+    //    }
+
+    //    if (studentRegistration.Id == 0)
+    //        await _studentRegistrationRepository.AddStudentRegistrationAsync(studentRegistration, cancellationToken);
+    //    else
+    //        await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
+
+    //    // 🔹 Free/Paid redirect logic
+    //    var ev = await _eventRepository.GeEventByIdAsync(studentRegistration.EventId, cancellationToken);
+    //    if (ev == null) return NotFound();
+
+    //    if (ev.IsFree)
+    //    {
+    //        // Free event → congratulations page
+    //        return RedirectToAction("Congratulations", new { registrationId = studentRegistration.Id });
+    //    }
+    //    else
+    //    {
+    //        // Paid event → payment page
+    //        return RedirectToAction("CreateOrEdit", "Payment", new { id = 0, registrationId = studentRegistration.Id });
+    //    }
+    //}
+
+
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
     {
+        // 🔴 Email already exists check
+        var exists = await _studentRegistrationRepository
+            .IsEmailAlreadyRegistered(studentRegistration.Email, studentRegistration.EventId, cancellationToken);
+
+        if (exists)
+        {
+            TempData["Error"] = "This email is already used for this event!";
+            return RedirectToAction("CreateOrEdit", new { id = 0, eventId = studentRegistration.EventId });
+        }
+
+        // ✅ Image upload
         if (photo != null)
         {
             var fileName = await _fileService.Upload(photo, "StudentPhotos");
@@ -152,23 +198,25 @@ public class StudentregistrationController : Controller
             studentRegistration.PhotoPath ??= "default.png";
         }
 
+        // ✅ Save
         if (studentRegistration.Id == 0)
             await _studentRegistrationRepository.AddStudentRegistrationAsync(studentRegistration, cancellationToken);
         else
             await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
 
-        // 🔹 Free/Paid redirect logic
+        // ✅ Success popup message
+        TempData["Success"] = "Registration Completed Successfully!";
+
+        // 🔹 Free/Paid redirect
         var ev = await _eventRepository.GeEventByIdAsync(studentRegistration.EventId, cancellationToken);
         if (ev == null) return NotFound();
 
         if (ev.IsFree)
         {
-            // Free event → congratulations page
             return RedirectToAction("Congratulations", new { registrationId = studentRegistration.Id });
         }
         else
         {
-            // Paid event → payment page
             return RedirectToAction("CreateOrEdit", "Payment", new { id = 0, registrationId = studentRegistration.Id });
         }
     }
