@@ -52,14 +52,20 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
         }
         return null;
     }
+    //public async Task<StudentRegistration?> GetStudentRegistrationByIdAsync(long id, CancellationToken cancellationToken)
+    //{
+    //   var data = await  _context.studentRegistrations.FindAsync(id, cancellationToken);
+    //    if (data != null)
+    //    {
+    //        return data;
+    //    }
+    //    return null;
+    //}
     public async Task<StudentRegistration?> GetStudentRegistrationByIdAsync(long id, CancellationToken cancellationToken)
     {
-       var data = await  _context.studentRegistrations.FindAsync(id, cancellationToken);
-        if (data != null)
-        {
-            return data;
-        }
-        return null;
+        return await _context.studentRegistrations
+            .Include(r => r.Event)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
     public async Task<StudentRegistration?> UpdateStudentRegistrationAsync(StudentRegistration studentRegistration, CancellationToken cancellationToken)
@@ -81,5 +87,13 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
             return data;
         }
         return null;
+    }
+
+    public async Task<List<StudentRegistration>> GetMyRegistrationsAsync(string email, CancellationToken cancellationToken)
+    {
+        return await _context.studentRegistrations
+            .Where(r => r.Email == email)
+            .Include(r => r.Event)   // ← এটি না থাকলে Event data null
+            .ToListAsync(cancellationToken);
     }
 }
