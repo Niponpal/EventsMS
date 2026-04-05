@@ -12,5 +12,6 @@ public interface IStudentRegistrationRepository
     Task<StudentRegistration> DeleteStudentRegistrationAsync(long id, CancellationToken cancellationToken);
     IEnumerable<SelectListItem> Dropdown();
     Task<List<StudentRegistration>> GetMyRegistrationsAsync(string email, CancellationToken cancellationToken);
+    Task<bool> IsEmailAlreadyRegistered(string email, long eventId, CancellationToken cancellationToken);
 
 }
