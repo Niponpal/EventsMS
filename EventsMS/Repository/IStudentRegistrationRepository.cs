@@ -10,7 +10,7 @@ public interface IStudentRegistrationRepository
     Task<StudentRegistration> AddStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
     Task<StudentRegistration?> UpdateStudentRegistrationAsync(StudentRegistration  studentRegistration, CancellationToken cancellationToken);
     Task<StudentRegistration> DeleteStudentRegistrationAsync(long id, CancellationToken cancellationToken);
-    Task<List<StudentRegistration>> GetMyRegistrationsAsync(string email, CancellationToken cancellationToken);
     IEnumerable<SelectListItem> Dropdown();
+    Task<List<StudentRegistration>> GetMyRegistrationsAsync(string email, CancellationToken cancellationToken);
 
 }

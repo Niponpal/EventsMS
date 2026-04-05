@@ -132,7 +132,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a asp-controller="Studentregistration" asp-action="MyEvents"
+                        <a asp-controller="StudentRegistration" asp-action="MyEvents"
                            class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "MyEvents" ? "active" : "")">
                             My Events
                         </a>
@@ -201,3 +201,200 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+@* <!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EventsMS</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e2937;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --border-light: #334155;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navbar */
+        .navbar {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-secondary) !important;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+            /* Active Link Styling - Blue Color */
+            .nav-link.active {
+                color: var(--primary) !important;
+                font-weight: 600;
+            }
+
+                .nav-link.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    background: var(--primary);
+                    border-radius: 3px;
+                }
+
+            .nav-link:hover {
+                color: var(--primary) !important;
+            }
+
+        [data-bs-theme="dark"] .nav-link {
+            color: #cbd5e1 !important;
+        }
+
+            [data-bs-theme="dark"] .nav-link:hover,
+            [data-bs-theme="dark"] .nav-link.active {
+                color: var(--primary-light) !important;
+            }
+
+                [data-bs-theme="dark"] .nav-link.active::after {
+                    background: var(--primary-light);
+                }
+
+        main {
+            padding: 2rem 0;
+            min-height: 75vh;
+        }
+
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-light);
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <i class="bi bi-calendar-event-fill fs-4"></i>
+                EventsMS
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Left Menu -->
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a asp-action="Index" class="nav-link active">All Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">My Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+
+                <!-- Right Side -->
+                <div class="d-flex align-items-center gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Login</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Register</a>
+                    }
+
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="btn btn-light border rounded-circle p-2"
+                            style="width:42px; height:42px;">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    <footer class="py-4 mt-5">
+        <div class="container text-center text-muted small">
+            © @DateTime.Now.Year EventsMS
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        let currentTheme = localStorage.getItem('theme') || 'light';
+
+        document.documentElement.setAttribute('data-bs-theme', currentTheme);
+        themeIcon.className = currentTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+
+        themeToggle.addEventListener('click', () => {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-bs-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            themeIcon.className = currentTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+ *@
