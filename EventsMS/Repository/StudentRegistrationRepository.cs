@@ -91,9 +91,11 @@ public class StudentRegistrationRepository : IStudentRegistrationRepository
 
     public async Task<List<StudentRegistration>> GetMyRegistrationsAsync(string email, CancellationToken cancellationToken)
     {
+        var normalizedEmail = email.Trim().ToLower();
+
         return await _context.studentRegistrations
-            .Where(r => r.Email == email)
-            .Include(r => r.Event)   // ← এটি না থাকলে Event data null
-            .ToListAsync(cancellationToken);
+                             .Include(r => r.Event)
+                             .Where(r => r.Email.Trim().ToLower() == normalizedEmail)
+                             .ToListAsync(cancellationToken);
     }
 }

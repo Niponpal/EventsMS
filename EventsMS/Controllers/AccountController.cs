@@ -1,8 +1,10 @@
 ﻿using EventsMS.Models.Auth;
 using EventsMS.Service;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static EventsMS.Auth_IdentityModel.IdentityModel;
 
 namespace EventsMS.Controllers;
@@ -102,6 +104,9 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+
+
+
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
@@ -132,6 +137,7 @@ public class AccountController : Controller
                 TempData["AlertType"] = "error";
                 return View(model);
             }
+
 
             var roles = (await _userManager.GetRolesAsync(user)).ToList();
             var permission = _permissionService.CheckPermission(roles);

@@ -3,6 +3,8 @@ using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EventsMS.Controllers;
 
@@ -136,27 +138,6 @@ public class StudentregistrationController : Controller
 
 
 
-    //[HttpPost]
-    //public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
-    //{
-    //    if (photo != null)
-    //    {
-    //        var fileName = await _fileService.Upload(photo, "StudentPhotos");
-    //        studentRegistration.PhotoPath = fileName;
-    //    }
-    //    else
-    //    {
-    //        // যদি photo upload না করা হয়
-    //        studentRegistration.PhotoPath ??= "default.png"; 
-    //    }
-
-    //    if (studentRegistration.Id == 0)
-    //        await _studentRegistrationRepository.AddStudentRegistrationAsync(studentRegistration, cancellationToken);
-    //    else
-    //        await _studentRegistrationRepository.UpdateStudentRegistrationAsync(studentRegistration, cancellationToken);
-
-    //    return RedirectToAction("Index", "Home");
-    //}
 
     [HttpPost]
     public async Task<IActionResult> CreateOrEdit(StudentRegistration studentRegistration, IFormFile photo, CancellationToken cancellationToken)
@@ -209,27 +190,6 @@ public class StudentregistrationController : Controller
         return NotFound();
     }
 
-    //// StudentregistrationController.cs
-    //[HttpGet]
-    //public async Task<IActionResult> Congratulations(long registrationId, CancellationToken cancellationToken)
-    //{
-    //    var registration = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(registrationId, cancellationToken);
-    //    if (registration == null)
-    //        return NotFound();
-
-    //    // 🔹 Ensure EventName is available
-    //    string eventName = string.Empty;
-    //    if (registration.EventId != 0)
-    //    {
-    //        var evnt = await _eventRepository.GeEventByIdAsync(registration.EventId, cancellationToken);
-    //        if (evnt != null)
-    //            eventName = evnt.Name;
-    //    }
-
-    //    ViewData["EventName"] = eventName;
-
-    //    return View(registration); // send registration if needed for more details
-    //}
 
 
     [HttpGet]
@@ -261,18 +221,26 @@ public class StudentregistrationController : Controller
         return View(vm);
     }
 
-
     [HttpGet]
     public async Task<IActionResult> MyEvents(CancellationToken cancellationToken)
     {
         if (!User.Identity.IsAuthenticated)
             return RedirectToAction("Login", "Account");
 
-        var email = User.Identity.Name; // logged-in user email
-        var myEvents = await _studentRegistrationRepository
-            .GetMyRegistrationsAsync(email, cancellationToken);
+        var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(ClaimTypes.Name);
+        if (emailClaim == null) return Unauthorized();
 
-        return View(myEvents);
+        // Debug
+        ViewData["Debug"] = $"Claim Email: '{emailClaim.Value}'";
+
+        var myEvents = await _studentRegistrationRepository.GetMyRegistrationsAsync(emailClaim.Value, cancellationToken);
+
+        if (!myEvents.Any())
+            ViewData["Debug"] += " → No registrations found in DB!";
+
+        return View(myEvents ?? new List<StudentRegistration>());
     }
+
+
 
 }
