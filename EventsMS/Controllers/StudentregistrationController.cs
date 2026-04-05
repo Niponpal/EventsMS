@@ -3,7 +3,6 @@ using EventsMS.Models;
 using EventsMS.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
 
 namespace EventsMS.Controllers;
 
@@ -262,6 +261,18 @@ public class StudentregistrationController : Controller
         return View(vm);
     }
 
-  
+
+    [HttpGet]
+    public async Task<IActionResult> MyEvents(CancellationToken cancellationToken)
+    {
+        if (!User.Identity.IsAuthenticated)
+            return RedirectToAction("Login", "Account");
+
+        var email = User.Identity.Name; // logged-in user email
+        var myEvents = await _studentRegistrationRepository
+            .GetMyRegistrationsAsync(email, cancellationToken);
+
+        return View(myEvents);
+    }
 
 }

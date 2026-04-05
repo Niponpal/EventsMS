@@ -1,0 +1,29 @@
+﻿@model IEnumerable<EventsMS.Models.StudentRegistration>
+
+<h2>My Events</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Event Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Payment Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var registration in Model)
+        {
+            <tr>
+                <td>@registration.Event?.Name ?? "N/A"</td>
+                <td>@registration.Event?.StartDate.ToString("dd MMM yyyy") ?? "N/A"</td>
+                <td>@registration.Event?.EndDate.ToString("dd MMM yyyy") ?? "N/A"</td>
+                <td>@registration.PaymentStatus</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@registration.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
