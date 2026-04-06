@@ -44,9 +44,15 @@
                             <span asp-validation-for="PhoneNumber" class="text-danger small mt-1 d-block"></span>
                         </div>
 
-                        <div class="mb-3">
+                        @* <div class="mb-3">
                             <label asp-for="Email" class="form-label fw-semibold">Email Address</label>
                             <input asp-for="Email" class="form-control shadow-sm" placeholder="example@domain.com" />
+                            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                        </div> *@
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold">Email Address</label>
+                            <input asp-for="Email" class="form-control shadow-sm" placeholder="example@domain.com" readonly />
                             <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
                         </div>
 
