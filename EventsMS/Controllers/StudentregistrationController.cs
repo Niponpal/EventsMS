@@ -37,13 +37,13 @@ public class StudentregistrationController : Controller
     }
 
 
+
+
     //[HttpGet]
     //public async Task<IActionResult> CreateOrEdit(long id, long? eventId, CancellationToken cancellationToken)
     //{
-    //    // 🔒 Check if user is logged in
     //    if (!User.Identity.IsAuthenticated)
     //    {
-    //        // Login না থাকলে Register page-এ পাঠাও এবং returnUrl set করো
     //        return RedirectToAction("Login", "Account", new
     //        {
     //            returnUrl = Url.Action("CreateOrEdit", "Studentregistration", new { id, eventId })
@@ -54,18 +54,15 @@ public class StudentregistrationController : Controller
 
     //    if (id == 0)
     //    {
-    //        // নতুন রেজিস্ট্রেশন
     //        model = new StudentRegistration();
     //        if (eventId != null) model.EventId = eventId.Value;
     //    }
     //    else
     //    {
-    //        // Edit mode
     //        model = await _studentRegistrationRepository.GetStudentRegistrationByIdAsync(id, cancellationToken);
     //        if (model == null) return NotFound();
     //    }
 
-    //    // Selected Event fetch
     //    long selectedEventId = model.EventId != 0 ? model.EventId : (eventId ?? 0);
 
     //    if (selectedEventId != 0)
@@ -106,6 +103,11 @@ public class StudentregistrationController : Controller
         {
             model = new StudentRegistration();
             if (eventId != null) model.EventId = eventId.Value;
+
+            // ✅ Auto-fill email of logged-in user
+            var emailClaim = User.FindFirst(ClaimTypes.Email) ?? User.FindFirst(ClaimTypes.Name);
+            if (emailClaim != null)
+                model.Email = emailClaim.Value;
         }
         else
         {
