@@ -1,5 +1,25 @@
-﻿using EventsMS.Models;
+﻿//using EventsMS.Helper;
+//using EventsMS.SSLCommerz;
+//using Microsoft.AspNetCore.Mvc;
+
+//namespace EventsMS.Controllers;
+
+//public class PaymentController : Controller
+//{
+//    private readonly ISSLCommerzService _ssl;
+//    private readonly ISignInHelper _signInHelper;
+
+//    public IActionResult Index()
+//    {
+//        return View();
+//    }
+//}
+
+
+
+using EventsMS.Models;
 using EventsMS.Repository;
+using EventsMS.SSLCommerz;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,6 +29,7 @@ public class PaymentController : Controller
 {
     private readonly IPaymentRepository _paymentRepository;
     private readonly IStudentRegistrationRepository _studentRegistrationRepository;
+    private readonly ISSLCommerzService _sslCommerzService;
 
     public PaymentController(IPaymentRepository paymentRepository, IStudentRegistrationRepository studentRegistrationRepository)
     {
@@ -23,7 +44,7 @@ public class PaymentController : Controller
         {
             return View(data);
         }
-    
+
         return NotFound();
     }
     //[HttpGet]
@@ -101,11 +122,11 @@ public class PaymentController : Controller
         return NotFound();
     }
     [HttpPost]
-        public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
-        {
-            await _paymentRepository.DeletePaymentyAsync(id, cancellationToken);
-            return RedirectToAction(nameof(Index));
-        }
+    public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
+    {
+        await _paymentRepository.DeletePaymentyAsync(id, cancellationToken);
+        return RedirectToAction(nameof(Index));
+    }
 
 
     [HttpGet]
